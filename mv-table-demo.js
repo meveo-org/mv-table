@@ -4,7 +4,7 @@ import {
 	css
 } from 'https://cdn.jsdelivr.net/gh/manaty/mv-dependencies@master/web_modules/lit-element.js';
 
-import './src/mv-table/mv-table.js';
+import './web_modules/mv-table/mv-table.js';
 
 export class MvTableDemo extends LitElement {
 	static get properties() {
@@ -33,14 +33,6 @@ export class MvTableDemo extends LitElement {
 	}
 
 	render() {
-		/* eslint-disable no-console */
-		console.log('='.repeat(80));
-		console.log('MvTableDemo render');
-		console.log('this.columns :', this.columns);
-		console.log('this.tableData :', this.tableData);
-		console.log('this.visibleColumns :', this.visibleColumns);
-		console.log('='.repeat(80));
-		/* eslint-enable */
 		return html`
       <mv-table
         .columns="${this.columns}"

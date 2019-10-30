@@ -20,45 +20,41 @@ export class MvTable extends LitElement {
 		return css`
 			:host {
 				font-family: var(--font-family, Arial);
-				font-size: var(--font-size-m, 10pt);
-				line-height: var(--line-height-s, 1.625);
-			}
+				font-size: var(--font-size-m, 10pt);				
+      }
+
+      table {
+        border: var(--table-border, 1px solid black);
+        border-collapse: collapse;
+      }
+      
+      td {
+        border: var(--table-cell-border, 1px solid black);
+        height: var(--table-cell-height, 60px);
+        padding: var(--table-cell-padding, 0 10px);
+      }
 		`;
 	}
 
 	render() {
-		/* eslint-disable no-console */
-		console.log('='.repeat(80));
-		console.log('MvTable render');
-		console.log('this.columns :', this.columns);
-		console.log('this.visibleColumns :', this.visibleColumns);
-		console.log('this.tableData :', this.tableData);
-		console.log('='.repeat(80));
-		/* eslint-enable */
 		return html`
       <table>
         <thead>
           <tr>
           ${this.visibleColumns.map(visibleColumn => {
-				const column = this.columns[visibleColumn] || {};
-				return html`
-                  <td>${column.label}</td>
-                `;
-			})}
+            const column = this.columns[visibleColumn] || {};
+            return html`<td>${column.title}</td>`;
+          })}
           </tr>
         </thead>
         <tbody>
           ${this.tableData.map(
-				rowData => html`
-            <tr>
-            ${this.visibleColumns.map(
-				visibleColumn => html`
-              <td>${rowData[visibleColumn]}</td>
+            rowData => html`
+              <tr>
+              ${this.visibleColumns.map(visibleColumn => html`<td>${rowData[visibleColumn]}</td>`)}
+              </tr>
             `
-			)}
-            </tr>
-          `
-			)}
+          )}
         </tbody>
       </table>
     `;
