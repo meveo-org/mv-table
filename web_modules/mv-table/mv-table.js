@@ -4,26 +4,20 @@ import {
   css
 } from "https://cdn.jsdelivr.net/gh/manaty/mv-dependencies@master/web_modules/lit-element.js";
 
+import "./cell_types/mv-array.js";
 import "./cell_types/mv-date.js";
 import "./cell_types/mv-text.js";
 import "./cell_types/mv-url.js";
 
-const CELL_TYPES = ({ rowData, column }) => {
-  const { name, hrefProp, target } = column;
+const CELL_TYPES = props => {
+  const { rowData, column } = props;
+  const { name, target } = column;
   const value = rowData[name];
   return {
-    DATE: html`<mv-date .value="${value}" />`,
-    TEXT: html`<mv-text .value="${value}" />`,
-    URL: hrefProp
-      ? html`
-      <mv-url
-      .href="${rowData[hrefProp]}"
-      .label="${value}"
-      .target="${target}" />
-      `
-      : html`
-      <mv-url .href="${value}" .label="${value}" .target="${target}" />
-      `
+    ARRAY: html`<mv-array .value="${value}"> </mv-array>`,
+    DATE: html`<mv-date .value="${value}"> <mv-date>`,
+    TEXT: html`<mv-text .value="${value}"> </mv-text>`,
+    URL: html`<mv-url .href="${value.href}" .label="${value.label}" .target="${target}"> </mv-url>`
   };
 };
 
@@ -36,10 +30,7 @@ export class MvTable extends LitElement {
   static get properties() {
     return {
       columns: { type: Array, attribute: true },
-      tableData: { type: Array, attribute: true },
-      totalCount: { type: Number, attribute: true },
-      limit: { type: Number, attribute: true },
-      offset: { type: Number, attribute: true }
+      list: { type: Array, attribute: true }
     };
   }
 
@@ -53,6 +44,7 @@ export class MvTable extends LitElement {
       table {
         border: var(--table-border, 1px solid black);
         border-collapse: collapse;
+        width: 100%;
       }
       
       td {
@@ -60,11 +52,16 @@ export class MvTable extends LitElement {
         height: var(--table-cell-height, 60px);
         padding: var(--table-cell-padding, 0 10px);
       }
+
+      .mv-table-container {
+        width: 100%;
+      }
 		`;
   }
 
   render() {
     return html`
+      <div class="mv-table-container">
       <table>
         <thead>
           <tr>
@@ -72,7 +69,7 @@ export class MvTable extends LitElement {
           </tr>
         </thead>
         <tbody>
-          ${this.tableData.map(
+          ${this.list.map(
             rowData => html`
                 <tr>
                   ${this.columns.map(column => {
@@ -84,6 +81,7 @@ export class MvTable extends LitElement {
           )}
         </tbody>
       </table>
+      </div>
     `;
   }
 }

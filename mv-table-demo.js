@@ -4,12 +4,16 @@ import {
   css
 } from "https://cdn.jsdelivr.net/gh/manaty/mv-dependencies@master/web_modules/lit-element.js";
 
+import { getSchema, getPeople } from "./mock_data/api.js";
+
 import "./web_modules/mv-table/mv-table.js";
+import "./web_modules/mv-table/components/mv-pagination.js";
 
 export class MvTableDemo extends LitElement {
   static get properties() {
     return {
-      tableData: { type: Object, reflect: true, attribute: false }
+      list: { type: Object, reflect: true, attribute: false },
+      page: { type: Number, reflect: true, attribute: false }
     };
   }
 
@@ -19,14 +23,26 @@ export class MvTableDemo extends LitElement {
 				font-family: var(--font-family, Arial);
 				font-size: var(--font-size-m, 10pt);
 				line-height: var(--line-height-s, 1.625);
-			}
+      }
+      
+      .table-demo {
+        display: flex;
+        flex-direction: column;
+        width: calc(100% - 80px);
+        margin: 0 auto;
+      }
+
+      .page-buttons {
+        font-size: 16px;
+      }
 		`;
   }
 
   constructor() {
     super();
     this.limit = 10;
-    this.offset = 1;
+    this.page = 1;
+    this.pages = 0;
     this.columns = {};
     this.columnOrder = [
       "name",
@@ -34,54 +50,74 @@ export class MvTableDemo extends LitElement {
       "hair_color",
       "eye_color",
       "birth_year",
-      "created"
+      "films",
+      "created",
+      "url"
     ];
-    this.tableData = [];
+    this.list = [];
   }
 
   render() {
     return (
-      this.tableData &&
-      this.tableData.length > 0 &&
+      this.list &&
+      this.list.length > 0 &&
       html`
-      <mv-table
-        .columns="${this.columns}"
-        .tableData="${this.tableData}"
-        .totalCount="${this.count}"
-        .limit="${this.limit}"
-        .offset="${this.offset}"
-        @to-next-page="${this.nextPageHandler}"
-        @to-previous-page="${this.previousPageHandler}"
-      />
+      <div class="table-demo">
+        <div class="table-container">
+          <mv-table
+            .columns="${this.columns}"
+            .list="${this.list}"          
+          > </mv-table>
+          <mv-pagination
+            .page="${this.page}"
+            .pages="${this.pages}"
+            .count="${this.count}"
+            @change-page="${this.gotoPage}"          
+          >
+            <span slot="first-button" class="page-buttons">&laquo;</span>
+            <span slot="previous-button" class="page-buttons">&lsaquo;</span>
+            <span slot="next-button" class="page-buttons">&rsaquo;</span>
+            <span slot="last-button" class="page-buttons">&raquo;</span>
+          </mv-pagination>
+        </div>
+      </div>
     `
     );
   }
 
   connectedCallback() {
-    const baseUrl = "https://swapi.co/api/people";
-    fetch(`${baseUrl}/schema?format=json`)
-      .then(schemaResult => schemaResult.json())
-      .then(schema => {
-        this.columns = this.parseColumns(schema.properties);
-        return fetch(
-          `${baseUrl}?limit=${this.limit}&page=${this.offset}&format=json`
-        );
-      })
-      .then(result => result.json())
-      .then(data => {
-        this.count = data.count;
-        this.nextPageHandler = this.gotoPage(data.next);
-        this.previousPageHandler = this.gotoPage(data.previous);
-        this.tableData = data.results;
-      })
-      .catch(error => {
-        /* eslint-disable no-console */
-        console.error("=".repeat(80));
-        console.error("MvTableDemo connectedCallback error: ", error);
-        console.error("=".repeat(80));
-        /* eslint-enable */
-      });
+    const schema = getSchema();
+    this.columns = this.parseColumns(schema.properties);
+    this.loadData(1);
     super.connectedCallback();
+  }
+
+  loadData(page) {
+    this.page = page < 1 ? 1 : page;
+    this.offset = (this.page - 1) * this.limit;
+    const people = getPeople(this.offset, this.limit);
+    this.count = people.count;
+    this.pages = this.limit > 0 ? Math.ceil(this.count / this.limit) : 0;
+    this.list = this.buildList(people.results);
+  }
+
+  buildList(results) {
+    const tableData = (results || []).reduce((list, rowItem) => {
+      const row = Object.keys(rowItem).reduce((data, key) => {
+        const column =
+          this.columns.find(columnItem => columnItem.name === key) || {};
+        const item = rowItem[key];
+
+        // special case for URL, add href
+        data[key] = column.hrefProp
+          ? { label: item, href: rowItem[column.hrefProp] }
+          : item;
+        return data;
+      }, {});
+      list.push(row);
+      return list;
+    }, []);
+    return tableData;
   }
 
   createColumnTitle(key) {
@@ -109,8 +145,10 @@ export class MvTableDemo extends LitElement {
     if (isVisible) {
       const column = columns[key];
       const { description } = column;
+      const isName = key === "name";
+
       //special case for name (make the name a clickable link)
-      const type = key === "name" ? "URL" : this.parseType(column);
+      const type = isName ? "URL" : this.parseType(column);
       const result = {
         name: key,
         title: this.createColumnTitle(key),
@@ -118,8 +156,8 @@ export class MvTableDemo extends LitElement {
         type
       };
       if (result.type === "URL") {
-        result.hrefProp = "url";
-        result.target = key === "name" ? "_blank" : "_self";
+        result.hrefProp = isName ? "url" : key;
+        result.target = isName ? "_blank" : "_self";
       }
       return result;
     }
@@ -136,13 +174,10 @@ export class MvTableDemo extends LitElement {
     }, []);
   }
 
-  gotoPage(href) {
-    return event => {
-      event.stopImmediatePropagation();
-      if (!!href) {
-        window.location.href = href;
-      }
-    };
+  gotoPage(event) {
+    if (event && event.detail && event.detail.page > 0) {
+      this.loadData(event.detail.page);
+    }
   }
 }
 

@@ -28,8 +28,9 @@ export class MvUrl extends LitElement {
   }
 
   render() {
+    const label = this.label || this.href;
     return html`
-      <td><a href="${this.href}" target="${this.target}">${this.label}</a></td>
+      <td><a href="${this.href}" target="${this.target}">${label}</a></td>
     `;
   }
 }

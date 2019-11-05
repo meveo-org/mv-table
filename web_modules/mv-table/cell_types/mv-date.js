@@ -9,9 +9,7 @@ export class MvDate extends LitElement {
     return {
       value: { type: String, attribute: true },
       locale: { type: String, attribute: true },
-      "date-time": { type: Boolean, attribute: true },
-      "date-only": { type: Boolean, attribute: true },
-      "time-only": { type: Boolean, attribute: true }
+      format: { type: String, attribute: true } // recognized format values are: "date", "time", or "both"
     };
   }
 
@@ -27,9 +25,7 @@ export class MvDate extends LitElement {
   constructor() {
     super();
     this.locale = "en-US";
-    this["date-only"] = true;
-    this["time-only"] = false;
-    this["date-time"] = false;
+    this.format = "date";
     this.formattedDate = "";
   }
 
@@ -37,9 +33,9 @@ export class MvDate extends LitElement {
     const oldValue = this.formattedDate;
     try {
       const date = new Date(value);
-      if (this["time-only"]) {
+      if (this.format === "time") {
         this.formattedDate = date.toLocaleTimeString(this.locale);
-      } else if (this["date-time"]) {
+      } else if (this.format === "both") {
         this.formattedDate = date.toLocaleString(this.locale);
       } else {
         this.formattedDate = date.toLocaleDateString(this.locale);
