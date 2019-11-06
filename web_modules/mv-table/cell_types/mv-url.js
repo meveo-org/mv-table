@@ -19,6 +19,15 @@ export class MvUrl extends LitElement {
 				font-family: var(--font-family, Arial);
 				font-size: var(--font-size-m, 10pt);				
       }
+
+      a {
+        color: #80828C;
+        text-decoration: none;
+      }
+
+      a:hover {
+        text-decoration: underline;
+      }
 		`;
   }
 
@@ -30,7 +39,7 @@ export class MvUrl extends LitElement {
   render() {
     const label = this.label || this.href;
     return html`
-      <td><a href="${this.href}" target="${this.target}">${label}</a></td>
+      <a href="${this.href}" target="${this.target}">${label}</a>
     `;
   }
 }

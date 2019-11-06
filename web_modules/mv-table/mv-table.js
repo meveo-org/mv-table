@@ -42,15 +42,63 @@ export class MvTable extends LitElement {
       }
 
       table {
-        border: var(--table-border, 1px solid black);
         border-collapse: collapse;
         width: 100%;
       }
-      
+
+      thead {
+        font-family: var(--font-family, Arial);
+        margin: auto;
+        height: 66px;
+        max-height: 66px;
+        font-weight: 700;
+        text-transform: uppercase;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        background-color: #F5F6FA;
+      }
+
+      thead td {
+        color: #80828C;
+        border-bottom: none;        
+        text-align: left;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        cursor: default;
+      }
+
+      thead td:first-child {
+        border-radius: 10px 0 0 0;
+      }
+
+      thead td:last-child {
+        border-radius: 0 10px 0 0;
+      }
+
+      tbody tr {
+        border-bottom: 1px solid #E9E9E9;
+      }
+
+      tbody tr:hover {
+        background-color: #EDEDED;
+      }
+
+      tbody td {
+        color: #80828C;
+      }
+
       td {
-        border: var(--table-cell-border, 1px solid black);
-        height: var(--table-cell-height, 60px);
-        padding: var(--table-cell-padding, 0 10px);
+        border-bottom: none;
+        padding: 0 0 0 15px;
+        text-align: left;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        height: 66px;
+        max-height: 66px;
       }
 
       .mv-table-container {

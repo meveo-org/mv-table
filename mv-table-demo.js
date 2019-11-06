@@ -28,12 +28,12 @@ export class MvTableDemo extends LitElement {
       .table-demo {
         display: flex;
         flex-direction: column;
-        width: calc(100% - 80px);
+        width: calc(100% - 60px);
         margin: 0 auto;
       }
 
       .page-buttons {
-        font-size: 16px;
+        font-size: var(--page-button-font-size, 16px);
       }
 		`;
   }
@@ -51,8 +51,7 @@ export class MvTableDemo extends LitElement {
       "eye_color",
       "birth_year",
       "films",
-      "created",
-      "url"
+      "created"
     ];
     this.list = [];
   }
@@ -66,13 +65,13 @@ export class MvTableDemo extends LitElement {
         <div class="table-container">
           <mv-table
             .columns="${this.columns}"
-            .list="${this.list}"          
+            .list="${this.list}"
           > </mv-table>
           <mv-pagination
             .page="${this.page}"
             .pages="${this.pages}"
             .count="${this.count}"
-            @change-page="${this.gotoPage}"          
+            @change-page="${this.gotoPage}"
           >
             <span slot="first-button" class="page-buttons">&laquo;</span>
             <span slot="previous-button" class="page-buttons">&lsaquo;</span>

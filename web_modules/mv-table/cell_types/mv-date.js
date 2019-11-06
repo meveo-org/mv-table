@@ -56,7 +56,7 @@ export class MvDate extends LitElement {
 
   render() {
     return html`
-      <td>${this.value}</td>
+      ${this.value}
     `;
   }
 }

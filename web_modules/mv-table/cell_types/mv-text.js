@@ -1,30 +1,30 @@
 import {
-	LitElement,
-	html,
-	css
-} from 'https://cdn.jsdelivr.net/gh/manaty/mv-dependencies@master/web_modules/lit-element.js'
+  LitElement,
+  html,
+  css
+} from "https://cdn.jsdelivr.net/gh/manaty/mv-dependencies@master/web_modules/lit-element.js";
 
 export class MvText extends LitElement {
-  static get properties () {
+  static get properties() {
     return {
       value: { type: String, attribute: true }
-    }
+    };
   }
 
-  static get styles () {
+  static get styles() {
     return css`
 			:host {
 				font-family: var(--font-family, Arial);
 				font-size: var(--font-size-m, 10pt);				
       }
-		`
+		`;
   }
 
-  render () {
+  render() {
     return html`
-      <td>${this.value}</td>
-    `
+      ${this.value}
+    `;
   }
 }
 
-customElements.define('mv-text', MvText)
+customElements.define("mv-text", MvText);
