@@ -62,23 +62,28 @@ export class MvTableDemo extends LitElement {
       this.list.length > 0 &&
       html`
       <div class="table-demo">
-        <div class="table-container">
-          <mv-table
-            .columns="${this.columns}"
-            .list="${this.list}"
-          > </mv-table>
-          <mv-pagination
-            .page="${this.page}"
-            .pages="${this.pages}"
-            .count="${this.count}"
-            @change-page="${this.gotoPage}"
-          >
-            <span slot="first-button" class="page-buttons">&laquo;</span>
-            <span slot="previous-button" class="page-buttons">&lsaquo;</span>
-            <span slot="next-button" class="page-buttons">&rsaquo;</span>
-            <span slot="last-button" class="page-buttons">&raquo;</span>
-          </mv-pagination>
-        </div>
+        <ul>
+        <li><em>Names are links which open in a new window</em></li>
+        <li><em>Click on a birth year to trigger a cell action</em></li>
+        <li><em>Click on any other cell to trigger a row action</em></li>
+        </ul>
+        <mv-table
+          .columns="${this.columns}"
+          .list="${this.list}"
+          @row-click="${this.handleRowClick}"
+          @cell-click="${this.handleCellClick}"
+        > </mv-table>
+        <mv-pagination
+          .page="${this.page}"
+          .pages="${this.pages}"
+          .count="${this.count}"
+          @change-page="${this.gotoPage}"            
+        >
+          <span slot="first-button" class="page-buttons">&laquo;</span>
+          <span slot="previous-button" class="page-buttons">&lsaquo;</span>
+          <span slot="next-button" class="page-buttons">&rsaquo;</span>
+          <span slot="last-button" class="page-buttons">&raquo;</span>
+        </mv-pagination>
       </div>
     `
     );
@@ -174,8 +179,26 @@ export class MvTableDemo extends LitElement {
   }
 
   gotoPage(event) {
-    if (event && event.detail && event.detail.page > 0) {
+    const { detail = {} } = event || {};
+    if (detail.page > 0) {
       this.loadData(event.detail.page);
+    }
+  }
+
+  handleRowClick(event) {
+    const { detail } = event || {};
+    const { row, originalEvent } = detail || {};
+    originalEvent.stopPropagation();
+    alert(`Row clicked: ${row.name.label}`);
+  }
+
+  handleCellClick(event) {
+    const { detail } = event || {};
+    const { row, column, value, originalEvent } = detail || {};
+    // only show an alert if the birth_year was clicked
+    if (column.name === "birth_year") {
+      originalEvent.stopPropagation();
+      alert(`${row.name.label} was born on ${value}`);
     }
   }
 }

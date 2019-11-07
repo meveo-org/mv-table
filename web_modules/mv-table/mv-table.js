@@ -30,7 +30,8 @@ export class MvTable extends LitElement {
   static get properties() {
     return {
       columns: { type: Array, attribute: true },
-      list: { type: Array, attribute: true }
+      list: { type: Array, attribute: true },
+      "has-action-column": { type: Boolean, attribute: true }
     };
   }
 
@@ -107,6 +108,10 @@ export class MvTable extends LitElement {
 		`;
   }
 
+  constructor() {
+    super();
+  }
+
   render() {
     return html`
       <div class="mv-table-container">
@@ -119,10 +124,13 @@ export class MvTable extends LitElement {
         <tbody>
           ${this.list.map(
             rowData => html`
-                <tr>
+                <tr @click="${this.handleRowClick(rowData)}">
                   ${this.columns.map(column => {
                     const cellComponent = getCellComponent({ rowData, column });
-                    return html`<td>${cellComponent}</td>`;
+                    return html`
+                    <td @click="${this.handleCellClick(rowData, column)}">
+                      ${cellComponent}
+                    </td>`;
                   })}
                 </tr>
               `
@@ -131,6 +139,26 @@ export class MvTable extends LitElement {
       </table>
       </div>
     `;
+  }
+
+  handleRowClick(row) {
+    return originalEvent => {
+      this.dispatchEvent(
+        new CustomEvent("row-click", { detail: { row, originalEvent } })
+      );
+    };
+  }
+
+  handleCellClick(row, column) {
+    return originalEvent => {
+      const { name } = column;
+      const value = row[name];
+      this.dispatchEvent(
+        new CustomEvent("cell-click", {
+          detail: { row, column, value, originalEvent }
+        })
+      );
+    };
   }
 }
 
