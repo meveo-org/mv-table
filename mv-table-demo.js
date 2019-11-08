@@ -8,12 +8,12 @@ import { getSchema, getPeople } from "./mock_data/api.js";
 
 import "./web_modules/mv-table/mv-table.js";
 import "./web_modules/mv-table/components/mv-pagination.js";
+import "./web_modules/mv-table/components/mv-button.js";
 
 export class MvTableDemo extends LitElement {
   static get properties() {
     return {
-      list: { type: Object, reflect: true, attribute: false },
-      page: { type: Number, reflect: true, attribute: false }
+      page: { type: Number, reflect: true }
     };
   }
 
@@ -54,39 +54,78 @@ export class MvTableDemo extends LitElement {
       "created"
     ];
     this.list = [];
+
+    const actionColumnStyles = {
+      container: `
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+      `,
+      button: `
+        --mv-button-padding: 11px 15px;
+      `
+    };
+    this.actionColumn = {
+      label: "Action", // label is optional
+      getActionComponent: row => html`
+        <div style="${actionColumnStyles.container}">
+          <mv-button
+            @button-clicked="${this.handleActionButton(row, "Question")}"
+            button-style="info"
+            style="${actionColumnStyles.button}"
+          >
+            ?
+          </mv-button>
+          <mv-button
+            @button-clicked="${this.handleActionButton(row, "Check")}"
+            style="${actionColumnStyles.button}"
+          >
+            &check;
+          </mv-button>
+          <mv-button
+            @button-clicked="${this.handleActionButton(row, "Cross")}"
+            button-style="error"
+            style="${actionColumnStyles.button}"
+          >
+            &cross;
+          </mv-button>
+        </div>
+      `
+    };
   }
 
   render() {
-    return (
-      this.list &&
-      this.list.length > 0 &&
-      html`
-      <div class="table-demo">
-        <ul>
-        <li><em>Names are links which open in a new window</em></li>
-        <li><em>Click on a birth year to trigger a cell action</em></li>
-        <li><em>Click on any other cell to trigger a row action</em></li>
-        </ul>
-        <mv-table
-          .columns="${this.columns}"
-          .list="${this.list}"
-          @row-click="${this.handleRowClick}"
-          @cell-click="${this.handleCellClick}"
-        > </mv-table>
-        <mv-pagination
-          .page="${this.page}"
-          .pages="${this.pages}"
-          .count="${this.count}"
-          @change-page="${this.gotoPage}"            
-        >
-          <span slot="first-button" class="page-buttons">&laquo;</span>
-          <span slot="previous-button" class="page-buttons">&lsaquo;</span>
-          <span slot="next-button" class="page-buttons">&rsaquo;</span>
-          <span slot="last-button" class="page-buttons">&raquo;</span>
-        </mv-pagination>
-      </div>
-    `
-    );
+    const hasList = this.list && this.list.length > 0;
+    return hasList
+      ? html`
+        <div class="table-demo">
+          <ul>
+            <li><em>Names are links which open in a new window</em></li>
+            <li><em>Click on a birth year to trigger a cell action</em></li>
+            <li><em>Click on any other cell to trigger a row action</em></li>
+          </ul>
+          <mv-table
+            .columns="${this.columns}"
+            .list="${this.list}"
+            .action-column="${this.actionColumn}"
+            @row-click="${this.handleRowClick}"
+            @cell-click="${this.handleCellClick}"
+          > </mv-table>
+          <mv-pagination
+            .page="${this.page}"
+            .pages="${this.pages}"
+            .count="${this.count}"
+            @change-page="${this.gotoPage}"
+          >
+            <span slot="first-button" class="page-buttons">&laquo;</span>
+            <span slot="previous-button" class="page-buttons">&lsaquo;</span>
+            <span slot="next-button" class="page-buttons">&rsaquo;</span>
+            <span slot="last-button" class="page-buttons">&raquo;</span>
+          </mv-pagination>
+        </div>
+      `
+      : html`<h1>Loading...</h1>`;
   }
 
   connectedCallback() {
@@ -159,6 +198,8 @@ export class MvTableDemo extends LitElement {
         tooltip: description,
         type
       };
+
+      //special case for URLs, add hrefProp and target
       if (result.type === "URL") {
         result.hrefProp = isName ? "url" : key;
         result.target = isName ? "_blank" : "_self";
@@ -200,6 +241,16 @@ export class MvTableDemo extends LitElement {
       originalEvent.stopPropagation();
       alert(`${row.name.label} was born on ${value}`);
     }
+    if (column.name === "name") {
+      // don't fire row action when name link is clicked
+      originalEvent.stopPropagation();
+    }
+  }
+
+  handleActionButton(row, action) {
+    return () => {
+      alert(`${action} button clicked on ${row.name.label}'s row`);
+    };
   }
 }
 

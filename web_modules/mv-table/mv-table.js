@@ -4,15 +4,15 @@ import {
   css
 } from "https://cdn.jsdelivr.net/gh/manaty/mv-dependencies@master/web_modules/lit-element.js";
 
-import "./cell_types/mv-array.js";
-import "./cell_types/mv-date.js";
-import "./cell_types/mv-text.js";
-import "./cell_types/mv-url.js";
+import "./components/cell_types/mv-array.js";
+import "./components/cell_types/mv-date.js";
+import "./components/cell_types/mv-text.js";
+import "./components/cell_types/mv-url.js";
 
 const CELL_TYPES = props => {
-  const { rowData, column } = props;
+  const { row, column } = props;
   const { name, target } = column;
-  const value = rowData[name];
+  const value = row[name];
   return {
     ARRAY: html`<mv-array .value="${value}"> </mv-array>`,
     DATE: html`<mv-date .value="${value}"> <mv-date>`,
@@ -31,7 +31,7 @@ export class MvTable extends LitElement {
     return {
       columns: { type: Array, attribute: true },
       list: { type: Array, attribute: true },
-      "has-action-column": { type: Boolean, attribute: true }
+      "action-column": { type: Object, attribute: true }
     };
   }
 
@@ -48,10 +48,10 @@ export class MvTable extends LitElement {
       }
 
       thead {
-        font-family: var(--font-family, Arial);
+        font-family: var(--header-font-family, Arial);
         margin: auto;
-        height: 66px;
-        max-height: 66px;
+        height: var(--table-row-height, 66px);
+        max-height: var(--table-row-height, 66px);
         font-weight: 700;
         text-transform: uppercase;
         text-overflow: ellipsis;
@@ -62,12 +62,6 @@ export class MvTable extends LitElement {
       }
 
       thead td {
-        color: #80828C;
-        border-bottom: none;        
-        text-align: left;
-        overflow: hidden;
-        white-space: nowrap;
-        text-overflow: ellipsis;
         cursor: default;
       }
 
@@ -87,51 +81,69 @@ export class MvTable extends LitElement {
         background-color: #EDEDED;
       }
 
-      tbody td {
-        color: #80828C;
-      }
-
       td {
+        color: #80828C;
         border-bottom: none;
         padding: 0 0 0 15px;
         text-align: left;
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
-        height: 66px;
-        max-height: 66px;
+        height: var(--table-row-height, 66px);
+        max-height: var(--table-row-height, 66px);
+      }
+
+      .action-header {
+        text-align: center;
       }
 
       .mv-table-container {
         width: 100%;
+      }
+
+      .numeric {
+        text-align: right;        
       }
 		`;
   }
 
   constructor() {
     super();
+    this.columns = [];
+    this.list = [];
+    this["action-column"] = null;
   }
 
   render() {
+    const hasActionColumn = !!this["action-column"];
     return html`
       <div class="mv-table-container">
       <table>
         <thead>
           <tr>
           ${this.columns.map(column => html`<td>${column.title}</td>`)}
+          ${hasActionColumn
+            ? html`<td class="action-header">${this["action-column"]
+                .label}</td>`
+            : html``}
           </tr>
         </thead>
         <tbody>
           ${this.list.map(
-            rowData => html`
-                <tr @click="${this.handleRowClick(rowData)}">
+            row => html`
+                <tr @click="${this.handleRowClick(row)}">
                   ${this.columns.map(column => {
-                    const cellComponent = getCellComponent({ rowData, column });
+                    const cellComponent = getCellComponent({ row, column });
                     return html`
-                    <td @click="${this.handleCellClick(rowData, column)}">
+                    <td @click="${this.handleCellClick(row, column)}">
                       ${cellComponent}
                     </td>`;
                   })}
+                  ${hasActionColumn
+                    ? html`<td>
+                        ${this["action-column"].getActionComponent(row)}
+                      </td>`
+                    : html``}
                 </tr>
               `
           )}

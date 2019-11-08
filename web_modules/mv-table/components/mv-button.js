@@ -12,7 +12,11 @@ export class MvButton extends LitElement {
       disabled: { type: Boolean, attribute: true },
 
       // valid type values are: "default", "round", or "outline"
-      type: { type: String, attribute: true }
+      type: { type: String, attribute: true },
+      // valid button-style values are:
+      //      "gradient", "outline", "success", "error", or "info"
+      // default: "success"
+      "button-style": { type: String, attribute: true }
     };
   }
 
@@ -21,6 +25,10 @@ export class MvButton extends LitElement {
 			:host {
 				font-family: var(--font-family, Arial);
 				font-size: var(--font-size-m, 10pt);				
+      }
+
+      button {
+        margin: var(--mv-button-margin, 5px);
       }
 
       button.round {
@@ -32,12 +40,11 @@ export class MvButton extends LitElement {
         color: #80828C;
         border-radius: 55px;
         box-shadow: unset;
-        margin: var(--mv-button-margin, 5px);
-        border: none;
-        cursor: pointer;
+        border: none;        
       }
       
       button.round:hover:not([disabled]) {
+        cursor: pointer;
         background-color: #FFFFFF;
         color: #1D9BC9;
         border: 1px solid #1D9BC9;
@@ -52,15 +59,53 @@ export class MvButton extends LitElement {
       }
 
       button.round:disabled {
-        cursor: unset;
         background-color: #EAEBF0;
         color: #CACBD2;
         z-index: 100;
       }
       
-      button.round:focus {
-        outline: none !important;
+      button:focus {
+        outline: none;
       }
+
+      button.default {
+        border: none;
+        border-radius: 5px;
+        box-shadow: 0 2px 2px 0 rgba(93, 94, 97, 0.2);
+        padding: var(--mv-button-padding, 16px 59px);
+      }
+
+      button.default:hover:not([disabled]) {
+        cursor: pointer;        
+      }
+
+      button.default.success {
+        color: #FFFFFF;
+        background-color: #54CA95;
+      }
+
+      button.default.success:hover:not([disabled]) {
+        background-color: #0CA361;
+      }
+
+      button.default.error {
+        color: #FFFFFF;
+        background-color: #DD5C55;
+      }
+
+      button.default.error:hover:not([disabled]) {
+        background-color: #E71919;
+      }
+
+      button.default.info {
+        color: #FFFFFF;
+        background-color: #3999C1;
+      }
+
+      button.default.info:hover:not([disabled]) {
+        background-color: #007FAD;
+      }
+
 		`;
   }
 
@@ -70,6 +115,7 @@ export class MvButton extends LitElement {
     this.selected = false;
     this.disabled = false;
     this.type = "default";
+    this["button-style"] = "success";
   }
 
   handleClick(event) {
@@ -78,8 +124,9 @@ export class MvButton extends LitElement {
   }
 
   render() {
+    const buttonStyle = this.type !== "round" ? ` ${this["button-style"]}` : "";
     const selectedClass = this.selected ? " selected" : "";
-    const buttonClass = `mv-button ${this.type}${selectedClass}`;
+    const buttonClass = `${this.type}${buttonStyle}${selectedClass}`;
     return !!this.visible
       ? html`
           <button

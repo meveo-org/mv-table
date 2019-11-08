@@ -59,7 +59,19 @@ export class MvPagination extends LitElement {
         align-items: center;
         background-color: #EAEBF0;
         border-radius: 55px;
-        margin: 0px 15px;        
+        margin: 0px 15px;
+        --mv-button-margin: 0 5px;
+      }
+
+      .button-group mv-button:first-child,
+      .button-group mv-button:nth-child(2) {
+        --mv-button-margin: 0 5px 0 0;
+      }
+
+
+      .button-group mv-button:last-child,
+      .button-group mv-button:nth-last-child(2) {
+        --mv-button-margin: 0 0 0 5px;
       }
 		`;
   }
