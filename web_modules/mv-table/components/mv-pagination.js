@@ -11,7 +11,6 @@ export class MvPagination extends LitElement {
     return {
       page: { type: Number, reflect: true, attribute: true },
       pages: { type: Number, attribute: true },
-      count: { type: Number, attribute: true },
 
       // max-buttons must be an odd number >= 3, default 5
       "max-buttons": { type: Number, attribute: true },
@@ -83,7 +82,7 @@ export class MvPagination extends LitElement {
     this["max-buttons"] = 5;
     this.justify = "center";
     this.type = "button";
-    this.isButtonType = this.type === "button";
+    this.isButtonType = true;
     this.showLeftSeparator = false;
     this.showRightSeparator = false;
     this.showFirstPageButton = false;

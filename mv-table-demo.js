@@ -111,11 +111,13 @@ export class MvTableDemo extends LitElement {
             .action-column="${this.actionColumn}"
             @row-click="${this.handleRowClick}"
             @cell-click="${this.handleCellClick}"
+            @select-row="${this.handleRowSelect}"
+            with-checkbox
+            selectable
           > </mv-table>
           <mv-pagination
             .page="${this.page}"
             .pages="${this.pages}"
-            .count="${this.count}"
             @change-page="${this.gotoPage}"
           >
             <span slot="first-button" class="page-buttons">&laquo;</span>
@@ -139,8 +141,8 @@ export class MvTableDemo extends LitElement {
     this.page = page < 1 ? 1 : page;
     this.offset = (this.page - 1) * this.limit;
     const people = getPeople(this.offset, this.limit);
-    this.count = people.count;
-    this.pages = this.limit > 0 ? Math.ceil(this.count / this.limit) : 0;
+    const count = people.count || 0;
+    this.pages = this.limit > 0 ? Math.ceil(count / this.limit) : 0;
     this.list = this.buildList(people.results);
   }
 
@@ -157,6 +159,8 @@ export class MvTableDemo extends LitElement {
           : item;
         return data;
       }, {});
+      const url = rowItem.url.split("/");
+      row.id = url[url.length - 2];
       list.push(row);
       return list;
     }, []);
@@ -251,6 +255,20 @@ export class MvTableDemo extends LitElement {
     return () => {
       alert(`${action} button clicked on ${row.name.label}'s row`);
     };
+  }
+
+  handleRowSelect(event) {
+    const { detail: { row, selected, removed, added, originalEvent } } = event;
+    originalEvent.stopPropagation();
+    /* eslint-disable no-console */
+    console.log("=".repeat(80));
+    console.log("mv-table-demo");
+    console.log("row, :", row);
+    console.log("selected :", selected);
+    console.log("removed :", removed);
+    console.log("added :", added);
+    console.log("=".repeat(80));
+    /* eslint-enable */
   }
 }
 
