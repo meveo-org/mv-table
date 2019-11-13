@@ -9,11 +9,13 @@ import { getSchema, getPeople } from "./mock_data/api.js";
 import "./web_modules/mv-table/mv-table.js";
 import "./web_modules/mv-table/components/mv-pagination.js";
 import "./web_modules/mv-table/components/mv-button.js";
+import "./web_modules/mv-table/components/mv-toast.js";
 
 export class MvTableDemo extends LitElement {
   static get properties() {
     return {
-      page: { type: Number, reflect: true }
+      page: { type: Number, reflect: true },
+      message: { type: String, reflect: true }
     };
   }
 
@@ -35,6 +37,15 @@ export class MvTableDemo extends LitElement {
       .page-buttons {
         font-size: var(--page-button-font-size, 16px);
       }
+
+      .toasts {
+        display: flex;
+        flex-direction: row;        
+      }
+
+      .toasts mv-toast {
+        padding: 10px;
+      }
 		`;
   }
 
@@ -54,6 +65,7 @@ export class MvTableDemo extends LitElement {
       "created"
     ];
     this.list = [];
+    this.message = "";
 
     const actionColumnStyles = {
       container: `
@@ -100,6 +112,11 @@ export class MvTableDemo extends LitElement {
     return hasList
       ? html`
         <div class="table-demo">
+          <div class="toasts">
+            <mv-toast>${this.message}</mv-toast>
+            <mv-toast type="information">${this.message}</mv-toast>
+            <mv-toast type="error">${this.message}</mv-toast>
+          </div>
           <ul>
             <li><em>Names are links which open in a new window</em></li>
             <li><em>Click on a birth year to trigger a cell action</em></li>
@@ -234,16 +251,16 @@ export class MvTableDemo extends LitElement {
     const { detail } = event || {};
     const { row, originalEvent } = detail || {};
     originalEvent.stopPropagation();
-    alert(`Row clicked: ${row.name.label}`);
+    this.message = `Row clicked: ${row.name.label}`;
   }
 
   handleCellClick(event) {
     const { detail } = event || {};
     const { row, column, value, originalEvent } = detail || {};
-    // only show an alert if the birth_year was clicked
+    // only show the message if the birth_year was clicked
     if (column.name === "birth_year") {
       originalEvent.stopPropagation();
-      alert(`${row.name.label} was born on ${value}`);
+      this.message = `${row.name.label} was born on ${value}`;
     }
     if (column.name === "name") {
       // don't fire row action when name link is clicked
@@ -253,13 +270,14 @@ export class MvTableDemo extends LitElement {
 
   handleActionButton(row, action) {
     return () => {
-      alert(`${action} button clicked on ${row.name.label}'s row`);
+      this.message = `${action} button clicked on ${row.name.label}'s row`;
     };
   }
 
   handleRowSelect(event) {
     const { detail: { row, selected, removed, added, originalEvent } } = event;
     originalEvent.stopPropagation();
+    this.message = JSON.stringify(selected, null, 2);
   }
 }
 
