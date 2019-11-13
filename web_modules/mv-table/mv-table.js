@@ -36,6 +36,7 @@ export class MvTable extends LitElement {
       columns: { type: Array, attribute: true },
       selectable: { type: Boolean, attribute: true },
       "with-checkbox": { type: Boolean, attribute: true },
+      "checkbox-column-label": { type: String, attribute: true },
       "action-column": { type: Object, attribute: true },
       selectedRows: { type: Array, attribute: false }
     };
@@ -124,6 +125,7 @@ export class MvTable extends LitElement {
     this.selectable = false;
     this.selectedRows = [];
     this["with-checkbox"] = false;
+    this["checkbox-column-label"] = "";
     this["action-column"] = null;
     this.isAllSelected = false;
   }
@@ -139,12 +141,12 @@ export class MvTable extends LitElement {
           <tr>
           ${withCheckbox
             ? html`
-              <td>
+              <td @click="${this.handleCellClick()}">
                 <mv-checkbox
                   .value="${SELECT_ALL}"
                   .checked="${this.isAllSelected}"
                   @click-checkbox="${this.handleClickCheckbox}"
-                  label="All"
+                  label="${this["checkbox-column-label"]}"
                 > </mv-checkbox>
               </td>`
             : html``}
@@ -168,7 +170,7 @@ export class MvTable extends LitElement {
                 >
                   ${withCheckbox
                     ? html`
-                      <td>
+                      <td  @click="${this.handleCellClick()}">
                         <mv-checkbox
                           .value="${row}"
                           .checked="${selected}"
@@ -226,13 +228,17 @@ export class MvTable extends LitElement {
 
   handleCellClick(row, column) {
     return originalEvent => {
-      const { name } = column;
-      const value = row[name];
-      this.dispatchEvent(
-        new CustomEvent("cell-click", {
-          detail: { row, column, value, originalEvent }
-        })
-      );
+      if (!row && !column) {
+        originalEvent.stopPropagation();
+      } else {
+        const { name } = column;
+        const value = row[name];
+        this.dispatchEvent(
+          new CustomEvent("cell-click", {
+            detail: { row, column, value, originalEvent }
+          })
+        );
+      }
     };
   }
 

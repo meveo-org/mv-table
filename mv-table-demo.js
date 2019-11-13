@@ -260,15 +260,6 @@ export class MvTableDemo extends LitElement {
   handleRowSelect(event) {
     const { detail: { row, selected, removed, added, originalEvent } } = event;
     originalEvent.stopPropagation();
-    /* eslint-disable no-console */
-    console.log("=".repeat(80));
-    console.log("mv-table-demo");
-    console.log("row, :", row);
-    console.log("selected :", selected);
-    console.log("removed :", removed);
-    console.log("added :", added);
-    console.log("=".repeat(80));
-    /* eslint-enable */
   }
 }
 
