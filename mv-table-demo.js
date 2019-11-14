@@ -14,8 +14,8 @@ import "./web_modules/mv-table/components/mv-toast.js";
 export class MvTableDemo extends LitElement {
   static get properties() {
     return {
-      page: { type: Number, reflect: true },
-      message: { type: String, reflect: true }
+      page: { type: Number, reflect: true, attribute: false },
+      message: { type: String, reflect: true, attribute: false }
     };
   }
 
@@ -25,6 +25,10 @@ export class MvTableDemo extends LitElement {
 				font-family: var(--font-family, Arial);
 				font-size: var(--font-size-m, 10pt);
 				line-height: var(--line-height-s, 1.625);
+      }
+
+      pre {
+        margin: 0;
       }
       
       .table-demo {
@@ -113,9 +117,9 @@ export class MvTableDemo extends LitElement {
       ? html`
         <div class="table-demo">
           <div class="toasts">
-            <mv-toast>${this.message}</mv-toast>
-            <mv-toast type="information">${this.message}</mv-toast>
-            <mv-toast type="error">${this.message}</mv-toast>
+            <mv-toast><pre>${this.message}</pre></mv-toast>
+            <mv-toast type="information"><pre>${this.message}</pre></mv-toast>
+            <mv-toast type="error"><pre>${this.message}</pre></mv-toast>
           </div>
           <ul>
             <li><em>Names are links which open in a new window</em></li>
@@ -277,7 +281,7 @@ export class MvTableDemo extends LitElement {
   handleRowSelect(event) {
     const { detail: { row, selected, removed, added, originalEvent } } = event;
     originalEvent.stopPropagation();
-    this.message = JSON.stringify(selected, null, 2);
+    this.message = `Selected rows:\n ${JSON.stringify(selected, null, 2)}`;
   }
 }
 
