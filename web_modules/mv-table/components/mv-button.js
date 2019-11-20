@@ -14,7 +14,7 @@ export class MvButton extends LitElement {
       // valid type values are: "default", "round", or "outline"
       type: { type: String, attribute: true },
       // valid button-style values are:
-      //      "gradient", "outline", "success", "error", or "info"
+      //      "gradient", "success", "error", "warning", or "info"
       // default: "success"
       "button-style": { type: String, attribute: true }
     };

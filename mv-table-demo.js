@@ -128,7 +128,7 @@ export class MvTableDemo extends LitElement {
           </ul>
           <mv-table
             .columns="${this.columns}"
-            .list="${this.list}"
+            .rows="${this.list}"
             .action-column="${this.actionColumn}"
             @row-click="${this.handleRowClick}"
             @cell-click="${this.handleCellClick}"

@@ -22,7 +22,7 @@ export class MvToast extends LitElement {
 				font-size: var(--mv-font-size-m, 10pt);				
       }
 
-      @keyframes fade-in-top-right {
+      @keyframes fade-in {
         0% {
           opacity: 0;
         }
@@ -52,11 +52,11 @@ export class MvToast extends LitElement {
       }
 
       .mv-toast.show {
-        animation: fade-in-top-right 1s ease-in;
+        animation: fade-in 1s ease-in;
       }
 
       .mv-toast.hide {
-        animation: fade-out 1s ease-in;
+        animation: fade-out 1s ease-out;
       }
 
       .toast-icon-section {
@@ -253,7 +253,7 @@ export class MvToast extends LitElement {
   constructor() {
     super();
     this.type = "success";
-    this.duration = 0;
+    this.duration = 1;
     this.closeable = true;
     this.visible = true;
     this.show = true;
@@ -289,11 +289,15 @@ export class MvToast extends LitElement {
   }
 
   close() {
-    const that = this;
-    that.show = false;
+    this.show = false;
     setTimeout(() => {
-      that.visible = false;
+      this.clearMessage();
     }, 1000);
+  }
+
+  clearMessage() {
+    this.visible = false;
+    this.dispatchEvent(new CustomEvent("clear-message"));
   }
 }
 

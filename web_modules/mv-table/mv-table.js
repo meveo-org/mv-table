@@ -32,7 +32,7 @@ const getCellComponent = props => {
 export class MvTable extends LitElement {
   static get properties() {
     return {
-      list: { type: Array, attribute: true, reflect: true },
+      rows: { type: Array, attribute: false, reflect: true },
       columns: { type: Array, attribute: true },
       selectable: { type: Boolean, attribute: true },
       "with-checkbox": { type: Boolean, attribute: true },
@@ -121,7 +121,7 @@ export class MvTable extends LitElement {
   constructor() {
     super();
     this.columns = [];
-    this.list = [];
+    this.rows = [];
     this.selectable = false;
     this.selectedRows = [];
     this["with-checkbox"] = false;
@@ -160,7 +160,7 @@ export class MvTable extends LitElement {
           </tr>
         </thead>
         <tbody>
-          ${this.list.map(row => {
+          ${this.rows.map(row => {
             const selected = this.selectedRows.includes(row);
             const rowClass = `mv-table-row${selected ? " selected" : ""}`;
             return html`
@@ -200,7 +200,7 @@ export class MvTable extends LitElement {
   }
 
   attributeChangedCallback(name, oldValue, newValue) {
-    if (name === "list") {
+    if (name === "rows") {
       this.selectedRows = [];
       this.isAllSelected = false;
     }
@@ -254,10 +254,10 @@ export class MvTable extends LitElement {
         this.isAllSelected = false;
       } else {
         removed = [];
-        added = this.list.filter(
+        added = this.rows.filter(
           item => !this.selectedRows.some(selectedRow => selectedRow === item)
         );
-        this.selectedRows = [...this.list];
+        this.selectedRows = [...this.rows];
         this.isAllSelected = true;
       }
     } else {
@@ -293,9 +293,9 @@ export class MvTable extends LitElement {
 
   hasAllSelected() {
     return (
-      this.list.length > 0 &&
+      this.rows.length > 0 &&
       this.selectedRows.length > 0 &&
-      this.list.every(row => this.selectedRows.includes(row))
+      this.rows.every(row => this.selectedRows.includes(row))
     );
   }
 }
