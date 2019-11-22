@@ -1,15 +1,11 @@
-import {
-  LitElement,
-  html,
-  css
-} from "https://cdn.jsdelivr.net/gh/manaty/mv-dependencies@master/web_modules/lit-element.js";
+import { LitElement, html, css } from "lit-element";
 
 import { getSchema, getPeople } from "./mock_data/api.js";
 
 import "./mv-table.js";
-import "./web_modules/mv-pagination/mv-pagination.js";
-import "./web_modules/mv-button/mv-button.js";
-import "./web_modules/mv-toast/mv-toast.js";
+import "mv-pagination";
+import "mv-button";
+import "mv-toast";
 
 export class MvTableDemo extends LitElement {
   static get properties() {

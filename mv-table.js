@@ -1,10 +1,6 @@
-import {
-  LitElement,
-  html,
-  css
-} from "https://cdn.jsdelivr.net/gh/manaty/mv-dependencies@master/web_modules/lit-element.js";
+import { LitElement, html, css } from "lit-element";
 
-import "./web_modules/mv-checkbox/mv-checkbox.js";
+import "mv-checkbox";
 import "./cell_types/mv-array.js";
 import "./cell_types/mv-date.js";
 import "./cell_types/mv-text.js";

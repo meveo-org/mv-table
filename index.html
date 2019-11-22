@@ -8,12 +8,21 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
   <title>mv-table</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/manaty/mv-theme@master/css/meveo-theme.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/meveo-frontend/mv-theme@master/css/meveo-theme.css" />
   <link rel="icon" type="image/png" href="https://manaty.net/images/favicon.png">
-  <script type="module" src="./mv-table-demo.js"></script>
-  <script>
-
+  <script defer src="https://cdn.jsdelivr.net/gh/guybedford/es-module-shims@latest/dist/es-module-shims.js"></script>
+  <script type="importmap-shim">
+    {
+      "imports": {
+        "lit-element": "https://cdn.jsdelivr.net/gh/meveo-frontend/mv-dependencies@master/lit-element.js",
+        "mv-checkbox": "https://cdn.jsdelivr.net/gh/meveo-frontend/mv-checkbox@master/mv-checkbox.js",
+        "mv-button": "https://cdn.jsdelivr.net/gh/meveo-frontend/mv-button@master/mv-button.js",
+        "mv-pagination": "https://cdn.jsdelivr.net/gh/meveo-frontend/mv-pagination@master/mv-pagination.js",
+        "mv-toast": "https://cdn.jsdelivr.net/gh/meveo-frontend/mv-toast@master/mv-toast.js"
+      }
+    }
   </script>
+  <script type="module-shim" src="./mv-table-demo.js"></script>
 </head>
 
 <body>
