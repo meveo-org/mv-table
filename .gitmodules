@@ -1,0 +1,12 @@
+[submodule "web_modules/mv-checkbox"]
+	path = web_modules/mv-checkbox
+	url = https://github.com/meveo-frontend/mv-checkbox.git
+[submodule "web_modules/mv-pagination"]
+	path = web_modules/mv-pagination
+	url = https://github.com/meveo-frontend/mv-pagination.git
+[submodule "web_modules/mv-button"]
+	path = web_modules/mv-button
+	url = https://github.com/meveo-frontend/mv-button.git
+[submodule "web_modules/mv-toast"]
+	path = web_modules/mv-toast
+	url = https://github.com/meveo-frontend/mv-toast.git

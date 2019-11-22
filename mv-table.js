@@ -4,11 +4,11 @@ import {
   css
 } from "https://cdn.jsdelivr.net/gh/manaty/mv-dependencies@master/web_modules/lit-element.js";
 
-import "./components/mv-checkbox.js";
-import "./components/cell_types/mv-array.js";
-import "./components/cell_types/mv-date.js";
-import "./components/cell_types/mv-text.js";
-import "./components/cell_types/mv-url.js";
+import "./web_modules/mv-checkbox/mv-checkbox.js";
+import "./cell_types/mv-array.js";
+import "./cell_types/mv-date.js";
+import "./cell_types/mv-text.js";
+import "./cell_types/mv-url.js";
 
 const CELL_TYPES = props => {
   const { row, column } = props;
@@ -170,7 +170,7 @@ export class MvTable extends LitElement {
                 >
                   ${withCheckbox
                     ? html`
-                      <td  @click="${this.handleCellClick()}">
+                      <td>
                         <mv-checkbox
                           .value="${row}"
                           .checked="${selected}"

@@ -6,10 +6,10 @@ import {
 
 import { getSchema, getPeople } from "./mock_data/api.js";
 
-import "./web_modules/mv-table/mv-table.js";
-import "./web_modules/mv-table/components/mv-pagination.js";
-import "./web_modules/mv-table/components/mv-button.js";
-import "./web_modules/mv-table/components/mv-toast.js";
+import "./mv-table.js";
+import "./web_modules/mv-pagination/mv-pagination.js";
+import "./web_modules/mv-button/mv-button.js";
+import "./web_modules/mv-toast/mv-toast.js";
 
 export class MvTableDemo extends LitElement {
   static get properties() {
