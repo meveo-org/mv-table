@@ -114,8 +114,6 @@ export class MvTableDemo extends LitElement {
         <div class="table-demo">
           <div class="toasts">
             <mv-toast><pre>${this.message}</pre></mv-toast>
-            <mv-toast type="information"><pre>${this.message}</pre></mv-toast>
-            <mv-toast type="error"><pre>${this.message}</pre></mv-toast>
           </div>
           <ul>
             <li><em>Names are links which open in a new window</em></li>

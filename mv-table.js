@@ -278,9 +278,9 @@ export class MvTable extends LitElement {
     this.dispatchEvent(
       new CustomEvent("select-row", {
         detail: {
+          originalEvent,
           removed,
           added,
-          originalEvent,
           selected: this.selectedRows
         }
       })
