@@ -54,7 +54,7 @@ export class MvTableDemo extends LitElement {
     this.limit = 10;
     this.page = 1;
     this.pages = 0;
-    this.columns = {};
+    this.columns = [];
     this.columnOrder = [
       "name",
       "gender",

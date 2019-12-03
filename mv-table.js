@@ -11,10 +11,10 @@ const CELL_TYPES = props => {
   const { name, target } = column;
   const value = row[name];
   return {
-    ARRAY: html`<mv-array .value="${value}"> </mv-array>`,
-    DATE: html`<mv-date .value="${value}"> <mv-date>`,
-    TEXT: html`<mv-text .value="${value}"> </mv-text>`,
-    URL: html`<mv-url .href="${value.href}" .label="${value.label}" .target="${target}"> </mv-url>`
+    ARRAY: html`<mv-array .value="${value}"></mv-array>`,
+    DATE: html`<mv-date .value="${value}"></mv-date>`,
+    TEXT: html`<mv-text .value="${value}"></mv-text>`,
+    URL: html`<mv-url .href="${value.href}" .label="${value.label}" .target="${target}"></mv-url>`
   };
 };
 
