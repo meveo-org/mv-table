@@ -36,7 +36,7 @@ You can also check this [demo](https://manaty.net/mv-table/)
 ```
 
 The column schema has the following properties:
-```json
+```javascript
 {
   name,           // attribute/property name of the column
   title,          // text for column header
