@@ -2,10 +2,10 @@ import { LitElement, html, css } from "lit-element";
 
 import { getSchema, getPeople } from "./mock_data/api.js";
 
-import "./mv-table.js";
 import "mv-pagination";
 import "mv-button";
 import "mv-toast";
+import "./mv-table.js";
 
 export class MvTableDemo extends LitElement {
   static get properties() {
@@ -75,6 +75,7 @@ export class MvTableDemo extends LitElement {
         justify-content: center;
       `,
       button: `
+        --mv-button-min-width: 50px;
         --mv-button-padding: 11px 15px;
       `
     };
@@ -109,11 +110,13 @@ export class MvTableDemo extends LitElement {
 
   render() {
     const hasList = this.list && this.list.length > 0;
+    console.log("this.columns :", this.columns);
     return hasList
       ? html`
         <div class="table-demo">
           <div class="toasts">
-            <mv-toast><pre>${this.message}</pre></mv-toast>
+            <mv-toast type="information" .closeable="${false}"><pre>${this
+          .message}</pre></mv-toast>
           </div>
           <ul>
             <li><em>Names are links which open in a new window</em></li>
@@ -129,17 +132,12 @@ export class MvTableDemo extends LitElement {
             @select-row="${this.handleRowSelect}"
             with-checkbox
             selectable
-          > </mv-table>
+          ></mv-table>
           <mv-pagination
             .page="${this.page}"
             .pages="${this.pages}"
             @change-page="${this.gotoPage}"
-          >
-            <span slot="first-button" class="page-buttons">&laquo;</span>
-            <span slot="previous-button" class="page-buttons">&lsaquo;</span>
-            <span slot="next-button" class="page-buttons">&rsaquo;</span>
-            <span slot="last-button" class="page-buttons">&raquo;</span>
-          </mv-pagination>
+          ></mv-pagination>
         </div>
       `
       : html`<h1>Loading...</h1>`;

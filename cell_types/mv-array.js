@@ -1,8 +1,4 @@
-import {
-  LitElement,
-  html,
-  css
-} from "https://cdn.jsdelivr.net/gh/manaty/mv-dependencies@master/web_modules/lit-element.js";
+import { LitElement, html, css } from "lit-element";
 
 export class MvArray extends LitElement {
   static get properties() {
