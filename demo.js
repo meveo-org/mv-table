@@ -110,7 +110,6 @@ export class MvTableDemo extends LitElement {
 
   render() {
     const hasList = this.list && this.list.length > 0;
-    console.log("this.columns :", this.columns);
     return hasList
       ? html`
         <div class="table-demo">
