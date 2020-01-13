@@ -7,7 +7,7 @@
 * Can render dynamic table data based on pre-defined column schema
 
 ## Dependencies
-* [mv-checkbox](https://github.com/meveo-frontend/mv-checkbox)
+* [mv-checkbox](https://github.com/meveo-org/mv-checkbox)
 
 ## Quick Start
 
@@ -18,7 +18,7 @@ To experiment with the MvTable component.
 3. Update the table in the demo.js file
 
 
-You can also check this [demo](https://manaty.net/mv-table/)
+You can also check this [demo](https://table.meveo.org/)
 
 
 ## Sample usage
