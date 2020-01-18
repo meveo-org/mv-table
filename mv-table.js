@@ -40,9 +40,12 @@ export class MvTable extends LitElement {
 
   static get styles() {
     return css`
-			:host {
-				font-family: var(--font-family, Arial);
-				font-size: var(--font-size-m, 10pt);				
+      :host {
+        font-family: var(--font-family, Arial);
+        font-size: var(--font-size-m, 10pt);
+        --table-header-font-family: var(--mv-table-header-font-family, var(--font-family, Arial));
+        --table-row-height: var(--mv-table-row-height, 66px);
+        --table-row-cursor: var(--mv-table-row-cursor, default);
       }
 
       table {
@@ -51,10 +54,10 @@ export class MvTable extends LitElement {
       }
 
       thead {
-        font-family: var(--header-font-family, Arial);
+        font-family: var(--table-header-font-family);
         margin: auto;
-        height: var(--table-row-height, 66px);
-        max-height: var(--table-row-height, 66px);
+        height: var(--table-row-height);
+        max-height: var(--table-row-height);
         font-weight: 700;
         text-transform: uppercase;
         text-overflow: ellipsis;
@@ -78,6 +81,7 @@ export class MvTable extends LitElement {
 
       tbody tr {
         border-bottom: 1px solid #E9E9E9;
+        cursor: var(--table-row-cursor);
       }
 
       tbody tr:hover, tbody tr.selected {
@@ -92,8 +96,8 @@ export class MvTable extends LitElement {
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
-        height: var(--table-row-height, 66px);
-        max-height: var(--table-row-height, 66px);
+        height: var(--table-row-height);
+        max-height: var(--table-row-height);
       }
 
       .action-header {
