@@ -46,6 +46,9 @@ export class MvTable extends LitElement {
         --table-header-font-family: var(--mv-table-header-font-family, var(--font-family, Arial));
         --table-row-height: var(--mv-table-row-height, 66px);
         --table-row-cursor: var(--mv-table-row-cursor, default);
+        --head-background-color: var(--mv-table-head-background-color);
+        --body-background-color: var(--mv-table-body-background-color);
+        --color: var(--mv-table-color, #80828C);
       }
 
       table {
@@ -64,7 +67,7 @@ export class MvTable extends LitElement {
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
-        background-color: #F5F6FA;
+        background-color: var(--head-background-color, #F5F6FA);
       }
 
       thead td {
@@ -82,14 +85,15 @@ export class MvTable extends LitElement {
       tbody tr {
         border-bottom: 1px solid #E9E9E9;
         cursor: var(--table-row-cursor);
+        background-color: var(--mv-table-body-background-color);
       }
 
       tbody tr:hover, tbody tr.selected {
-        background-color: #EDEDED;
+        background-color: var(--head-background-color, #EDEDED);
       }
 
       td {
-        color: #80828C;
+        color: var(--color);
         border-bottom: none;
         padding: 0 0 0 15px;
         text-align: left;

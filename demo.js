@@ -11,16 +11,19 @@ export class MvTableDemo extends LitElement {
   static get properties() {
     return {
       page: { type: Number, reflect: true, attribute: false },
-      message: { type: String, reflect: true, attribute: false }
+      message: { type: String, reflect: true, attribute: false },
+      hue: { type: Number, attribute: false, reflect: false },
+      saturation: { type: Number, attribute: false, reflect: false },
+      lightness: { type: Number, attribute: false, reflect: false }
     };
   }
 
   static get styles() {
     return css`
-			:host {
-				font-family: var(--font-family, Arial);
-				font-size: var(--font-size-m, 10pt);
-				line-height: var(--line-height-s, 1.625);
+	  :host {
+	    font-family: var(--font-family, Arial);
+		font-size: var(--font-size-m, 10pt);
+		line-height: var(--line-height-s, 1.625);
       }
 
       pre {
@@ -40,13 +43,51 @@ export class MvTableDemo extends LitElement {
 
       .toasts {
         display: flex;
-        flex-direction: row;        
+        justify-content: space-between;        
       }
 
       .toasts mv-toast {
         padding: 10px;
       }
-		`;
+      
+      .slidecontainer {
+        width: 500px;
+      }
+      
+      .slider {
+        -webkit-appearance: none;
+        width: 100%;
+        height: 15px;
+        border-radius: 5px;
+        background: #d3d3d3;
+        outline: none;
+        opacity: 0.7;
+        -webkit-transition: .2s;
+        transition: opacity .2s;
+      }
+      
+      .slider:hover {
+        opacity: 1;
+      }
+      
+      .slider::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 25px;
+        height: 25px;
+        border-radius: 50%;
+        background: #4CAF50;
+        cursor: pointer;
+      }
+      
+      .slider::-moz-range-thumb {
+        width: 25px;
+        height: 25px;
+        border-radius: 50%;
+        background: #4CAF50;
+        cursor: pointer;
+      }
+	`;
   }
 
   constructor() {
@@ -106,16 +147,39 @@ export class MvTableDemo extends LitElement {
         </div>
       `
     };
+    this.hue = 0;
+    this.saturation = 0;
+    this.lightness = 100;
   }
 
   render() {
     const hasList = this.list && this.list.length > 0;
+    const color =
+        `--mv-table-body-background-color: hsl(${this.hue}, ${this.saturation}%, ${this.lightness}%);
+        --mv-table-head-background-color: hsl(${this.hue}, ${this.saturation}%, ${this.lightness - 15}%);
+        --mv-table-color:${this.lightness < 80 ? "#FFFFFF" : "#80828C"};
+        --mv-checkbox-border-color: ${this.lightness < 80 ? "#FFFFFF" : "#4E686D"};`;
     return hasList
       ? html`
         <div class="table-demo">
           <div class="toasts">
             <mv-toast type="information" .closeable="${false}"><pre>${this
           .message}</pre></mv-toast>
+            <div>
+              <h3>Customize theme with HSL colors</h3>
+              Hue: ${this.hue}
+              <div class="slidecontainer">
+                <input type="range" min="0" max="360" value="${this.hue}" class="slider" @input="${this.changeHue}">
+              </div>
+              Saturation: ${this.saturation}%
+              <div class="slidecontainer">
+                <input type="range" min="0" max="100" value="${this.saturation}" class="slider" @input="${this.changeSaturation}">
+              </div>
+              Lightness: ${this.lightness}%
+              <div class="slidecontainer">
+                <input type="range" min="0" max="100" value="${this.lightness}" class="slider" @input="${this.changeLightness}">
+              </div>  
+            </div>
           </div>
           <ul>
             <li><em>Names are links which open in a new window</em></li>
@@ -131,6 +195,7 @@ export class MvTableDemo extends LitElement {
             @select-row="${this.handleRowSelect}"
             with-checkbox
             selectable
+            style="${color}"
           ></mv-table>
           <mv-pagination
             .page="${this.page}"
@@ -274,6 +339,18 @@ export class MvTableDemo extends LitElement {
     originalEvent.stopPropagation();
     this.message = `Selected rows:\n ${JSON.stringify(selected, null, 2)}`;
   }
+
+  changeHue = event => {
+    this.hue = event.currentTarget.value;
+  };
+
+  changeSaturation = event => {
+    this.saturation = event.currentTarget.value;
+  };
+
+  changeLightness = event => {
+    this.lightness = event.currentTarget.value;
+  };
 }
 
 customElements.define("mv-table-demo", MvTableDemo);
