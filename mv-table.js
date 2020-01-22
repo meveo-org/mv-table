@@ -34,7 +34,11 @@ export class MvTable extends LitElement {
       "with-checkbox": { type: Boolean, attribute: true },
       "checkbox-column-label": { type: String, attribute: true },
       "action-column": { type: Object, attribute: true },
-      selectedRows: { type: Array, attribute: false }
+      selectedRows: { type: Array, attribute: false },
+
+      //  valid theme values are: "light", "dark"
+      //    default: "light"
+      theme: { type: String, attribute: false }
     };
   }
 
@@ -46,9 +50,15 @@ export class MvTable extends LitElement {
         --table-header-font-family: var(--mv-table-header-font-family, var(--font-family, Arial));
         --table-row-height: var(--mv-table-row-height, 66px);
         --table-row-cursor: var(--mv-table-row-cursor, default);
-        --head-background-color: var(--mv-table-head-background-color);
-        --body-background-color: var(--mv-table-body-background-color);
-        --color: var(--mv-table-color, #80828C);
+        
+        --head-light-background: var(--mv-table-head-light-background, #F5F6FA);
+        --body-light-background: var(--mv-table-body-light-background);
+        --hover-light-background: var(--mv-table-hover-light-background, #EDEDED);
+        
+        --head-dark-background: var(--mv-table-head-dark-background, #23404C);
+        --body-dark-background: var(--mv-table-body-dark-background, #373E48);
+        --hover-dark-background: var(--mv-table-hover-dark-background, #4E686D);
+        --color: var(--mv-table-color);
       }
 
       table {
@@ -67,7 +77,7 @@ export class MvTable extends LitElement {
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
-        background-color: var(--head-background-color, #F5F6FA);
+        background-color: var(--head-background);
       }
 
       thead td {
@@ -85,15 +95,14 @@ export class MvTable extends LitElement {
       tbody tr {
         border-bottom: 1px solid #E9E9E9;
         cursor: var(--table-row-cursor);
-        background-color: var(--mv-table-body-background-color);
+        background-color: var(--body-background);
       }
 
       tbody tr:hover, tbody tr.selected {
-        background-color: var(--head-background-color, #EDEDED);
+        background-color: var(--hover-background);
       }
-
+      
       td {
-        color: var(--color);
         border-bottom: none;
         padding: 0 0 0 15px;
         text-align: left;
@@ -102,6 +111,7 @@ export class MvTable extends LitElement {
         text-overflow: ellipsis;
         height: var(--table-row-height);
         max-height: var(--table-row-height);
+        color: var(--color);
       }
 
       .action-header {
@@ -119,7 +129,25 @@ export class MvTable extends LitElement {
       mv-checkbox {
         margin: auto;
       }
-		`;
+      
+      .light {
+        --head-background: var(--head-light-background);
+        --body-background: var(--body-light-background);
+        --hover-background: var(--hover-light-background);
+        --color: #80828C;
+        --mv-checkbox-border-color: var(--color);
+        --mv-table-url-color: var(--color);
+      }
+      
+      .dark {
+        --head-background: var(--head-dark-background);
+        --body-background: var(--body-dark-background);
+        --hover-background: var(--hover-dark-background);
+        --color: #FFFFFF;
+        --mv-checkbox-border-color: var(--color);
+        --mv-table-url-color: var(--color);
+      }
+    `;
   }
 
   constructor() {
@@ -132,6 +160,7 @@ export class MvTable extends LitElement {
     this["checkbox-column-label"] = "";
     this["action-column"] = null;
     this.isAllSelected = false;
+    this.theme = "light";
   }
 
   render() {
@@ -139,7 +168,7 @@ export class MvTable extends LitElement {
     const hasActionColumn = !!this["action-column"];
 
     return html`
-      <div class="mv-table-container">
+      <div class="mv-table-container ${this.theme}">
       <table>
         <thead>
           <tr>

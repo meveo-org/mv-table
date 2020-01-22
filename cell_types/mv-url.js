@@ -14,7 +14,7 @@ export class MvUrl extends LitElement {
 	  :host {
 		font-family: var(--font-family, Arial);
 		font-size: var(--font-size-m, 10pt);
-		--color: var(--mv-table-color, #80828C);				
+		--color: var(--mv-table-url-color, #80828C);				
       }
 
       a {
@@ -25,7 +25,7 @@ export class MvUrl extends LitElement {
       a:hover {
         text-decoration: underline;
       }
-		`;
+	`;
   }
 
   constructor() {
