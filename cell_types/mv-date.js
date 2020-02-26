@@ -5,7 +5,8 @@ export class MvDate extends LitElement {
     return {
       value: { type: String, attribute: true },
       locale: { type: String, attribute: true },
-      format: { type: String, attribute: true } // recognized format values are: "date", "time", or "both"
+      format: { type: String, attribute: true } , // recognized format values are: "date", "time", or "both"
+      datePattern : { type: String, attribute: true }
     };
   }
 
@@ -23,7 +24,28 @@ export class MvDate extends LitElement {
     this.locale = "en-US";
     this.format = "date";
     this.formattedDate = "";
+    this.datePattern = null;
   }
+
+  formatDateByPattern = (pattern, value) => {
+    const date = new Date(value);
+    let month = date.getMonth() + 1;
+    let day = date.getDate();
+    const year = date.getFullYear();
+    if (day < 10) {
+      day = `0${day}`;
+    }
+    if (month < 10) {
+      month = `0${month}`;
+    }
+    if (pattern === "mm/dd/yyyy") {
+      return `${month}/${day}/${year}`;
+    }
+    if (pattern === "yyyy/dd/mm") {
+      return `${year}/${day}/${month}`;
+    }
+    return `${month}/${day}/${year}`;
+  };
 
   set value(value) {
     const oldValue = this.formattedDate;
@@ -51,8 +73,9 @@ export class MvDate extends LitElement {
   }
 
   render() {
+    const value = this.datePattern ? this.formatDateByPattern(this.datePattern, this.value) : this.value;
     return html`
-      ${this.value}
+      ${value}
     `;
   }
 }

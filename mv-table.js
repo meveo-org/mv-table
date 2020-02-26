@@ -7,12 +7,12 @@ import "./cell_types/mv-text.js";
 import "./cell_types/mv-url.js";
 
 const CELL_TYPES = props => {
-  const { row, column } = props;
+  const { row, column, datePattern } = props;
   const { name, target } = column;
   const value = row[name];
   return {
     ARRAY: html`<mv-array .value="${value}"></mv-array>`,
-    DATE: html`<mv-date .value="${value}"></mv-date>`,
+    DATE: html`<mv-date .value="${value}" .datePattern="${datePattern}"></mv-date>`,
     TEXT: html`<mv-text .value="${value}"></mv-text>`,
     URL: html`<mv-url .href="${value.href}" .label="${value.label}" .target="${target}"></mv-url>`
   };
@@ -38,7 +38,8 @@ export class MvTable extends LitElement {
 
       //  valid theme values are: "light", "dark"
       //    default: "light"
-      theme: { type: String, attribute: false }
+      theme: { type: String, attribute: false },
+      datePattern: { type: String, attribute: true }
     };
   }
 
@@ -161,11 +162,13 @@ export class MvTable extends LitElement {
     this["action-column"] = null;
     this.isAllSelected = false;
     this.theme = "light";
+    this.datePattern = null;
   }
 
   render() {
     const withCheckbox = this["with-checkbox"];
     const hasActionColumn = !!this["action-column"];
+    const { datePattern } = this;
 
     return html`
       <div class="mv-table-container ${this.theme}">
@@ -212,7 +215,7 @@ export class MvTable extends LitElement {
                       </td>`
                     : html``}
                   ${this.columns.map(column => {
-                    const cellComponent = getCellComponent({ row, column });
+                    const cellComponent = getCellComponent({ row, column, datePattern });
                     return html`
                     <td @click="${this.handleCellClick(row, column)}">
                       ${cellComponent}
