@@ -5,7 +5,6 @@ import { getSchema, getPeople } from "./mock_data/api.js";
 import "mv-pagination";
 import "mv-button";
 import "mv-toast";
-import "mv-font-awesome";
 import "./mv-table.js";
 
 export class MvTableDemo extends LitElement {
@@ -19,12 +18,12 @@ export class MvTableDemo extends LitElement {
 
   static get styles() {
     return css`
-	  :host {
-	    font-family: var(--font-family, Arial);
-		font-size: var(--font-size-m, 10pt);
-		line-height: var(--line-height-s, 1.625);
+      :host {
+        font-family: var(--font-family, Arial);
+        font-size: var(--font-size-m, 10pt);
+        line-height: var(--line-height-s, 1.625);
       }
-
+      
       pre {
         margin: 0;
       }
@@ -35,7 +34,7 @@ export class MvTableDemo extends LitElement {
         width: calc(100% - 60px);
         margin: 0 auto;
       }
-
+      
       .page-buttons {
         font-size: var(--page-button-font-size, 16px);
       }
@@ -49,17 +48,26 @@ export class MvTableDemo extends LitElement {
         padding: 10px;
       }
       
-      mv-fa[icon="lightbulb"] {
-        font-size: 50px;
+      fieldset > label, label > input {
         cursor: pointer;
-        margin: 20px;
       }
       
-      .theme {
-        display: flex;
-        justify-content: flex-start;
+      fieldset {
+        width: 120px;
+        margin-left: 10px;
+        border:2px solid red;
+        -moz-border-radius:8px;
+        -webkit-border-radius:8px;	
+        border-radius:8px;
+        color: #818181;
+        height: 45px;
       }
-	`;
+      
+      legend {
+        font-weight: 500;
+        color: red;
+      }
+    `;
   }
 
   constructor() {
@@ -119,7 +127,6 @@ export class MvTableDemo extends LitElement {
         </div>
       `
     };
-    this.open = true;
     this.theme = "light";
   }
 
@@ -129,11 +136,12 @@ export class MvTableDemo extends LitElement {
       ? html`
         <div class="table-demo">
           <div class="toasts">
-            <mv-toast type="information" .closeable="${false}"><pre>${this
-          .message}</pre></mv-toast>
-            <div class="theme">
-              <mv-fa icon="lightbulb" style="color: ${this.open ? "yellow" : ""}" @click=${this.toggleLightBulb}></mv-fa>
-            </div>
+            <mv-toast type="information" .closeable="${false}" .theme="${this.theme}"><pre>${this.message}</pre></mv-toast>
+            <fieldset>
+              <legend>Theme</legend>
+              <label><input type="radio" name="theme" value="light" checked @change="${this.radioChange}" />Light</label>
+              <label><input type="radio" name="theme" value="dark" @change="${this.radioChange}" />Dark</label>
+            </fieldset>
           </div>
           <ul>
             <li><em>Names are links which open in a new window</em></li>
@@ -155,6 +163,7 @@ export class MvTableDemo extends LitElement {
             .page="${this.page}"
             .pages="${this.pages}"
             @change-page="${this.gotoPage}"
+            .theme="${this.theme}"
           ></mv-pagination>
         </div>
       `
@@ -294,9 +303,9 @@ export class MvTableDemo extends LitElement {
     this.message = `Selected rows:\n ${JSON.stringify(selected, null, 2)}`;
   }
 
-  toggleLightBulb = () => {
-    this.open = !this.open;
-    if (this.open) {
+  radioChange = originalEvent => {
+    const { target: { value } } = originalEvent;
+    if (value === "light") {
       this.theme = "light";
     } else {
       this.theme = "dark";

@@ -10,11 +10,11 @@ export class MvArray extends LitElement {
 
   static get styles() {
     return css`
-			:host {
-				font-family: var(--font-family, Arial);
-				font-size: var(--font-size-m, 10pt);				
+      :host {
+        font-family: var(--font-family, Arial);
+        font-size: var(--font-size-m, 10pt);				
       }
-
+      
       ul {
         list-style: none;
         padding-left: 0;
@@ -72,7 +72,7 @@ export class MvArray extends LitElement {
         box-shadow: inset 0 0 5px 0 rgba(29, 155, 201, 0.3);
         background-color: #008FC3;
       }
-		`;
+    `;
   }
 
   constructor() {
