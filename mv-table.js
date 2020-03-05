@@ -39,7 +39,7 @@ export class MvTable extends LitElement {
       //  valid theme values are: "light", "dark"
       //    default: "light"
       theme: { type: String, attribute: false },
-      datePattern: { type: String, attribute: true }
+      datePattern: { type: String, attribute: "date-pattern", reflect: true }
     };
   }
 

@@ -56,9 +56,9 @@ export class MvTableDemo extends LitElement {
         width: 120px;
         margin-left: 10px;
         border:2px solid red;
-        -moz-border-radius:8px;
-        -webkit-border-radius:8px;	
-        border-radius:8px;
+        -moz-border-radius: 8px;
+        -webkit-border-radius: 8px;	
+        border-radius: 8px;
         color: #818181;
         height: 45px;
       }
@@ -132,15 +132,16 @@ export class MvTableDemo extends LitElement {
 
   render() {
     const hasList = this.list && this.list.length > 0;
+    const { theme } = this;
     return hasList
       ? html`
         <div class="table-demo">
           <div class="toasts">
-            <mv-toast type="information" .closeable="${false}" .theme="${this.theme}"><pre>${this.message}</pre></mv-toast>
+            <mv-toast type="information" .closeable="${false}" .theme="${theme}"><pre>${this.message}</pre></mv-toast>
             <fieldset>
               <legend>Theme</legend>
-              <label><input type="radio" name="theme" value="light" checked @change="${this.radioChange}" />Light</label>
-              <label><input type="radio" name="theme" value="dark" @change="${this.radioChange}" />Dark</label>
+              <label><input type="radio" name="theme" value="light" checked @change="${this.changeTheme}" />Light</label>
+              <label><input type="radio" name="theme" value="dark" @change="${this.changeTheme}" />Dark</label>
             </fieldset>
           </div>
           <ul>
@@ -157,13 +158,13 @@ export class MvTableDemo extends LitElement {
             @select-row="${this.handleRowSelect}"
             with-checkbox
             selectable
-            .theme="${this.theme}"
+            .theme="${theme}"
           ></mv-table>
           <mv-pagination
             .page="${this.page}"
             .pages="${this.pages}"
             @change-page="${this.gotoPage}"
-            .theme="${this.theme}"
+            .theme="${theme}"
           ></mv-pagination>
         </div>
       `
@@ -303,13 +304,9 @@ export class MvTableDemo extends LitElement {
     this.message = `Selected rows:\n ${JSON.stringify(selected, null, 2)}`;
   }
 
-  radioChange = originalEvent => {
+  changeTheme = originalEvent => {
     const { target: { value } } = originalEvent;
-    if (value === "light") {
-      this.theme = "light";
-    } else {
-      this.theme = "dark";
-    }
+    this.theme = value;
   };
 }
 

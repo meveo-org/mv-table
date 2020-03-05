@@ -6,7 +6,7 @@ export class MvDate extends LitElement {
       value: { type: String, attribute: true },
       locale: { type: String, attribute: true },
       format: { type: String, attribute: true } , // recognized format values are: "date", "time", or "both"
-      datePattern : { type: String, attribute: true }
+      datePattern: { type: String, attribute: "date-pattern", reflect: true }
     };
   }
 
