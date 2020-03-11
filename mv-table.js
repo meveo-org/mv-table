@@ -5,6 +5,7 @@ import "./cell_types/mv-array.js";
 import "./cell_types/mv-date.js";
 import "./cell_types/mv-text.js";
 import "./cell_types/mv-url.js";
+import "./cell_types/mv-image.js";
 
 const CELL_TYPES = props => {
   const { row, column, datePattern } = props;
@@ -14,7 +15,8 @@ const CELL_TYPES = props => {
     ARRAY: html`<mv-array .value="${value}"></mv-array>`,
     DATE: html`<mv-date .value="${value}" .datePattern="${datePattern}"></mv-date>`,
     TEXT: html`<mv-text .value="${value}"></mv-text>`,
-    URL: html`<mv-url .href="${value.href}" .label="${value.label}" .target="${target}"></mv-url>`
+    URL: html`<mv-url .href="${value.href}" .label="${value.label}" .target="${target}"></mv-url>`,
+    IMAGE: html`<mv-image .href="${value.href}" .alt="${value.alt}" .title="${value.title}" .content="${value.content}"></mv-image>`
   };
 };
 
@@ -107,7 +109,7 @@ export class MvTable extends LitElement {
         border-bottom: none;
         padding: 0 0 0 15px;
         text-align: left;
-        overflow: hidden;
+        overflow: initial;
         white-space: nowrap;
         text-overflow: ellipsis;
         height: var(--table-row-height);
