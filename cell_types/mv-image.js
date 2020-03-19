@@ -26,10 +26,6 @@ export class MvImage extends LitElement {
         width: var(--width);
         height: var(--height);
       }
-      
-      .container {
-        text-align: center;
-      }
     `;
   }
 

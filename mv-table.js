@@ -27,6 +27,13 @@ const getCellComponent = props => {
   return CELL_TYPES(props)[type] || CELL_TYPES(props)["TEXT"];
 };
 
+const getStyle = (columnsStyle, column, type) => {
+  if (columnsStyle.some(columnStyle => columnStyle.name === column)) {
+    return columnsStyle.find(columnStyle => columnStyle.name === column)[type]
+  }
+  return "";
+};
+
 export class MvTable extends LitElement {
   static get properties() {
     return {
@@ -41,7 +48,8 @@ export class MvTable extends LitElement {
       //  valid theme values are: "light", "dark"
       //    default: "light"
       theme: { type: String, attribute: false },
-      datePattern: { type: String, attribute: "date-pattern", reflect: true }
+      datePattern: { type: String, attribute: "date-pattern", reflect: true },
+      columnsStyle: { type: Array, attribute: false }
     };
   }
 
@@ -107,7 +115,7 @@ export class MvTable extends LitElement {
       
       td {
         border-bottom: none;
-        padding: 0 0 0 15px;
+        padding: 0 15px 0 15px;
         text-align: left;
         overflow: initial;
         white-space: nowrap;
@@ -115,6 +123,8 @@ export class MvTable extends LitElement {
         height: var(--table-row-height);
         max-height: var(--table-row-height);
         color: var(--color);
+        white-space: normal;
+        word-wrap: break-word;
       }
 
       .action-header {
@@ -165,6 +175,7 @@ export class MvTable extends LitElement {
     this.isAllSelected = false;
     this.theme = "light";
     this.datePattern = null;
+    this.columnsStyle = [];
   }
 
   render() {
@@ -188,7 +199,7 @@ export class MvTable extends LitElement {
                 > </mv-checkbox>
               </td>`
             : html``}
-          ${this.columns.map(column => html`<td>${column.title}</td>`)}
+          ${this.columns.map(column => html`<td style="${getStyle(this.columnsStyle, column.name, "header")}">${column.title}</td>`)}
           ${hasActionColumn
             ? html`
             <td class="action-header">
@@ -219,7 +230,7 @@ export class MvTable extends LitElement {
                   ${this.columns.map(column => {
                     const cellComponent = getCellComponent({ row, column, datePattern });
                     return html`
-                    <td @click="${this.handleCellClick(row, column)}">
+                    <td @click="${this.handleCellClick(row, column)}" style="${getStyle(this.columnsStyle, column.name, "cell")}">
                       ${cellComponent}
                     </td>`;
                   })}
