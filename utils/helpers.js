@@ -1,4 +1,4 @@
-const parseType = ({ format, type }) => {
+const parseType = ({ format, type = "STRING" }) => {
   if (format) {
     switch (format) {
       case "date-time":
