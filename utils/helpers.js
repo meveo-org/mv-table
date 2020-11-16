@@ -23,7 +23,7 @@ export const parseColumns = (properties, columnOrder) => {
     const property = properties[key];
     const column = {
       name: key,
-      title: property.description,
+      title: property.label,
       tooltip: property.description,
       type: parseType(property),
     };
