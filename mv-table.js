@@ -9,6 +9,7 @@ import "./cell_types/mv-image.js";
 
 const CELL_TYPES = props => {
   const { row, column, datePattern } = props;
+  console.log("props: ", props);
   const { name, target } = column;
   const value = row[name];
   return {
