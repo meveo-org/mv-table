@@ -14,6 +14,7 @@ const CELL_TYPES = props => {
   return {
     ARRAY: html`<mv-array .value="${value}"></mv-array>`,
     DATE: html`<mv-date .value="${value}" .datePattern="${datePattern}"></mv-date>`,
+    STRING: html`<mv-text .value="${value}"></mv-text>`,
     TEXT: html`<mv-text .value="${value}"></mv-text>`,
     URL: html`<mv-url .href="${value.href}" .label="${value.label}" .target="${target}"></mv-url>`,
     IMAGE: html`<mv-image .href="${value.href}" .alt="${value.alt}" .title="${value.title}" .content="${value.content}"></mv-image>`
