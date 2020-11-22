@@ -18,7 +18,7 @@ export class MvText extends LitElement {
 
   render() {
     return html`
-      ${this.value + ""}
+      ${(this.value + "") || ""}
     `;
   }
 }
