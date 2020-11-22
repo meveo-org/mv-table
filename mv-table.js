@@ -9,9 +9,8 @@ import "./cell_types/mv-image.js";
 
 const CELL_TYPES = props => {
   const { row, column, datePattern } = props;
-  console.log("props: ", props);
   const { name, target } = column;
-  const value = row[name];
+  const value = row[name] || {};
   return {
     ARRAY: html`<mv-array .value="${value}"></mv-array>`,
     DATE: html`<mv-date .value="${value}" .datePattern="${datePattern}"></mv-date>`,
