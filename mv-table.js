@@ -136,6 +136,7 @@ export class MvTable extends LitElement {
       .mv-table-container {
         width: 100%;
         overflow-x: auto;
+        overflow-y: hidden;
       }
 
       .numeric {
