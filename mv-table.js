@@ -82,8 +82,8 @@ export class MvTable extends LitElement {
       thead {
         font-family: var(--table-header-font-family);
         margin: auto;
-        height: var(--table-row-height);
-        max-height: var(--table-row-height);
+        height: var(--table-row-height + 70px);
+        max-height: var(--table-row-height + 70px);
         font-weight: 700;
         text-transform: uppercase;
         text-overflow: ellipsis;
