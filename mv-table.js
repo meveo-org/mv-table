@@ -74,7 +74,7 @@ export class MvTable extends LitElement {
       }
 
       table {
-        display: block;
+        display: table;
         border-collapse: collapse;
         width: 100%;
       }
