@@ -221,7 +221,7 @@ export class MvTable extends LitElement {
         <table>
           <thead>
             <tr>
-              ${withCheckbox
+              ${withCheckbox && !this.selectOne
                 ? html` <td @click="${this.handleCellClick()}">
                     <mv-checkbox
                       .value="${SELECT_ALL}"
@@ -231,6 +231,8 @@ export class MvTable extends LitElement {
                     >
                     </mv-checkbox>
                   </td>`
+                : this.selectOne
+                ? html`<td></td>`
                 : html``}
               ${this.columns.map(
                 (column) =>
@@ -346,14 +348,17 @@ export class MvTable extends LitElement {
   }
 
   selectRow(row, checked, originalEvent) {
-    const isAllSelected = this.hasAllSelected();
     let removed = [];
     let added = [];
     if (this.selectOne) {
+      const isCurrentlySelected = !!this.selectedRows.find(
+        (item) => item.uuid === row.uuid
+      );
       removed = [...this.selectedRows];
-      added = [row];
-      this.selectedRows = [row];
+      added = isCurrentlySelected ? [] : [row];
+      this.selectedRows = isCurrentlySelected ? [] : [row];
     } else {
+      const isAllSelected = this.hasAllSelected();
       if (row === SELECT_ALL) {
         if (isAllSelected) {
           removed = [...this.selectedRows];
