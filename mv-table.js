@@ -3,6 +3,7 @@ import { LitElement, html, css } from "lit-element";
 import "mv-checkbox";
 import "./cell_types/mv-array.js";
 import "./cell_types/mv-date.js";
+import "./cell_types/mv-entity.js";
 import "./cell_types/mv-text.js";
 import "./cell_types/mv-url.js";
 import "./cell_types/mv-image.js";
@@ -10,6 +11,7 @@ import "./cell_types/mv-image.js";
 const CELL_TYPES = (props) => {
   const { row, column, datePattern } = props;
   const { name, target } = column;
+  console.log("props: ", props);
   const value = row[name] || {};
   return {
     ARRAY: html`<mv-array .value="${value}"></mv-array>`,
@@ -17,6 +19,7 @@ const CELL_TYPES = (props) => {
       .value="${value}"
       .datePattern="${datePattern}"
     ></mv-date>`,
+    ENTITY: html`<mv-entity .value="${value}"></mv-entity>`,
     STRING: html`<mv-text .value="${value}"></mv-text>`,
     TEXT: html`<mv-text .value="${value}"></mv-text>`,
     URL: html`<mv-url

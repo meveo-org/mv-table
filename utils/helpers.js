@@ -1,4 +1,4 @@
-const parseType = ({ format, type = "STRING" }) => {
+const parseType = ({ $ref, format, type }) => {
   if (format) {
     switch (format) {
       case "date-time":
@@ -9,7 +9,8 @@ const parseType = ({ format, type = "STRING" }) => {
         break;
     }
   }
-  return type.toUpperCase();
+  const isEntity = !!$ref && !type;
+  return isEntity ? "ENTITY" : (type || "").toUpperCase() || "STRING";
 };
 
 export const capitalize = (key) => {
