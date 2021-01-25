@@ -11,7 +11,6 @@ import "./cell_types/mv-image.js";
 const CELL_TYPES = (props) => {
   const { row, column, datePattern } = props;
   const { name, target } = column;
-  console.log("props: ", props);
   const value = row[name] || {};
   return {
     ARRAY: html`<mv-array .value="${value}"></mv-array>`,
