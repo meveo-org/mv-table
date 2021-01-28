@@ -11,27 +11,28 @@ import "./cell_types/mv-image.js";
 const CELL_TYPES = (props) => {
   const { row, column, datePattern } = props;
   const { name, target } = column;
-  const value = row[name] || {};
+  const value = row[name];
   return {
-    ARRAY: html`<mv-array .value="${value}"></mv-array>`,
+    ARRAY: html`<mv-array .value="${value || []}"></mv-array>`,
+    BOOLEAN: html`<mv-text .value="${value}"></mv-text>`,
     DATE: html`<mv-date
-      .value="${value}"
+      .value="${value || {}}"
       .datePattern="${datePattern}"
     ></mv-date>`,
-    ENTITY: html`<mv-entity .value="${value}"></mv-entity>`,
+    ENTITY: html`<mv-entity .value="${value || {}}"></mv-entity>`,
+    IMAGE: html`<mv-image
+      .href="${(value || {}).href}"
+      .alt="${(value || {}).alt}"
+      .title="${(value || {}).title}"
+      .content="${(value || {}).content}"
+    ></mv-image>`,
     STRING: html`<mv-text .value="${value}"></mv-text>`,
     TEXT: html`<mv-text .value="${value}"></mv-text>`,
     URL: html`<mv-url
-      .href="${value.href}"
-      .label="${value.label}"
+      .href="${(value || {}).href}"
+      .label="${(value || {}).label}"
       .target="${target}"
     ></mv-url>`,
-    IMAGE: html`<mv-image
-      .href="${value.href}"
-      .alt="${value.alt}"
-      .title="${value.title}"
-      .content="${value.content}"
-    ></mv-image>`,
   };
 };
 
