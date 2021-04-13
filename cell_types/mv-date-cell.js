@@ -1,6 +1,6 @@
 import { LitElement, html, css } from "lit-element";
 
-export class MvDate extends LitElement {
+export class MvDateCell extends LitElement {
   static get properties() {
     return {
       value: { type: String, attribute: true },
@@ -80,4 +80,4 @@ export class MvDate extends LitElement {
   }
 }
 
-customElements.define("mv-date", MvDate);
+customElements.define("mv-date-cell", MvDateCell);

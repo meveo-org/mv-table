@@ -8,9 +8,10 @@ const parseType = ({ $ref, format, type }) => {
       default:
         break;
     }
+  } else if (!!$ref) {
+    return "ENTITY";
   }
-  const isEntity = !!$ref && !type;
-  return isEntity ? "ENTITY" : (type || "").toUpperCase() || "STRING";
+  return (type || "").toUpperCase() || "STRING";
 };
 
 export const capitalize = (key) => {

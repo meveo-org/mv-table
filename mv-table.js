@@ -1,38 +1,46 @@
 import { LitElement, html, css } from "lit-element";
 
 import "mv-checkbox";
-import "./cell_types/mv-array.js";
-import "./cell_types/mv-date.js";
-import "./cell_types/mv-entity.js";
-import "./cell_types/mv-text.js";
-import "./cell_types/mv-url.js";
-import "./cell_types/mv-image.js";
+import "./cell_types/mv-array-cell.js";
+import "./cell_types/mv-boolean-cell.js";
+import "./cell_types/mv-date-cell.js";
+import "./cell_types/mv-entity-cell.js";
+import "./cell_types/mv-text-cell.js";
+import "./cell_types/mv-url-cell.js";
+import "./cell_types/mv-image-cell.js";
 
 const CELL_TYPES = (props) => {
   const { row, column, datePattern } = props;
   const { name, target } = column;
   const value = row[name];
+  const { href, alt, label, title, content } = value || {};
   return {
-    ARRAY: html`<mv-array .value="${value || []}"></mv-array>`,
-    BOOLEAN: html`<mv-text .value="${value}"></mv-text>`,
-    DATE: html`<mv-date
-      .value="${value || {}}"
-      .datePattern="${datePattern}"
-    ></mv-date>`,
-    ENTITY: html`<mv-entity .value="${value || {}}"></mv-entity>`,
-    IMAGE: html`<mv-image
-      .href="${(value || {}).href}"
-      .alt="${(value || {}).alt}"
-      .title="${(value || {}).title}"
-      .content="${(value || {}).content}"
-    ></mv-image>`,
-    STRING: html`<mv-text .value="${value}"></mv-text>`,
-    TEXT: html`<mv-text .value="${value}"></mv-text>`,
-    URL: html`<mv-url
-      .href="${(value || {}).href}"
-      .label="${(value || {}).label}"
-      .target="${target}"
-    ></mv-url>`,
+    ARRAY: html`<mv-array-cell .value="${value}"></mv-array-cell>`,
+    BOOLEAN: html`<mv-boolean-cell .value="${value}"></mv-boolean-cell>`,
+    DATE: html`
+      <mv-date-cell
+        .value="${value}"
+        .datePattern="${datePattern}"
+      ></mv-date-cell>
+    `,
+    ENTITY: html`<mv-entity-cell .value="${value}"></mv-entity-cell>`,
+    IMAGE: html`
+      <mv-image-cell
+        .href="${href}"
+        .alt="${alt}"
+        .title="${title}"
+        .content="${content}"
+      ></mv-image-cell>
+    `,
+    STRING: html`<mv-text-cell .value="${value}"></mv-text-cell>`,
+    TEXT: html`<mv-text-cell .value="${value}"></mv-text-cell>`,
+    URL: html`
+      <mv-url-cell
+        .href="${href}"
+        .label="${label}"
+        .target="${target}"
+      ></mv-url-cell>
+    `,
   };
 };
 
@@ -259,20 +267,20 @@ export class MvTable extends LitElement {
           <tbody>
             ${this.rows.map((row) => {
               const selected = this.selectedRows.includes(row);
-              const rowClass = `mv-table-row${selected ? " selected" : ""}${
-                this.selectable || this.selectOne ? " selectable" : ""
-              }`;
+              const rowClass = `mv-table-row${selected ? " selected" : ""}`;
               return html`
                 <tr @click="${this.handleRowClick(row)}" class="${rowClass}">
                   ${withCheckbox
-                    ? html` <td>
-                        <mv-checkbox
-                          .value="${row}"
-                          .checked="${selected}"
-                          @click-checkbox="${this.handleClickCheckbox}"
-                        >
-                        </mv-checkbox>
-                      </td>`
+                    ? html`
+                        <td>
+                          <mv-checkbox
+                            .value="${row}"
+                            .checked="${selected}"
+                            @click-checkbox="${this.handleClickCheckbox}"
+                          >
+                          </mv-checkbox>
+                        </td>
+                      `
                     : html``}
                   ${this.columns.map((column) => {
                     const cellComponent = getCellComponent({
@@ -280,21 +288,25 @@ export class MvTable extends LitElement {
                       column,
                       datePattern,
                     });
-                    return html` <td
-                      @click="${this.handleCellClick(row, column)}"
-                      style="${getStyle(
-                        this.columnsStyle,
-                        column.name,
-                        "cell"
-                      )}"
-                    >
-                      ${cellComponent}
-                    </td>`;
+                    return html`
+                      <td
+                        @click="${this.handleCellClick(row, column)}"
+                        style="${getStyle(
+                          this.columnsStyle,
+                          column.name,
+                          "cell"
+                        )}"
+                      >
+                        ${cellComponent}
+                      </td>
+                    `;
                   })}
                   ${hasActionColumn
-                    ? html`<td>
-                        ${this["action-column"].getActionComponent(row)}
-                      </td>`
+                    ? html`
+                        <td>
+                          ${this["action-column"].getActionComponent(row)}
+                        </td>
+                      `
                     : html``}
                 </tr>
               `;
@@ -353,20 +365,31 @@ export class MvTable extends LitElement {
   selectRow(row, checked, originalEvent) {
     let removed = [];
     let added = [];
-    if (this.selectOne) {
-      const isCurrentlySelected = !!this.selectedRows.find(
-        (item) => item.uuid === row.uuid
-      );
-      removed = [...this.selectedRows];
-      added = isCurrentlySelected ? [] : [row];
-      this.selectedRows = isCurrentlySelected ? [] : [row];
+    if (row === SELECT_ALL) {
+      if (isAllSelected) {
+        removed = [...this.selectedRows];
+        added = [];
+        this.selectedRows = [];
+        this.isAllSelected = false;
+      } else {
+        removed = [];
+        added = this.rows.filter(
+          (item) =>
+            !this.selectedRows.some((selectedRow) => selectedRow === item)
+        );
+        this.selectedRows = [...this.rows];
+        this.isAllSelected = true;
+      }
     } else {
       const isAllSelected = this.hasAllSelected();
       if (row === SELECT_ALL) {
         if (isAllSelected) {
           removed = [...this.selectedRows];
           added = [];
-          this.selectedRows = [];
+          this.selectedRows = [
+            ...this.selectedRows.slice(0, index),
+            ...this.selectedRows.slice(index + 1),
+          ];
           this.isAllSelected = false;
         } else {
           removed = [];

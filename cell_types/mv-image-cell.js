@@ -1,7 +1,7 @@
 import { LitElement, html, css } from "lit-element";
 import "mv-tooltip";
 
-export class MvImage extends LitElement {
+export class MvImageCell extends LitElement {
   static get properties() {
     return {
       href: { type: String, attribute: true },
@@ -64,4 +64,4 @@ export class MvImage extends LitElement {
   }
 }
 
-customElements.define("mv-image", MvImage);
+customElements.define("mv-image-cell", MvImageCell);

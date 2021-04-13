@@ -1,6 +1,6 @@
 import { LitElement, html, css } from "lit-element";
 
-export class MvArray extends LitElement {
+export class MvArrayCell extends LitElement {
   static get properties() {
     return {
       value: { type: Array, attribute: true },
@@ -92,4 +92,4 @@ export class MvArray extends LitElement {
   }
 }
 
-customElements.define("mv-array", MvArray);
+customElements.define("mv-array-cell", MvArrayCell);

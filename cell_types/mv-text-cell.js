@@ -1,6 +1,6 @@
 import { LitElement, html, css } from "lit-element";
 
-export class MvText extends LitElement {
+export class MvTextCell extends LitElement {
   static get properties() {
     return {
       value: { type: String, attribute: true }
@@ -23,4 +23,4 @@ export class MvText extends LitElement {
   }
 }
 
-customElements.define("mv-text", MvText);
+customElements.define("mv-text-cell", MvTextCell);

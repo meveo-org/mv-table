@@ -1,6 +1,6 @@
 import { LitElement, html, css } from "lit-element";
 
-export class MvUrl extends LitElement {
+export class MvUrlCell extends LitElement {
   static get properties() {
     return {
       href: { type: String, attribute: true },
@@ -41,4 +41,4 @@ export class MvUrl extends LitElement {
   }
 }
 
-customElements.define("mv-url", MvUrl);
+customElements.define("mv-url-cell", MvUrlCell);
