@@ -365,31 +365,20 @@ export class MvTable extends LitElement {
   selectRow(row, checked, originalEvent) {
     let removed = [];
     let added = [];
-    if (row === SELECT_ALL) {
-      if (isAllSelected) {
-        removed = [...this.selectedRows];
-        added = [];
-        this.selectedRows = [];
-        this.isAllSelected = false;
-      } else {
-        removed = [];
-        added = this.rows.filter(
-          (item) =>
-            !this.selectedRows.some((selectedRow) => selectedRow === item)
-        );
-        this.selectedRows = [...this.rows];
-        this.isAllSelected = true;
-      }
+    if (this.selectOne) {
+      const isCurrentlySelected = !!this.selectedRows.find(
+        (item) => item.uuid === row.uuid
+      );
+      removed = [...this.selectedRows];
+      added = isCurrentlySelected ? [] : [row];
+      this.selectedRows = isCurrentlySelected ? [] : [row];
     } else {
       const isAllSelected = this.hasAllSelected();
       if (row === SELECT_ALL) {
         if (isAllSelected) {
           removed = [...this.selectedRows];
           added = [];
-          this.selectedRows = [
-            ...this.selectedRows.slice(0, index),
-            ...this.selectedRows.slice(index + 1),
-          ];
+          this.selectedRows = [];
           this.isAllSelected = false;
         } else {
           removed = [];
