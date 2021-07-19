@@ -86,7 +86,7 @@ export class MvTable extends LitElement {
     return css`
       :host {
         font-family: var(--font-family, Arial);
-        font-size: var(--font-size-m, 10pt);
+        --font-size: var(--font-size-m, 1rem);
         --table-header-font-family: var(
           --mv-table-header-font-family,
           var(--font-family, Arial)
@@ -118,6 +118,7 @@ export class MvTable extends LitElement {
         margin: auto;
         height: var(--table-row-height);
         max-height: var(--table-row-height);
+        font-size: var(--font-size);
         font-weight: 700;
         text-transform: uppercase;
         text-overflow: ellipsis;
