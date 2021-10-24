@@ -22,7 +22,7 @@ export const capitalize = (key) => {
 
 export const parseColumns = (properties, columnOrder) => {
   return columnOrder.reduce((columnList, key) => {
-    const property = properties[key];
+    const property = properties[key] || {};
     const column = {
       name: key,
       title: key,
