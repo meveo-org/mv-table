@@ -15,7 +15,7 @@ const CELL_TYPES = (props) => {
   const value = row[name];
   const { href, alt, label, title, content } = value || {};
   return {
-    ARRAY: html`<mv-array-cell .value="${value}"></mv-array-cell>`,
+    ARRAY: html`<mv-array-cell .value="${value || []}"></mv-array-cell>`,
     BOOLEAN: html`<mv-boolean-cell .value="${value}"></mv-boolean-cell>`,
     DATE: html`
       <mv-date-cell
@@ -32,8 +32,8 @@ const CELL_TYPES = (props) => {
         .content="${content}"
       ></mv-image-cell>
     `,
-    STRING: html`<mv-text-cell .value="${value}"></mv-text-cell>`,
-    TEXT: html`<mv-text-cell .value="${value}"></mv-text-cell>`,
+    STRING: html`<mv-text-cell .value="${value || ""}"></mv-text-cell>`,
+    TEXT: html`<mv-text-cell .value="${value || ""}"></mv-text-cell>`,
     URL: html`
       <mv-url-cell
         .href="${href}"
