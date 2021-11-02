@@ -69,7 +69,7 @@ export class MvTable extends LitElement {
       //    default: "light"
       theme: { type: String, attribute: false },
       datePattern: { type: String, attribute: "date-pattern" },
-      sortOrder: { type: Object, attribute: false },
+      sortOrder: { type: Object, attribute: "sort-order" },
       sortable: { type: Boolean },
     };
   }
