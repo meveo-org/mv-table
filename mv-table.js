@@ -1,6 +1,6 @@
 import { LitElement, html, css } from "lit-element";
-
 import "mv-checkbox";
+import "mv-font-awesome";
 import "./cell_types/mv-array-cell.js";
 import "./cell_types/mv-boolean-cell.js";
 import "./cell_types/mv-date-cell.js";
@@ -53,32 +53,24 @@ const getCellComponent = (props) => {
   return CELL_TYPES(props)[type] || CELL_TYPES(props)["TEXT"];
 };
 
-const getStyle = (columnsStyle, column, type) => {
-  if (columnsStyle.some((columnStyle) => columnStyle.name === column)) {
-    return columnsStyle.find((columnStyle) => columnStyle.name === column)[
-      type
-    ];
-  }
-  return "";
-};
-
 export class MvTable extends LitElement {
   static get properties() {
     return {
-      rows: { type: Array, attribute: false, reflect: true },
-      columns: { type: Array, attribute: true },
-      selectable: { type: Boolean, attribute: true },
-      selectOne: { type: Boolean, attribute: "select-one", reflect: true },
-      "with-checkbox": { type: Boolean, attribute: true },
-      "checkbox-column-label": { type: String, attribute: true },
-      "action-column": { type: Object, attribute: true },
-      selectedRows: { type: Array, attribute: false, reflect: true },
+      rows: { type: Array, attribute: false },
+      columns: { type: Array },
+      selectable: { type: Boolean },
+      selectOne: { type: Boolean, attribute: "select-one" },
+      withCheckbox: { type: Boolean, attribute: "with-checkbox" },
+      checkboxColumnLabel: { type: String, attribute: "checkbox-column-label" },
+      actionColumn: { type: Object, attribute: "action-column" },
+      selectedRows: { type: Array, attribute: false },
 
       //  valid theme values are: "light", "dark"
       //    default: "light"
       theme: { type: String, attribute: false },
-      datePattern: { type: String, attribute: "date-pattern", reflect: true },
-      columnsStyle: { type: Array, attribute: false },
+      datePattern: { type: String, attribute: "date-pattern" },
+      sortOrder: { type: Object, attribute: false },
+      sortable: { type: Boolean },
     };
   }
 
@@ -114,22 +106,30 @@ export class MvTable extends LitElement {
       }
 
       thead {
-        font-family: var(--table-header-font-family);
         margin: auto;
         height: var(--table-row-height);
         max-height: var(--table-row-height);
-        font-size: var(--font-size);
-        font-weight: 700;
-        text-transform: uppercase;
-        text-overflow: ellipsis;
-        overflow: hidden;
-        white-space: nowrap;
-        text-overflow: ellipsis;
         background-color: var(--head-background);
       }
 
       thead td {
         cursor: default;
+      }
+
+      .sortable thead td {
+        cursor: pointer;
+      }
+
+      .sortable thead td:hover {
+        color: var(--hover-color);
+      }
+
+      thead td .title {
+        font-family: var(--table-header-font-family);
+        font-size: var(--font-size);
+        font-weight: 700;
+        text-transform: uppercase;
+        white-space: nowrap;
       }
 
       thead td:first-child {
@@ -192,6 +192,7 @@ export class MvTable extends LitElement {
         --body-background: var(--body-light-background);
         --hover-background: var(--hover-light-background);
         --color: #80828c;
+        --hover-color: #5c5e65;
         --mv-checkbox-border-color: var(--color);
         --mv-table-url-color: var(--color);
       }
@@ -201,6 +202,7 @@ export class MvTable extends LitElement {
         --body-background: var(--body-dark-background);
         --hover-background: var(--hover-dark-background);
         --color: #ffffff;
+        --hover-color: #b3b3b3;
         --mv-checkbox-border-color: var(--color);
         --mv-table-url-color: var(--color);
       }
@@ -214,54 +216,72 @@ export class MvTable extends LitElement {
     this.selectable = false;
     this.selectOne = false;
     this.selectedRows = [];
-    this["with-checkbox"] = false;
-    this["checkbox-column-label"] = "";
-    this["action-column"] = null;
+    this.withCheckbox = false;
+    this.checkboxColumnLabel = "";
+    this.actionColumn = null;
     this.isAllSelected = false;
     this.theme = "light";
     this.datePattern = null;
-    this.columnsStyle = [];
+    this.sortOrder = {};
+    this.sortable = false;
   }
 
+  sortIcon = (column) => {
+    const sortOrder = this.sortOrder[column.name];
+    if (sortOrder) {
+      const isAscending = this.sortOrder[sortKey] === "ASCENDING";
+      if (isAscending) {
+        return html`<mv-fa icon="sort-up"></mv-fa>`;
+      }
+      return html`<mv-fa icon="sort-down"></mv-fa>`;
+    }
+    return html`<mv-fa icon="sort"></mv-fa>`;
+  };
+
   render() {
-    const withCheckbox = this["with-checkbox"];
-    const hasActionColumn = !!this["action-column"];
+    const withCheckbox = this.withCheckbox;
+    const hasActionColumn = !!this.actionColumn;
+    const sortableClass = this.sortable ? " sortable" : "";
     const { datePattern } = this;
 
     return html`
-      <div class="mv-table-container ${this.theme}">
+      <div class="mv-table-container${sortableClass} ${this.theme}">
         <table>
           <thead>
             <tr>
               ${withCheckbox && !this.selectOne
-                ? html` <td @click="${this.handleCellClick()}">
-                    <mv-checkbox
-                      .value="${SELECT_ALL}"
-                      .checked="${this.isAllSelected}"
-                      @click-checkbox="${this.handleClickCheckbox}"
-                      label="${this["checkbox-column-label"]}"
-                    >
-                    </mv-checkbox>
-                  </td>`
+                ? html`
+                    <td @click="${this.handleCellClick()}">
+                      <mv-checkbox
+                        .value="${SELECT_ALL}"
+                        .checked="${this.isAllSelected}"
+                        @click-checkbox="${this.handleClickCheckbox}"
+                        label="${this.checkboxColumnLabel}"
+                      >
+                      </mv-checkbox>
+                    </td>
+                  `
                 : this.selectOne
                 ? html`<td></td>`
                 : html``}
-              ${this.columns.map(
-                (column) =>
-                  html`<td
-                    style="${getStyle(
-                      this.columnsStyle,
-                      column.name,
-                      "header"
-                    )}"
-                  >
-                    ${column.title}
-                  </td>`
+              ${this.columns.map((column) =>
+                this.sortable
+                  ? html`
+                      <td @click="${this.handleSort(column)}">
+                        <span class="title">${column.title}</span>
+                        <span>${this.sortIcon(column)}</span>
+                      </td>
+                    `
+                  : html`
+                      <td>
+                        <span class="title">${column.title}</span>
+                      </td>
+                    `
               )}
               ${hasActionColumn
-                ? html` <td class="action-header">
-                    ${this["action-column"].label}
-                  </td>`
+                ? html`
+                    <td class="action-header">${this.actionColumn.label}</td>
+                  `
                 : html``}
             </tr>
           </thead>
@@ -290,23 +310,14 @@ export class MvTable extends LitElement {
                       datePattern,
                     });
                     return html`
-                      <td
-                        @click="${this.handleCellClick(row, column)}"
-                        style="${getStyle(
-                          this.columnsStyle,
-                          column.name,
-                          "cell"
-                        )}"
-                      >
+                      <td @click="${this.handleCellClick(row, column)}">
                         ${cellComponent}
                       </td>
                     `;
                   })}
                   ${hasActionColumn
                     ? html`
-                        <td>
-                          ${this["action-column"].getActionComponent(row)}
-                        </td>
+                        <td>${this.actionColumn.getActionComponent(row)}</td>
                       `
                     : html``}
                 </tr>
@@ -318,52 +329,58 @@ export class MvTable extends LitElement {
     `;
   }
 
-  attributeChangedCallback(name, oldValue, newValue) {
+  attributeChangedCallback = (name, oldValue, newValue) => {
     if (name === "rows") {
       this.selectedRows = [];
       this.isAllSelected = false;
     }
     super.attributeChangedCallback(name, oldValue, newValue);
-  }
+  };
 
-  handleClickCheckbox(event) {
+  handleClickCheckbox = (event) => {
     const {
       detail: { value, checked, originalEvent },
     } = event;
     this.selectRow(value, checked, originalEvent);
-  }
+  };
 
-  handleRowClick(row) {
-    return (originalEvent) => {
-      this.dispatchEvent(
-        new CustomEvent("row-click", { detail: { row, originalEvent } })
+  handleRowClick = (row) => (originalEvent) => {
+    this.dispatchEvent(
+      new CustomEvent("row-click", { detail: { row, originalEvent } })
+    );
+    if (this.selectable || this.selectOne) {
+      const isSelected = this.selectedRows.some(
+        (selectedRow) => selectedRow === row
       );
-      if (this.selectable || this.selectOne) {
-        const isSelected = this.selectedRows.some(
-          (selectedRow) => selectedRow === row
-        );
-        this.selectRow(row, !isSelected, originalEvent);
-      }
-    };
-  }
+      this.selectRow(row, !isSelected, originalEvent);
+    }
+  };
 
-  handleCellClick(row, column) {
-    return (originalEvent) => {
-      if (!row && !column) {
-        originalEvent.stopPropagation();
-      } else {
-        const { name } = column;
-        const value = row[name];
-        this.dispatchEvent(
-          new CustomEvent("cell-click", {
-            detail: { row, column, value, originalEvent },
-          })
-        );
-      }
-    };
-  }
+  handleCellClick = (row, column) => (originalEvent) => {
+    if (!row && !column) {
+      originalEvent.stopPropagation();
+    } else {
+      const { name } = column;
+      const value = row[name];
+      this.dispatchEvent(
+        new CustomEvent("cell-click", {
+          detail: { row, column, value, originalEvent },
+        })
+      );
+    }
+  };
 
-  selectRow(row, checked, originalEvent) {
+  handleSort = (column) => (originalEvent) => {
+    const order =
+      this.sortOrder[column.name] === "ASCENDING" ? "DESCENDING" : "ASCENDING";
+    this.dispatchEvent(
+      new CustomEvent("column-sort", {
+        detail: { column, order, originalEvent },
+      })
+    );
+  };
+
+  selectRow = (row, checked, originalEvent) => {
     let removed = [];
     let added = [];
     if (this.selectOne) {
@@ -420,15 +437,15 @@ export class MvTable extends LitElement {
         },
       })
     );
-  }
+  };
 
-  hasAllSelected() {
+  hasAllSelected = () => {
     return (
       this.rows.length > 0 &&
       this.selectedRows.length > 0 &&
       this.rows.every((row) => this.selectedRows.includes(row))
     );
-  }
+  };
 }
 
 customElements.define("mv-table", MvTable);
