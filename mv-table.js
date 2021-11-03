@@ -62,14 +62,14 @@ export class MvTable extends LitElement {
       selectOne: { type: Boolean, attribute: "select-one" },
       withCheckbox: { type: Boolean, attribute: "with-checkbox" },
       checkboxColumnLabel: { type: String, attribute: "checkbox-column-label" },
-      actionColumn: { type: Object, attribute: "action-column" },
+      "action-column": { type: Object, attribute: false },
       selectedRows: { type: Array, attribute: false },
 
       //  valid theme values are: "light", "dark"
       //    default: "light"
       theme: { type: String, attribute: false },
       datePattern: { type: String, attribute: "date-pattern" },
-      sortOrder: { type: Object, attribute: "sort-order" },
+      "sort-order": { type: Object, attribute: false },
       sortable: { type: Boolean },
     };
   }
@@ -218,18 +218,19 @@ export class MvTable extends LitElement {
     this.selectedRows = [];
     this.withCheckbox = false;
     this.checkboxColumnLabel = "";
-    this.actionColumn = null;
     this.isAllSelected = false;
     this.theme = "light";
     this.datePattern = null;
-    this.sortOrder = {};
     this.sortable = false;
+    this["action-column"] = null;
+    this["sort-order"] = {};
   }
 
   sortIcon = (column) => {
-    const sortOrder = this.sortOrder[column.name];
-    if (sortOrder) {
-      const isAscending = this.sortOrder[sortKey] === "ASCENDING";
+    const sortOrder = this["sort-order"] || {};
+    const order = sortOrder[column.name];
+    if (order) {
+      const isAscending = order === "ASCENDING";
       if (isAscending) {
         return html`<mv-fa icon="sort-up"></mv-fa>`;
       }
@@ -240,7 +241,7 @@ export class MvTable extends LitElement {
 
   render() {
     const withCheckbox = this.withCheckbox;
-    const hasActionColumn = !!this.actionColumn;
+    const hasActionColumn = !!this["action-column"];
     const sortableClass = this.sortable ? " sortable" : "";
     const { datePattern } = this;
 
@@ -280,7 +281,9 @@ export class MvTable extends LitElement {
               )}
               ${hasActionColumn
                 ? html`
-                    <td class="action-header">${this.actionColumn.label}</td>
+                    <td class="action-header">
+                      ${this["action-column"].label}
+                    </td>
                   `
                 : html``}
             </tr>
@@ -317,7 +320,9 @@ export class MvTable extends LitElement {
                   })}
                   ${hasActionColumn
                     ? html`
-                        <td>${this.actionColumn.getActionComponent(row)}</td>
+                        <td>
+                          ${this["action-column"].getActionComponent(row)}
+                        </td>
                       `
                     : html``}
                 </tr>
@@ -371,8 +376,9 @@ export class MvTable extends LitElement {
   };
 
   handleSort = (column) => (originalEvent) => {
+    const sortOrder = this["sort-order"] || {};
     const order =
-      this.sortOrder[column.name] === "ASCENDING" ? "DESCENDING" : "ASCENDING";
+      sortOrder[column.name] === "ASCENDING" ? "DESCENDING" : "ASCENDING";
     this.dispatchEvent(
       new CustomEvent("column-sort", {
         detail: { column, order, originalEvent },
