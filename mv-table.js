@@ -243,8 +243,9 @@ export class MvTable extends LitElement {
 
   render() {
     const withCheckbox = this.withCheckbox;
-    const rowActions = !!this["row-actions"] && this["row-actions"].length > 0;
-    const hasActionColumn = !!this["action-column"] || rowActions;
+    const rowActions = this["row-actions"];
+    const hasRowActions = rowActions && rowActions.length > 0
+    const hasActionColumn = !!this["action-column"] || hasRowActions;
     const sortableClass = this.sortable ? " sortable" : "";
     const { datePattern } = this;
 
