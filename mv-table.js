@@ -63,6 +63,7 @@ export class MvTable extends LitElement {
       withCheckbox: { type: Boolean, attribute: "with-checkbox" },
       checkboxColumnLabel: { type: String, attribute: "checkbox-column-label" },
       "action-column": { type: Object, attribute: false },
+      "row-actions": { type: Array, attribute: false },
       selectedRows: { type: Array, attribute: false },
 
       //  valid theme values are: "light", "dark"
@@ -223,6 +224,7 @@ export class MvTable extends LitElement {
     this.datePattern = null;
     this.sortable = false;
     this["action-column"] = null;
+    this["row-actions"] = [];
     this["sort-order"] = {};
   }
 
@@ -241,7 +243,8 @@ export class MvTable extends LitElement {
 
   render() {
     const withCheckbox = this.withCheckbox;
-    const hasActionColumn = !!this["action-column"];
+    const rowActions = !!this["row-actions"] && this["row-actions"].length > 0;
+    const hasActionColumn = !!this["action-column"] || rowActions;
     const sortableClass = this.sortable ? " sortable" : "";
     const { datePattern } = this;
 
@@ -321,7 +324,7 @@ export class MvTable extends LitElement {
                   ${hasActionColumn
                     ? html`
                         <td>
-                          ${this["action-column"].getActionComponent(row)}
+                          ${this["action-column"].getActionComponent(row, rowActions)}
                         </td>
                       `
                     : html``}
