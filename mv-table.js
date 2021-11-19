@@ -8,6 +8,7 @@ import "./cell_types/mv-entity-cell.js";
 import "./cell_types/mv-text-cell.js";
 import "./cell_types/mv-url-cell.js";
 import "./cell_types/mv-image-cell.js";
+import "./cell_types/mv-list-cell.js";
 
 const CELL_TYPES = (props) => {
   const { row, column, datePattern } = props;
@@ -24,6 +25,10 @@ const CELL_TYPES = (props) => {
       ></mv-date-cell>
     `,
     ENTITY: html`<mv-entity-cell .value="${value}"></mv-entity-cell>`,
+    LIST: html`<mv-list-cell
+      .value="${value}"
+      .options="${column.options}"
+    ></mv-list-cell>`,
     IMAGE: html`
       <mv-image-cell
         .href="${href}"
@@ -244,7 +249,7 @@ export class MvTable extends LitElement {
   render() {
     const withCheckbox = this.withCheckbox;
     const rowActions = this["row-actions"];
-    const hasRowActions = rowActions && rowActions.length > 0
+    const hasRowActions = rowActions && rowActions.length > 0;
     const hasActionColumn = !!this["action-column"] || hasRowActions;
     const sortableClass = this.sortable ? " sortable" : "";
     const { datePattern } = this;
@@ -325,7 +330,10 @@ export class MvTable extends LitElement {
                   ${hasActionColumn
                     ? html`
                         <td>
-                          ${this["action-column"].getActionComponent(row, rowActions)}
+                          ${this["action-column"].getActionComponent(
+                            row,
+                            rowActions
+                          )}
                         </td>
                       `
                     : html``}
