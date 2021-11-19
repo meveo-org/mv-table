@@ -18,7 +18,7 @@ export class MvListCell extends LitElement {
   }
 
   render() {
-    const option = options.find((item) => item.value === this.value);
+    const option = this.options.find((item) => item.value === this.value);
     return html` ${option.label + "" || ""} `;
   }
 }
