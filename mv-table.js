@@ -190,6 +190,7 @@ export class MvTable extends LitElement {
       }
 
       mv-checkbox {
+        --mv-checkbox-label-width: 15px;
         margin: auto;
       }
 
