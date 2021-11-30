@@ -254,6 +254,7 @@ export class MvTable extends LitElement {
     const hasActionColumn = !!this["action-column"] || hasRowActions;
     const sortableClass = this.sortable ? " sortable" : "";
     const { datePattern } = this;
+    const isAllSelected = this.hasAllSelected();
 
     return html`
       <div class="mv-table-container${sortableClass} ${this.theme}">
@@ -265,7 +266,7 @@ export class MvTable extends LitElement {
                     <td @click="${this.handleCellClick()}">
                       <mv-checkbox
                         .value="${SELECT_ALL}"
-                        .checked="${this.isAllSelected}"
+                        .checked="${isAllSelected}"
                         @click-checkbox="${this.handleClickCheckbox}"
                         label="${this.checkboxColumnLabel}"
                       >
@@ -397,20 +398,19 @@ export class MvTable extends LitElement {
     let removed = [];
     let added = [];
     if (this.selectOne) {
-      const isCurrentlySelected = !!this["selected-rows"].find(
+      const isCurrentlySelected = this["selected-rows"].some(
         (item) => item.uuid === row.uuid
       );
       removed = [...this["selected-rows"]];
       added = isCurrentlySelected ? [] : [row];
       this["selected-rows"] = isCurrentlySelected ? [] : [row];
     } else {
-      const isAllSelected = this.hasAllSelected();
       if (row === SELECT_ALL) {
+        const isAllSelected = this.hasAllSelected();
         if (isAllSelected) {
           removed = [...this["selected-rows"]];
           added = [];
           this["selected-rows"] = [];
-          this.isAllSelected = false;
         } else {
           removed = [];
           added = this.rows.filter(
@@ -418,14 +418,12 @@ export class MvTable extends LitElement {
               !this["selected-rows"].some((selectedRow) => selectedRow === item)
           );
           this["selected-rows"] = [...this.rows];
-          this.isAllSelected = true;
         }
       } else {
         if (checked) {
           removed = [];
           added = [row];
           this["selected-rows"] = [...this["selected-rows"], row];
-          this.isAllSelected = this.hasAllSelected();
         } else {
           const index = this["selected-rows"].indexOf(row);
           if (index > -1) {
@@ -435,7 +433,6 @@ export class MvTable extends LitElement {
               ...this["selected-rows"].slice(0, index),
               ...this["selected-rows"].slice(index + 1),
             ];
-            this.isAllSelected = false;
           }
         }
       }
