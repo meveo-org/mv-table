@@ -266,7 +266,7 @@ export class MvTable extends LitElement {
                     <td @click="${this.handleCellClick()}">
                       <mv-checkbox
                         .value="${SELECT_ALL}"
-                        .checked="${isAllSelected}"
+                        ?checked="${isAllSelected}"
                         @click-checkbox="${this.handleClickCheckbox(
                           isAllSelected
                         )}"
@@ -312,7 +312,7 @@ export class MvTable extends LitElement {
                         <td>
                           <mv-checkbox
                             .value="${row}"
-                            .checked="${selected}"
+                            ?checked="${selected}"
                             @click-checkbox="${this.handleClickCheckbox(
                               selected
                             )}"
@@ -359,7 +359,7 @@ export class MvTable extends LitElement {
     const {
       detail: { value, originalEvent },
     } = event;
-    this.selectRow(value, checked, originalEvent);
+    this.selectRow(value, !checked, originalEvent);
   };
 
   handleRowClick = (row) => (originalEvent) => {
@@ -367,7 +367,7 @@ export class MvTable extends LitElement {
       new CustomEvent("row-click", { detail: { row, originalEvent } })
     );
     if (this.selectable || this.selectOne) {
-      this.selectRow(row, this.isSelected(row), originalEvent);
+      this.selectRow(row, !this.isSelected(row), originalEvent);
     }
   };
 
