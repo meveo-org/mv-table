@@ -267,7 +267,9 @@ export class MvTable extends LitElement {
                       <mv-checkbox
                         .value="${SELECT_ALL}"
                         .checked="${isAllSelected}"
-                        @click-checkbox="${this.handleClickCheckbox(isAllSelected)}"
+                        @click-checkbox="${this.handleClickCheckbox(
+                          isAllSelected
+                        )}"
                         label="${this.checkboxColumnLabel}"
                       >
                       </mv-checkbox>
@@ -301,9 +303,7 @@ export class MvTable extends LitElement {
           </thead>
           <tbody>
             ${this.rows.map((row) => {
-              const selected = this["selected-rows"].some(
-                (selectedRow) => selectedRow.uuid === row.uuid
-              );
+              const selected = this.isSelected(row);
               const rowClass = `mv-table-row${selected ? " selected" : ""}`;
               return html`
                 <tr @click="${this.handleRowClick(row)}" class="${rowClass}">
@@ -313,7 +313,9 @@ export class MvTable extends LitElement {
                           <mv-checkbox
                             .value="${row}"
                             .checked="${selected}"
-                            @click-checkbox="${this.handleClickCheckbox(selected)}"
+                            @click-checkbox="${this.handleClickCheckbox(
+                              selected
+                            )}"
                           >
                           </mv-checkbox>
                         </td>
@@ -350,6 +352,9 @@ export class MvTable extends LitElement {
     `;
   }
 
+  isSelected = (row) =>
+    this["selected-rows"].some((selectedRow) => selectedRow.uuid === row.uuid);
+
   handleClickCheckbox = (checked) => (event) => {
     const {
       detail: { value, originalEvent },
@@ -362,10 +367,7 @@ export class MvTable extends LitElement {
       new CustomEvent("row-click", { detail: { row, originalEvent } })
     );
     if (this.selectable || this.selectOne) {
-      const isSelected = this["selected-rows"].some(
-        (selectedRow) => selectedRow === row
-      );
-      this.selectRow(row, !isSelected, originalEvent);
+      this.selectRow(row, !this.isSelected(row), originalEvent);
     }
   };
 
@@ -398,9 +400,7 @@ export class MvTable extends LitElement {
     let removed = [];
     let added = [];
     if (this.selectOne) {
-      const isCurrentlySelected = this["selected-rows"].some(
-        (item) => item.uuid === row.uuid
-      );
+      const isCurrentlySelected = this.isSelected(row);
       removed = [...this["selected-rows"]];
       added = isCurrentlySelected ? [] : [row];
       this["selected-rows"] = isCurrentlySelected ? [] : [row];
@@ -413,19 +413,17 @@ export class MvTable extends LitElement {
           this["selected-rows"] = [];
         } else {
           removed = [];
-          added = this.rows.filter(
-            (item) =>
-              !this["selected-rows"].some(
-                (selectedRow) => selectedRow.uuid === item.uuid
-              )
-          );
+          added = this.rows.filter((item) => !this.isSelected(item));
           this["selected-rows"] = [...this.rows];
         }
       } else {
         if (checked) {
           removed = [];
           added = [row];
-          this["selected-rows"] = [...this["selected-rows"], row];
+          const isExists = this.isSelected(row);
+          this["selected-rows"] = isExists
+            ? this["selected-rows"]
+            : [...this["selected-rows"], row];
         } else {
           const index = this["selected-rows"].indexOf(row);
           if (index > -1) {
