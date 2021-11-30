@@ -455,7 +455,7 @@ export class MvTable extends LitElement {
     return (
       this.rows.length > 0 &&
       this["selected-rows"].length > 0 &&
-      this.rows.every((row) => this["selected-rows"].includes(row))
+      this.rows.every((row) => this.isSelected(row))
     );
   };
 }
