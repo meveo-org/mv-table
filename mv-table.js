@@ -408,9 +408,14 @@ export class MvTable extends LitElement {
       if (row === SELECT_ALL) {
         const isAllSelected = this.hasAllSelected();
         if (isAllSelected) {
-          removed = [...this["selected-rows"]];
+          removed = [...this.rows];
           added = [];
-          this["selected-rows"] = [];
+          this["selected-rows"] = [
+            ...this["selected-rows"].filter(
+              (selectedRow) =>
+                !this.rows.some((item) => item.uuid === selectedRow.uuid)
+            ),
+          ];
         } else {
           removed = [];
           added = this.rows.filter((item) => !this.isSelected(item));
