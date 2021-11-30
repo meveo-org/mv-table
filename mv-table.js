@@ -69,7 +69,7 @@ export class MvTable extends LitElement {
       checkboxColumnLabel: { type: String, attribute: "checkbox-column-label" },
       "action-column": { type: Object, attribute: false },
       "row-actions": { type: Array, attribute: false },
-      selectedRows: { type: Array, attribute: false },
+      "selected-rows": { type: Array, attribute: false },
 
       //  valid theme values are: "light", "dark"
       //    default: "light"
@@ -222,13 +222,13 @@ export class MvTable extends LitElement {
     this.rows = [];
     this.selectable = false;
     this.selectOne = false;
-    this.selectedRows = [];
     this.withCheckbox = false;
     this.checkboxColumnLabel = "";
     this.isAllSelected = false;
     this.theme = "light";
     this.datePattern = null;
     this.sortable = false;
+    this["selected-rows"] = [];
     this["action-column"] = null;
     this["row-actions"] = [];
     this["sort-order"] = {};
@@ -300,7 +300,10 @@ export class MvTable extends LitElement {
           </thead>
           <tbody>
             ${this.rows.map((row) => {
-              const selected = this.selectedRows.includes(row);
+              const selected = this["selected-rows"].includes(row);
+              console.log('this["selected-rows"]: ', this["selected-rows"]);
+              console.log('row: ', row);
+              console.log('selected: ', selected);
               const rowClass = `mv-table-row${selected ? " selected" : ""}`;
               return html`
                 <tr @click="${this.handleRowClick(row)}" class="${rowClass}">
@@ -347,14 +350,6 @@ export class MvTable extends LitElement {
     `;
   }
 
-  attributeChangedCallback = (name, oldValue, newValue) => {
-    if (name === "rows") {
-      this.selectedRows = [];
-      this.isAllSelected = false;
-    }
-    super.attributeChangedCallback(name, oldValue, newValue);
-  };
-
   handleClickCheckbox = (event) => {
     const {
       detail: { value, checked, originalEvent },
@@ -367,7 +362,7 @@ export class MvTable extends LitElement {
       new CustomEvent("row-click", { detail: { row, originalEvent } })
     );
     if (this.selectable || this.selectOne) {
-      const isSelected = this.selectedRows.some(
+      const isSelected = this["selected-rows"].some(
         (selectedRow) => selectedRow === row
       );
       this.selectRow(row, !isSelected, originalEvent);
@@ -403,43 +398,43 @@ export class MvTable extends LitElement {
     let removed = [];
     let added = [];
     if (this.selectOne) {
-      const isCurrentlySelected = !!this.selectedRows.find(
+      const isCurrentlySelected = !!this["selected-rows"].find(
         (item) => item.uuid === row.uuid
       );
-      removed = [...this.selectedRows];
+      removed = [...this["selected-rows"]];
       added = isCurrentlySelected ? [] : [row];
-      this.selectedRows = isCurrentlySelected ? [] : [row];
+      this["selected-rows"] = isCurrentlySelected ? [] : [row];
     } else {
       const isAllSelected = this.hasAllSelected();
       if (row === SELECT_ALL) {
         if (isAllSelected) {
-          removed = [...this.selectedRows];
+          removed = [...this["selected-rows"]];
           added = [];
-          this.selectedRows = [];
+          this["selected-rows"] = [];
           this.isAllSelected = false;
         } else {
           removed = [];
           added = this.rows.filter(
             (item) =>
-              !this.selectedRows.some((selectedRow) => selectedRow === item)
+              !this["selected-rows"].some((selectedRow) => selectedRow === item)
           );
-          this.selectedRows = [...this.rows];
+          this["selected-rows"] = [...this.rows];
           this.isAllSelected = true;
         }
       } else {
         if (checked) {
           removed = [];
           added = [row];
-          this.selectedRows = [...this.selectedRows, row];
+          this["selected-rows"] = [...this["selected-rows"], row];
           this.isAllSelected = this.hasAllSelected();
         } else {
-          const index = this.selectedRows.indexOf(row);
+          const index = this["selected-rows"].indexOf(row);
           if (index > -1) {
-            removed = [this.selectedRows[index]];
+            removed = [this["selected-rows"][index]];
             added = [];
-            this.selectedRows = [
-              ...this.selectedRows.slice(0, index),
-              ...this.selectedRows.slice(index + 1),
+            this["selected-rows"] = [
+              ...this["selected-rows"].slice(0, index),
+              ...this["selected-rows"].slice(index + 1),
             ];
             this.isAllSelected = false;
           }
@@ -452,7 +447,7 @@ export class MvTable extends LitElement {
           originalEvent,
           removed,
           added,
-          selected: this.selectedRows,
+          selected: this["selected-rows"],
         },
       })
     );
@@ -461,8 +456,8 @@ export class MvTable extends LitElement {
   hasAllSelected = () => {
     return (
       this.rows.length > 0 &&
-      this.selectedRows.length > 0 &&
-      this.rows.every((row) => this.selectedRows.includes(row))
+      this["selected-rows"].length > 0 &&
+      this.rows.every((row) => this["selected-rows"].includes(row))
     );
   };
 }
