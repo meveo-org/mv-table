@@ -425,7 +425,9 @@ export class MvTable extends LitElement {
             ? this["selected-rows"]
             : [...this["selected-rows"], row];
         } else {
-          const index = this["selected-rows"].indexOf(row);
+          const index = this["selected-rows"].findIndex(
+            (item) => item.uuid === row.uuid
+          );
           if (index > -1) {
             removed = [this["selected-rows"][index]];
             added = [];
