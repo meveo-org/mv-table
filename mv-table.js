@@ -367,7 +367,7 @@ export class MvTable extends LitElement {
       new CustomEvent("row-click", { detail: { row, originalEvent } })
     );
     if (this.selectable || this.selectOne) {
-      this.selectRow(row, !this.isSelected(row), originalEvent);
+      this.selectRow(row, this.isSelected(row), originalEvent);
     }
   };
 
