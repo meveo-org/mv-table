@@ -267,7 +267,7 @@ export class MvTable extends LitElement {
                       <mv-checkbox
                         .value="${SELECT_ALL}"
                         .checked="${isAllSelected}"
-                        @click-checkbox="${this.handleClickCheckbox}"
+                        @click-checkbox="${this.handleClickCheckbox(isAllSelected)}"
                         label="${this.checkboxColumnLabel}"
                       >
                       </mv-checkbox>
@@ -313,7 +313,7 @@ export class MvTable extends LitElement {
                           <mv-checkbox
                             .value="${row}"
                             .checked="${selected}"
-                            @click-checkbox="${this.handleClickCheckbox}"
+                            @click-checkbox="${this.handleClickCheckbox(selected)}"
                           >
                           </mv-checkbox>
                         </td>
@@ -350,9 +350,9 @@ export class MvTable extends LitElement {
     `;
   }
 
-  handleClickCheckbox = (event) => {
+  handleClickCheckbox = (checked) => (event) => {
     const {
-      detail: { value, checked, originalEvent },
+      detail: { value, originalEvent },
     } = event;
     this.selectRow(value, checked, originalEvent);
   };
