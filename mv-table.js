@@ -300,10 +300,9 @@ export class MvTable extends LitElement {
           </thead>
           <tbody>
             ${this.rows.map((row) => {
-              const selected = this["selected-rows"].includes(row);
-              console.log('this["selected-rows"]: ', this["selected-rows"]);
-              console.log('row: ', row);
-              console.log('selected: ', selected);
+              const selected = this["selected-rows"].some(
+                (selectedRow) => selectedRow.uuid === row.uuid
+              );
               const rowClass = `mv-table-row${selected ? " selected" : ""}`;
               return html`
                 <tr @click="${this.handleRowClick(row)}" class="${rowClass}">
