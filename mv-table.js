@@ -415,7 +415,9 @@ export class MvTable extends LitElement {
           removed = [];
           added = this.rows.filter(
             (item) =>
-              !this["selected-rows"].some((selectedRow) => selectedRow === item)
+              !this["selected-rows"].some(
+                (selectedRow) => selectedRow.uuid === item.uuid
+              )
           );
           this["selected-rows"] = [...this.rows];
         }
