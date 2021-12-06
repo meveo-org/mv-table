@@ -46,8 +46,8 @@ export class MvEntityCell extends LitElement {
   `;
 
   renderItem = (item) => {
-    const {code, label, name, uuid} = item;
-    const itemLabel = label || name || code || uuid || "";
+    const { code, label, name, uuid } = item;
+    const itemLabel = label || name || code || uuid || item || "";
     return itemLabel ? html`<li>${itemLabel}</li>` : "";
   };
 }
