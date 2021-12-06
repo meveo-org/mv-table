@@ -21,26 +21,35 @@ export class MvEntityCell extends LitElement {
         padding: 10px 0;
         margin: 0;
       }
-      .entity-value li {
-        list-style: none;
-      }
     `;
   }
 
-  render() {
-    const keys = Object.keys(this.value || {});
-    return (keys || []).length > 0
-      ? html`
-          <div class="entity-value">
-            <ul>
-              ${keys.map(
-                (key) => html`<li><b>${key}</b>: ${this.value[key]}</li>`
-              )}
-            </ul>
-          </div>
-        `
-      : null;
-  }
+  render = () => {
+    const isArray = Array.isArray(this.value);
+    return html`
+      <div class="entity-value">
+        ${isArray ? this.renderList() : this.renderValues(this.value)}
+      </div>
+    `;
+  };
+
+  renderList = () => html`
+    <ul>
+      ${this.value.map(this.renderItem)}
+    </ul>
+  `;
+
+  renderValues = (item) => html`
+    <ul>
+      ${this.renderItem(item)}
+    </ul>
+  `;
+
+  renderItem = (item) => {
+    const {code, label, name, uuid} = item;
+    const itemLabel = label || name || code || uuid || "";
+    return itemLabel ? html`<li>${itemLabel}</li>` : "";
+  };
 }
 
 customElements.define("mv-entity-cell", MvEntityCell);
