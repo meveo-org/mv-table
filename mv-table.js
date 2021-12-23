@@ -1,6 +1,6 @@
 import { LitElement, html, css } from "lit-element";
-import "mv-checkbox";
-import "mv-font-awesome";
+import "@meveo-org/mv-checkbox";
+import "@meveo-org/mv-font-awesome";
 import "./cell_types/mv-array-cell.js";
 import "./cell_types/mv-boolean-cell.js";
 import "./cell_types/mv-date-cell.js";
