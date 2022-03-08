@@ -1,10 +1,10 @@
-import { LitElement, html, css } from "lit-element";
+import { LitElement, html, css } from "lit";
 
 import { getSchema, getPeople } from "./mock_data/api.js";
 
-import "mv-pagination";
-import "mv-button";
-import "mv-toast";
+import "@meveo-org/mv-pagination";
+import "@meveo-org/mv-button";
+import "@meveo-org/mv-toast";
 import "./mv-table.js";
 
 export class MvTableDemo extends LitElement {

@@ -1,4 +1,4 @@
-import { LitElement, html, css } from "lit-element";
+import { LitElement, html, css } from "lit";
 import "mv-tooltip";
 
 export class MvImageCell extends LitElement {
