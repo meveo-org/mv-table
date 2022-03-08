@@ -1,4 +1,4 @@
-import { LitElement, html, css } from "lit-element";
+import { LitElement, html, css } from "lit";
 import "@meveo-org/mv-checkbox";
 import "@meveo-org/mv-font-awesome";
 import "./cell_types/mv-array-cell.js";
