@@ -1,5 +1,5 @@
 import { LitElement, html, css } from "lit";
-import "mv-tooltip";
+import "@meveo-org/mv-tooltip";
 
 export class MvImageCell extends LitElement {
   static get properties() {
