@@ -1,6 +1,7 @@
 import { LitElement, html, css } from "lit";
 import "@meveo-org/mv-checkbox";
 import "@meveo-org/mv-font-awesome";
+import "@meveo-org/mv-progress-bar";
 import "./cell_types/mv-array-cell.js";
 import "./cell_types/mv-boolean-cell.js";
 import "./cell_types/mv-date-cell.js";
@@ -77,6 +78,7 @@ export class MvTable extends LitElement {
       datePattern: { type: String, attribute: "date-pattern" },
       "sort-order": { type: Object, attribute: false },
       sortable: { type: Boolean },
+      dataIsLoading: { type: Boolean },
     };
   }
 
@@ -213,6 +215,48 @@ export class MvTable extends LitElement {
         --mv-checkbox-border-color: var(--color);
         --mv-table-url-color: var(--color);
       }
+
+      .no-data {
+        font-size: 24px;
+        font-weight: bold;
+        text-align: center;
+        color: var(--warning-color);
+        padding-top: 15px;
+        padding-bottom: 15px;
+      }
+
+      tr.is-loading {
+        height: 80px !important;
+      }
+
+      td.is-loading {
+        height: 80px !important;
+      }
+
+      div.progress_container {
+        line-height: 40px !important;
+      }
+
+      .is-loading {
+        padding-top: 15px;
+        padding-bottom: 15px;
+      }
+
+      .loading {
+        display: block;
+        text-align: center;
+        font-weight: 500;
+        color: #FFFFFF;
+      }
+
+      .progressbar mv-progressbar, mv-progressbar[type="infinite"] {
+        --mv-progressbar-height: 20px;
+      }
+
+      .container_progressbar {
+        padding-top: 30px;
+        padding-bottom: 30px;
+      }
     `;
   }
 
@@ -232,6 +276,7 @@ export class MvTable extends LitElement {
     this["action-column"] = null;
     this["row-actions"] = [];
     this["sort-order"] = {};
+    this.dataIsLoading = true;
   }
 
   sortIcon = (column) => {
@@ -302,6 +347,26 @@ export class MvTable extends LitElement {
             </tr>
           </thead>
           <tbody>
+          ${this.dataIsLoading==true && this.rows.length==0 ? html`
+          <tr>
+            <td colspan="100" class="container_progressbar">
+                  <div class="progressbar">
+                <mv-progressbar
+                  animated
+                  striped
+                  value=100
+                >
+                <span class="loading">Please wait<span class="dotdotdot"></span></span>
+              </mv-progressbar></div>            </td></tr>
+            ` :null }
+
+            ${this.rows.length==0 && !this.dataIsLoading ?  
+              html`
+              <tr>
+                <td colspan="100" class="no-data"> No data to show</td>
+              </tr>
+              `
+              : null}
             ${this.rows.map((row) => {
               const selected = this.isSelected(row);
               const rowClass = `mv-table-row${selected ? " selected" : ""}`;
