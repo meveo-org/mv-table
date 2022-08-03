@@ -87,11 +87,12 @@ export class MvTable extends LitElement {
       :host {
         font-family: var(--font-family, Arial);
         --font-size: var(--font-size-m, 1rem);
+        --font-size-s: 12px;
+        --font-size-m: 13px;
         --table-header-font-family: var(
           --mv-table-header-font-family,
-          var(--font-family, Arial)
+          var('OpenSans')
         );
-        --table-row-height: var(--mv-table-row-height, 66px);
         --table-row-cursor: var(--mv-table-row-cursor, default);
 
         --head-light-background: var(--mv-table-head-light-background, #f5f6fa);
@@ -101,6 +102,14 @@ export class MvTable extends LitElement {
           #ededed
         );
 
+        --head-lightV2-background: var(--mv-table-head-lightV2-background, #328cc0);
+        --body-lightV2-background: var(--mv-table-body-lightV2-background, #dedede);
+        --hover-lightV2-background: var(
+          --mv-table-hover-lightV2-background,
+          #ededed
+        );
+
+
         --head-dark-background: var(--mv-table-head-dark-background, #23404c);
         --body-dark-background: var(--mv-table-body-dark-background, #373e48);
         --hover-dark-background: var(--mv-table-hover-dark-background, #4e686d);
@@ -109,49 +118,65 @@ export class MvTable extends LitElement {
 
       table {
         display: table;
-        border-collapse: collapse;
+        border-collapse: var(--border-colapse);
         width: 100%;
+        /* Espace blanc entre chaque ligne*/
+        border-spacing: var(--border-spacing);
+        background-color: var(--transparent-background);
+        position: var(--table-position);
       }
 
-      thead {
+      thead>tr:not(#filter){
         margin: auto;
-        height: var(--table-row-height);
-        max-height: var(--table-row-height);
+        height: var(--table-head-height);
+        max-height: var(--table-head-height);
         background-color: var(--head-background);
+        border-spacing: var(--no-border-spacing);
+        // 9 because filters contains mv-select with z-index: 10.
+        z-index: 9;
       }
-
+      
       thead td {
         cursor: default;
+        color: var(--color);
       }
 
       .sortable thead td {
         cursor: pointer;
       }
 
-      .sortable thead td:hover {
+      .sortable thead td:hover:not(.action-header) {
         color: var(--hover-color);
       }
 
       thead td .title {
         font-family: var(--table-header-font-family);
-        font-size: var(--font-size);
+        font-size: var(--font-size-s);
         font-weight: 700;
         text-transform: uppercase;
         white-space: nowrap;
       }
 
-      thead td:first-child {
-        border-radius: 10px 0 0 0;
+       thead td:first-child {
+        border-radius: var(--head-first-child-radius);
+      }
+      thead td:last-child {
+        border-radius: var(--head-last-child-radius);
       }
 
-      thead td:last-child {
-        border-radius: 0 10px 0 0;
+      td:first-child {
+        border-radius: var(--body-td-first-child-radius);
+      }
+
+      td:last-child {
+        border-radius: var(--body-td-last-child-radius);
       }
 
       tbody tr {
         border-bottom: 1px solid #e9e9e9;
         cursor: var(--table-row-cursor);
         background-color: var(--body-background);
+        z-index: 8;
       }
 
       tbody tr:hover,
@@ -170,11 +195,13 @@ export class MvTable extends LitElement {
         overflow: initial;
         white-space: nowrap;
         text-overflow: ellipsis;
-        height: var(--table-row-height);
-        max-height: var(--table-row-height);
-        color: var(--color);
+        height: var(--table-lightV2-row-height);
+        max-height: var(--table-lightV2-row-height);
+        color: var(--td-color);
         white-space: normal;
-        word-wrap: break-word;
+        word-wrap: var(--word-wrap);
+        border: var(--mv-table-body-td-border);
+        border-style: var(--mv-table-body-td-border-style);
       }
 
       .action-header {
@@ -183,8 +210,10 @@ export class MvTable extends LitElement {
 
       .mv-table-container {
         width: 100%;
+        max-height: 80%;
         overflow-x: auto;
-        overflow-y: hidden;
+        overflow-y: var(--mv-table-overflow-y);
+        
       }
 
       .numeric {
@@ -201,9 +230,43 @@ export class MvTable extends LitElement {
         --body-background: var(--body-light-background);
         --hover-background: var(--hover-light-background);
         --color: #80828c;
+        --td-color: #6C6C6C // Couleur proposée par contrast-finder.tanaguru.com avec constrat de 3.9 #9e9e9e;
         --hover-color: #5c5e65;
         --mv-checkbox-border-color: var(--color);
-        --mv-table-url-color: var(--color);
+        --mv-table-url-color: var(--td-color);
+        --border-colapse: collapse;
+        --table-head-height: var(--mv-table-head-height, 60px);
+        --table-row-height: var(--mv-table-row-height, 66px);
+        --head-first-child-radius:var(--mv-table-head-classic-first-radius);
+        --head-last-child-radius:var(--mv-table-head-classic-last-radius);
+        --word-wrap: break-word;
+        --mv-table-overflow-y: hidden;
+      }
+
+      .lightV2 {
+        --head-background: var(--head-lightV2-background);
+        --body-background: var(--body-lightV2-background);
+        --hover-background: var(--hover-lightV2-background);
+        --color: white;
+        --td-color: #6C6C6C // Couleur proposée par contrast-finder.tanaguru.com avec constrat de 3.9 #9e9e9e;
+        --hover-color: #5c5e65;
+        --mv-checkbox-border-color: var(--color);
+        --mv-table-url-color: var(--td-color);
+        --border-colapse: inherit;
+        --border-spacing: 0px 14px !important;
+        --transparent-background: transparent;
+        --table-head-height: var(--mv-table-lightV2-head-height, 60px);
+        --table-row-height: var(--lightV2-row-height, 60px);
+        --table-lightV2-row-height: var(--lightV2-row-height, 26px);
+        --no-border-spacing: 0px 0px !important;
+        --head-first-child-radius: var(--mv-table-lightV2-first-radius);
+        --head-last-child-radius: var(--mv-table-lightV2-last-radius);
+        --body-td-first-child-radius: var(--mv-table-lightV2-first-radius);
+        --body-td-last-child-radius: var(--mv-table-lightV2-last-radius);
+        --word-wrap: anywhere;
+        --mv-table-body-td-border: solid 1px #00000000;
+        --mv-table-body-td-border-style: solid none;
+        --mv-table-overflow-y: auto;
       }
 
       .dark {
@@ -211,9 +274,17 @@ export class MvTable extends LitElement {
         --body-background: var(--body-dark-background);
         --hover-background: var(--hover-dark-background);
         --color: #ffffff;
+        --td-color: #ffffff;
         --hover-color: #b3b3b3;
         --mv-checkbox-border-color: var(--color);
-        --mv-table-url-color: var(--color);
+        --mv-table-url-color: var(--td-color);
+        --border-colapse: collapse;
+        --table-head-height: var(--mv-table-head-height, 60px);
+        --table-row-height: var(--mv-table-row-height, 66px);
+        --head-first-child-radius:var(--mv-table-head-classic-first-radius);
+        --head-last-child-radius:var(--mv-table-head-classic-last-radius);
+        --word-wrap: break-word;
+        --mv-table-overflow-y: hidden;
       }
 
       .no-data {
@@ -256,6 +327,13 @@ export class MvTable extends LitElement {
       .container_progressbar {
         padding-top: 30px;
         padding-bottom: 30px;
+      }
+
+      /**
+      * ? Si filtre appliqué sur la colonne (class filtered)
+      */
+      td.filtered {
+        background-color: #8cc032 !important; 
       }
     `;
   }
