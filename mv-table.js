@@ -62,6 +62,7 @@ const getCellComponent = (props) => {
 export class MvTable extends LitElement {
   static get properties() {
     return {
+      entity: { type: Object, attribute: false },
       rows: { type: Array, attribute: false },
       columns: { type: Array },
       selectable: { type: Boolean },
@@ -87,6 +88,8 @@ export class MvTable extends LitElement {
       :host {
         font-family: var(--font-family, Arial);
         --font-size: var(--font-size-m, 1rem);
+        --font-size-s: 12px;
+        --font-size-m: 13px;
         --table-header-font-family: var(
           --mv-table-header-font-family,
           var(--font-family, Arial)
@@ -101,167 +104,368 @@ export class MvTable extends LitElement {
           #ededed
         );
 
+        --head-lightV2-background: var(--mv-table-head-lightV2-background, #328cc0);
+        --body-lightV2-background: var(--mv-table-body-lightV2-background, #dedede);
+        --table-lightV2-row-height: var(--table-lightV2-row-height)
+        --hover-lightV2-background: #c4c4c4;
+
         --head-dark-background: var(--mv-table-head-dark-background, #23404c);
         --body-dark-background: var(--mv-table-body-dark-background, #373e48);
         --hover-dark-background: var(--mv-table-hover-dark-background, #4e686d);
         --color: var(--mv-table-color);
+
+        --mv-button-padding: 5px 5px;
+        --mv-dropdown-content-max-height: max-content;
       }
 
-      table {
-        display: table;
-        border-collapse: collapse;
-        width: 100%;
-      }
+      *::-webkit-scrollbar {
+            width: 27px;
+            height: 30px;
+        }
 
-      thead {
+        *::-webkit-scrollbar-track {
+          border-radius: 3px;
+          background-color: #CECECE;
+          border: 10px solid #FFFFFF;
+        }
+
+        *::-webkit-scrollbar-track:hover {
+            background-color: #B8C0C2;
+        }
+
+        *::-webkit-scrollbar-track:active {
+            background-color: #B8C0C2;
+        }   
+        *::-webkit-scrollbar-thumb {
+            border-radius: 16px;
+            background-color: #676767;
+            border: 10px solid #FFFFFF;
+        }
+
+        *::-webkit-scrollbar-thumb:hover {
+            background-color: #328cc0
+        }
+
+        *::-webkit-scrollbar-thumb:active {
+            background-color: #328cc0
+        }
+
+        .action-header {
+          text-align: center;
+        }
+
+        .action-header>span:hover {
+          color: var(--hover-color);
+        }
+
+        .active {
+          color: #C0328C;
+        }
+
+        .checkbox {
+          width: 5px;
+        }
+
+        .container_progressbar {
+          padding-top: 30px;
+          padding-bottom: 30px;
+        }
+
+        .dark {
+          --head-background: var(--head-dark-background);
+          --body-background: var(--body-dark-background);
+          --hover-background: var(--hover-dark-background);
+          --color: #ffffff;
+          --hover-color: #b3b3b3;
+          --mv-checkbox-border-color: var(--color);
+          --mv-table-url-color: var(--td-color);
+          --border-colapse: collapse;
+          --table-head-height: var(--mv-table-head-height, 60px);
+          --table-row-height: var(--mv-table-row-height, 66px);
+          --head-first-child-radius:var(--mv-table-head-classic-first-radius);
+          --head-last-child-radius:var(--mv-table-head-classic-last-radius);
+          --word-wrap: break-word;
+          --mv-table-overflow-y: hidden;
+        }
+
+        .header_menu {
+          padding-left: 10px !important;
+          padding-right: 10px !important;
+        }
+
+        .is-loading {
+          padding-top: 15px;
+          padding-bottom: 15px;
+        }
+
+        .light {
+          --head-background: var(--head-light-background);
+          --body-background: var(--body-light-background);
+          --hover-background: var(--hover-light-background);
+          --color: #80828c;
+          --td-color: #6C6C6C // Couleur proposée par contrast-finder.tanaguru.com avec constrat de 3.9 #9e9e9e;
+          --hover-color: #5c5e65;
+          --mv-checkbox-border-color: var(--color);
+          --mv-table-url-color: var(--td-color);
+          --border-colapse: collapse;
+          --table-head-height: var(--mv-table-head-height, 60px);
+          --table-row-height: var(--mv-table-row-height, 66px);
+          --head-first-child-radius:var(--mv-table-head-classic-first-radius);
+          --head-last-child-radius:var(--mv-table-head-classic-last-radius);
+          --word-wrap: break-word;
+          --mv-table-overflow-y: hidden;
+        }
+
+        .lightV2 {
+          --head-background: var(--head-lightV2-background);
+          --body-background: var(--body-lightV2-background);
+          --hover-background: var(--hover-lightV2-background, #C4C4C4);
+          --color: white;
+          --td-color: #6C6C6C // Couleur proposée par contrast-finder.tanaguru.com avec constrat de 3.9 #9e9e9e;
+          --hover-color: #5c5e65;
+          --mv-checkbox-border-color: var(--color);
+          --mv-table-url-color: var(--td-color);
+          --border-colapse: inherit;
+          --border-spacing: 0px 14px !important;
+          --transparent-background: transparent;
+          --table-head-height: var(--mv-table-lightV2-head-height, 60px);
+          --table-row-height: var(--mv-table-lightV2-row-height, 60px);
+          --table-lightV2-row-height: var(--mv-table-lightV2-row-height, 26px);
+          --no-border-spacing: 0px 0px !important;
+          --head-first-child-radius: var(--mv-table-lightV2-first-radius);
+          --head-last-child-radius: var(--mv-table-lightV2-last-radius);
+          --body-td-first-child-radius: var(--mv-table-lightV2-first-radius);
+          --body-td-last-child-radius: var(--mv-table-lightV2-last-radius);
+          --word-wrap: anywhere;
+          --mv-table-body-td-border: solid 1px #00000000;
+          --mv-table-body-td-border-style: solid none;
+          --mv-table-overflow-y: auto;
+          --mv-table-td-font-size: var(--font-size-m, 13px);
+          --mv-dropdown-background: linear-gradient(180deg, #B3E1FC 0%, rgba(162, 212, 242, 0.97) 100%);
+        }
+
+        .loading {
+          display: block;
+          text-align: center;
+          font-weight: 500;
+          color: #FFFFFF;
+        }
+
+        .mv-table-container {
+          width: 100%;
+          height: 78%;
+          max-height: 78%;
+          overflow-x: auto;
+          overflow-y: var(--mv-table-overflow-y);
+        }
+        
+        .no-data {
+          font-size: 24px;
+          font-weight: bold;
+          text-align: center;
+          color: var(--warning-color);
+          padding-top: 15px;
+          padding-bottom: 15px;
+        }
+
+        .numeric {
+          text-align: right;
+        }
+
+        .progressbar mv-progressbar, mv-progressbar[type="infinite"] {
+          --mv-progressbar-height: 20px;
+        }
+
+        .selected {
+          color: #328cc0;
+        }
+
+        .sortable thead td {
+          cursor: pointer;
+        }
+
+        .sortable thead td:hover {
+          color: var(--hover-color);
+        }
+
+        .sortable thead td:hover:not(.action-header) {
+          color: var(--hover-color);
+        }
+
+        .cell_container {
+          display: flex;
+          align-items: center;
+          overflow: hidden;
+          height:26px;
+          font-size: var(--mv-table-td-font-size);
+        }
+
+        a {
+          font-style: normal;
+          font-weight: 400;
+          font-size: 12px;
+          line-height: 0px;
+          font-feature-settings: 'kern' off;
+          color: #02657e;
+          text-decoration: none;
+          margin-left: 30px;
+        }
+
+        div.progress_container {
+          line-height: 40px !important;
+        }
+
+        hr {
+          background-color: white;
+          border-color: white;
+          width: 95%;
+          height: 1px;
+        }
+
+        input[type="checkbox"] + span.lightV2::before {
+          box-shadow: inset 0px 1.8928px 1.8928px rgb(0 0 0 / 25%); 
+        }
+
+        mv-checkbox {
+          margin: auto;
+        }
+
+        span>mv-fa:hover {
+          cursor: pointer;
+        }
+
+        table {
+          display: table;
+          border-collapse: var(--border-colapse);
+          width: 100%;
+          /* Espace blanc entre chaque ligne*/
+          border-spacing: var(--border-spacing);
+          background-color: var(--transparent-background);
+          position: var(--table-position);
+        }
+
+        table thead #table_header {
+          position: -webkit-sticky;
+          position: sticky;
+          top: 0;
+          z-index: 9;
+          height: var(--table-lightV2-row-height)
+        }
+
+        tbody {
+          overflow-y: scroll;
+        }
+
+        tbody tr {
+          border-bottom: 1px solid #e9e9e9;
+          cursor: var(--table-row-cursor);
+          background-color: var(--body-background);
+          z-index: 8;
+        }
+
+        tbody tr:hover,
+        tbody tr.selected {
+          background-color: var(--hover-background);
+        }
+
+        tbody tr.selectable {
+          cursor: pointer;
+        }
+
+        td {
+          border-bottom: none;
+          padding: 0 15px 0 15px;
+          text-align: left;
+          overflow: initial;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+          height: var(--table-lightV2-row-height);
+          max-height: var(--table-lightV2-row-height);
+          color: var(--td-color);
+          white-space: normal;
+          word-wrap: var(--word-wrap);
+          border: var(--mv-table-body-td-border);
+          border-style: var(--mv-table-body-td-border-style);
+        }
+
+        /**
+        * ? Si filtre appliqué sur la colonne (class filtered)
+        */
+        td.filtered {
+          background-color: #8cc032 !important; 
+        }
+
+        td:first-child {
+          border-radius: var(--body-td-first-child-radius);
+        }
+
+        td:last-child {
+          border-radius: var(--body-td-last-child-radius);
+        }
+
+        td.td-filters {
+          vertical-align: top;
+        }
+
+        td.is-loading {
+          height: 80px !important;
+        }
+
+        thead {
+          margin: auto;
+          height: var(--table-row-height);
+          max-height: var(--table-row-height);
+          background-color: var(--head-background);
+        }
+
+        thead>tr:not(#filter){
         margin: auto;
-        height: var(--table-row-height);
-        max-height: var(--table-row-height);
+        max-height: var(--table-head-height);
         background-color: var(--head-background);
+        border-spacing: var(--no-border-spacing);
+        // 9 because filters contains mv-select with z-index: 10.
+        z-index: 9;
       }
 
-      thead td {
-        cursor: default;
-      }
+        thead td {
+          cursor: default;
+          color: var(--color);
+        }
 
-      .sortable thead td {
-        cursor: pointer;
-      }
+        thead td .title {
+          font-family: var(--table-header-font-family);
+          font-size: var(--font-size);
+          font-weight: 700;
+          text-transform: uppercase;
+          white-space: nowrap;
+        }
 
-      .sortable thead td:hover {
-        color: var(--hover-color);
-      }
+        thead td:first-child {
+          border-radius: var(--head-first-child-radius);
+        }
 
-      thead td .title {
-        font-family: var(--table-header-font-family);
-        font-size: var(--font-size);
-        font-weight: 700;
-        text-transform: uppercase;
-        white-space: nowrap;
-      }
+        thead td:last-child {
+          border-radius: var(--head-last-child-radius);
+        }
 
-      thead td:first-child {
-        border-radius: 10px 0 0 0;
-      }
+        tr {
+          max-height: 26px;
+          height: 26px;
+          // 8 because, need to pass under thead, and thead have 9 in z-index
+          z-index: 8;
+        }
 
-      thead td:last-child {
-        border-radius: 0 10px 0 0;
-      }
-
-      tbody tr {
-        border-bottom: 1px solid #e9e9e9;
-        cursor: var(--table-row-cursor);
-        background-color: var(--body-background);
-      }
-
-      tbody tr:hover,
-      tbody tr.selected {
-        background-color: var(--hover-background);
-      }
-
-      tbody tr.selectable {
-        cursor: pointer;
-      }
-
-      td {
-        border-bottom: none;
-        padding: 0 15px 0 15px;
-        text-align: left;
-        overflow: initial;
-        white-space: nowrap;
-        text-overflow: ellipsis;
-        height: var(--table-row-height);
-        max-height: var(--table-row-height);
-        color: var(--color);
-        white-space: normal;
-        word-wrap: break-word;
-      }
-
-      .action-header {
-        text-align: center;
-      }
-
-      .mv-table-container {
-        width: 100%;
-        overflow-x: auto;
-        overflow-y: hidden;
-      }
-
-      .numeric {
-        text-align: right;
-      }
-
-      mv-checkbox {
-        --mv-checkbox-label-width: 15px;
-        margin: auto;
-      }
-
-      .light {
-        --head-background: var(--head-light-background);
-        --body-background: var(--body-light-background);
-        --hover-background: var(--hover-light-background);
-        --color: #80828c;
-        --hover-color: #5c5e65;
-        --mv-checkbox-border-color: var(--color);
-        --mv-table-url-color: var(--color);
-      }
-
-      .dark {
-        --head-background: var(--head-dark-background);
-        --body-background: var(--body-dark-background);
-        --hover-background: var(--hover-dark-background);
-        --color: #ffffff;
-        --hover-color: #b3b3b3;
-        --mv-checkbox-border-color: var(--color);
-        --mv-table-url-color: var(--color);
-      }
-
-      .no-data {
-        font-size: 24px;
-        font-weight: bold;
-        text-align: center;
-        color: var(--warning-color);
-        padding-top: 15px;
-        padding-bottom: 15px;
-      }
-
-      tr.is-loading {
-        height: 80px !important;
-      }
-
-      td.is-loading {
-        height: 80px !important;
-      }
-
-      div.progress_container {
-        line-height: 40px !important;
-      }
-
-      .is-loading {
-        padding-top: 15px;
-        padding-bottom: 15px;
-      }
-
-      .loading {
-        display: block;
-        text-align: center;
-        font-weight: 500;
-        color: #FFFFFF;
-      }
-
-      .progressbar mv-progressbar, mv-progressbar[type="infinite"] {
-        --mv-progressbar-height: 20px;
-      }
-
-      .container_progressbar {
-        padding-top: 30px;
-        padding-bottom: 30px;
-      }
+        tr.is-loading {
+          height: 80px !important;
+        }
     `;
   }
 
   constructor() {
     super();
+    this.formFields = [];
+    this.pages = 1;
+    this.filterValues = {};
     this.columns = [];
     this.rows = [];
     this.selectable = false;
@@ -292,6 +496,8 @@ export class MvTable extends LitElement {
     return html`<mv-fa icon="sort"></mv-fa>`;
   };
 
+  
+
   render() {
     const withCheckbox = this.withCheckbox;
     const rowActions = this["row-actions"];
@@ -300,17 +506,24 @@ export class MvTable extends LitElement {
     const sortableClass = this.sortable ? " sortable" : "";
     const { datePattern } = this;
     const isAllSelected = this.hasAllSelected();
-
     return html`
+      <mv-table-options
+        .columns="${this.columns}"
+        .formFields="${this.formFields}"
+        .theme="${this.theme}"
+        .pagination="${this.pagination}"
+      >
+      </mv-table-options>
       <div class="mv-table-container${sortableClass} ${this.theme}">
         <table>
           <thead>
-            <tr>
+            <tr id="table_header">
               ${withCheckbox && !this.selectOne
                 ? html`
                     <td @click="${this.handleCellClick()}">
                       <mv-checkbox
                         .value="${SELECT_ALL}"
+                        .theme="${this.theme}"
                         ?checked="${isAllSelected}"
                         @click-checkbox="${this.handleClickCheckbox(
                           isAllSelected
@@ -324,8 +537,33 @@ export class MvTable extends LitElement {
                 ? html`<td></td>`
                 : html``}
               ${this.columns.map((column) =>
-                this.sortable
+                this.sortable && this.theme == "lightV2"
                   ? html`
+                    <td >
+                      <mv-dropdown
+                      container
+                      justify="left"
+                      position="bottom"
+                      theme="${this.theme}"
+                    >
+                      <mv-dropdown trigger>
+                        <span class="title">${column.title} <mv-lnr icon="chevron-down"></mv-lnr></span>
+                      </mv-dropdown>
+                        <mv-dropdown content theme="${this.theme}">
+                          <ul class="header_menu">
+                            <div @click="${this.handleSort(column, "asc")}"><mv-fa icon="sort-alpha-down" ></mv-fa>Tri de A à Z</div>
+                            <div @click="${this.handleSort(column, "desc")}"><mv-fa icon="sort-alpha-up-alt"></mv-fa>Tri de Z à A</div>
+                            <hr/>  
+                            <mv-button
+                              type="default" style="--mv-button-custom-color: #4f4f7a;" theme="${this.theme}"
+                              @button-clicked="${this.applyFilters}"
+                            >Appliquer</mv-button>
+                          </ul>
+                        </mv-dropdown>  
+                      </mv-dropdown>
+                    </td>
+                  `
+                  : this.sortable && this.theme != "lightV2" ? html`
                       <td @click="${this.handleSort(column)}">
                         <span class="title">${column.title}</span>
                         <span>${this.sortIcon(column)}</span>
@@ -357,7 +595,7 @@ export class MvTable extends LitElement {
                   value=100
                 >
                 <span class="loading">Please wait<span class="dotdotdot"></span></span>
-              </mv-progressbar></div>            </td></tr>
+              </mv-progressbar></div></td></tr>
             ` :null }
 
             ${this.rows.length==0 && !this.dataIsLoading ?  
@@ -375,14 +613,17 @@ export class MvTable extends LitElement {
                   ${withCheckbox
                     ? html`
                         <td>
+                          <div class="cell_container">
                           <mv-checkbox
                             .value="${row}"
+                            .theme="${this.theme}"
                             ?checked="${selected}"
                             @click-checkbox="${this.handleClickCheckbox(
                               selected
                             )}"
                           >
                           </mv-checkbox>
+                          </div>
                         </td>
                       `
                     : html``}
@@ -394,17 +635,21 @@ export class MvTable extends LitElement {
                     });
                     return html`
                       <td @click="${this.handleCellClick(row, column)}">
+                      <div class="cell_container">
                         ${cellComponent}
+                        </div>
                       </td>
                     `;
                   })}
                   ${hasActionColumn
                     ? html`
                         <td>
+                        <div class="cell_container">
                           ${this["action-column"].getActionComponent(
                             row,
                             rowActions
                           )}
+                          </div>
                         </td>
                       `
                     : html``}
