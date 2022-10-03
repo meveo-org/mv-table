@@ -17,10 +17,10 @@ export class MvTableOptions extends LitElement {
   static get properties() {
     return {
       //  valid theme values are: "light", "dark", "lightV2"
-      //    default: "light"
+      //    default: "lightV2"
       theme: { type: String, attribute: true },
       fields: { type: Array },
-      entity: { type: Object, attribute: false },
+      formFields: { type: Array, attribute: false },
       columns: { type: Array, reflect: true },
       displayed: { type: Boolean },
       pagination: { type: Array }
@@ -31,7 +31,7 @@ export class MvTableOptions extends LitElement {
     return css`
       :host {
         font-family: var(--font-family, Arial);
-        font-size: var(--font-size-m, 10pt);
+        font-size: var(--font-size-m, 13px);
         --light-background: var(--mv-pagination-light-background, #eaebf0);
         --dark-background: var(--mv-pagination-dark-background, #3999c1);
         --mv-select-width: 50px;
@@ -111,7 +111,7 @@ export class MvTableOptions extends LitElement {
     this.pages = 1;
     this.currentPage = 1;
     this.theme = "lightV2";
-    this.entity = { };
+    this.formFields = [];
     this.columns = [];
     this.displayed = true;
     this.maxButtons = 5;
@@ -162,17 +162,18 @@ export class MvTableOptions extends LitElement {
   */
 
   renderRowsPerPage = () => html`
-          <div class="rows-per-page">
-            <span>${ msg("Show", {id: 'SP.listContent.show'}) } </span>
-            <mv-select
-              .value="${this.selectedRowsPerPage}"
-              .options="${ROWS_PER_PAGE}"
-              @select-option="${this.changeRowsPerPage}"
-              no-clear-button
-            ></mv-select>
-            <span> rows</span>
-          </div>
-        `
+    <div class="rows-per-page">
+      <span>${ msg("Show", {id: 'SP.listContent.show'}) } </span>
+      <mv-select
+        .value="${this.selectedRowsPerPage}"
+        .options="${ROWS_PER_PAGE}"
+        .theme="${this.theme}"
+        @select-option="${this.changeRowsPerPage}"
+        no-clear-button
+      ></mv-select>
+      <span> rows</span>
+    </div>
+  `
         
   changeRowsPerPage = (event) => {
     const {
@@ -205,8 +206,7 @@ export class MvTableOptions extends LitElement {
   }
 
   render() {
-    const { entity, rowActions } = this
-    const { formFields } = entity
+    const { rowActions } = this
     return html`
       ${this.displayed ? html`
         <div class="container">
@@ -227,7 +227,7 @@ export class MvTableOptions extends LitElement {
                 <span slot="tooltip-content">${ msg('Show or hide columns', {id: 'SP.listContent.showOrHide'}) }</span>
               </mv-tooltip>
             </mv-dropdown>
-            ${formFields.map((group) => this.renderFieldGroup(group))}
+            ${this.formFields.map((group) => this.renderFieldGroup(group))}
           </mv-dropdown>
         </div>
           <div class="pagination ${this.theme}">
