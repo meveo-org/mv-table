@@ -35,6 +35,7 @@ export class MvTableOptions extends LitElement {
         --light-background: var(--mv-pagination-light-background, #eaebf0);
         --dark-background: var(--mv-pagination-dark-background, #3999c1);
         --mv-select-width: 50px;
+        --mv-select-selected-option-font-size: 13px;
         position: sticky;
         top: 0px;
         z-index: 1000;
