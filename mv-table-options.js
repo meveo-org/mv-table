@@ -38,7 +38,7 @@ export class MvTableOptions extends LitElement {
         --mv-select-selected-option-font-size: 13px;
         position: sticky;
         top: 0px;
-        z-index: 1000;
+        z-index: 20;
       }
       
       .container {
@@ -51,7 +51,7 @@ export class MvTableOptions extends LitElement {
 
       .container div {
         display: flex;
-        flex-basis: 30%;
+        flex-basis: 33%;
         height:100%;
       }
 
