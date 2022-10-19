@@ -16,8 +16,8 @@ const ROWS_PER_PAGE = [
 export class MvTableOptions extends LitElement {
   static get properties() {
     return {
-      //  valid theme values are: "light", "dark", "lightV2"
-      //    default: "lightV2"
+      //  valid theme values are: "light", "dark"
+      // default : "light"
       theme: { type: String, attribute: true },
       fields: { type: Array },
       formFields: { type: Array, attribute: false },
@@ -34,8 +34,6 @@ export class MvTableOptions extends LitElement {
         font-size: var(--font-size-m, 13px);
         --light-background: var(--mv-pagination-light-background, #eaebf0);
         --dark-background: var(--mv-pagination-dark-background, #3999c1);
-        --mv-select-width: 50px;
-        --mv-select-selected-option-font-size: 13px;
         position: sticky;
         top: 0px;
         z-index: 20;
@@ -111,7 +109,7 @@ export class MvTableOptions extends LitElement {
     this.selectedRowsPerPage = ROWS_PER_PAGE[0];
     this.pages = 1;
     this.currentPage = 1;
-    this.theme = "lightV2";
+    this.theme = "light";
     this.formFields = [];
     this.columns = [];
     this.displayed = true;
@@ -135,8 +133,8 @@ export class MvTableOptions extends LitElement {
   renderFieldGroup = (group) => {
     const { fields, label } = group
     return html`
-      <mv-dropdown header theme="light">${label}</mv-dropdown>
-      <mv-dropdown content theme="light">
+      <mv-dropdown header theme=${this.theme}>${label}</mv-dropdown>
+      <mv-dropdown content theme=${this.theme}>
         <ul>
           ${fields.map((item) => this.renderFieldItem(group, item))}
         </ul>
@@ -168,7 +166,6 @@ export class MvTableOptions extends LitElement {
       <mv-select
         .value="${this.selectedRowsPerPage}"
         .options="${ROWS_PER_PAGE}"
-        .theme="${this.theme}"
         @select-option="${this.changeRowsPerPage}"
         no-clear-button
       ></mv-select>
@@ -238,7 +235,7 @@ export class MvTableOptions extends LitElement {
               .pages="${this.pagination[1]}"
               .justify=${"center"}
               .max-buttons="${this.maxButtons}"
-              .theme=${"lightV2"}
+              .theme=${this.theme}
               @change-page="${this.gotoPage}"
             ></mv-pagination>
           </div>
