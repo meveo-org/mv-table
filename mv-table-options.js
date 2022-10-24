@@ -38,6 +38,10 @@ export class MvTableOptions extends LitElement {
         top: 0px;
         z-index: 20;
       }
+
+      ul {
+        padding-inline-start: 10px !important;
+      }
       
       .container {
         display: flex;

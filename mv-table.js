@@ -1,4 +1,5 @@
 import { LitElement, html, css } from "lit";
+import { msg } from '@lit/localize'
 import "@meveo-org/mv-checkbox";
 import "@meveo-org/mv-font-awesome";
 import "@meveo-org/mv-progress-bar";
@@ -10,96 +11,53 @@ import "./cell_types/mv-text-cell.js";
 import "./cell_types/mv-url-cell.js";
 import "./cell_types/mv-image-cell.js";
 import "./cell_types/mv-list-cell.js";
+import '@meveo-org/mv-table/mv-table-options.js'
 
-const CELL_TYPES = (props) => {
-  const { row, column, datePattern } = props;
-  const { name, target } = column;
-  const value = row[name];
-  const { href, alt, label, title, content } = value || {};
-  return {
-    ARRAY: html`<mv-array-cell .value="${value || []}"></mv-array-cell>`,
-    BOOLEAN: html`<mv-boolean-cell .value="${value}"></mv-boolean-cell>`,
-    DATE: html`
-      <mv-date-cell
-        .value="${value}"
-        .datePattern="${datePattern}"
-      ></mv-date-cell>
-    `,
-    ENTITY: html`<mv-entity-cell .value="${value}"></mv-entity-cell>`,
-    LIST: html`<mv-list-cell
-      .value="${value}"
-      .options="${column.options}"
-    ></mv-list-cell>`,
-    IMAGE: html`
-      <mv-image-cell
-        .href="${href}"
-        .alt="${alt}"
-        .title="${title}"
-        .content="${content}"
-      ></mv-image-cell>
-    `,
-    STRING: html`<mv-text-cell .value="${value || ""}"></mv-text-cell>`,
-    TEXT: html`<mv-text-cell .value="${value || ""}"></mv-text-cell>`,
-    URL: html`
-      <mv-url-cell
-        .href="${href}"
-        .label="${label}"
-        .target="${target}"
-      ></mv-url-cell>
-    `,
-  };
-};
 const SELECT_PAGE = { id: 'page', value: 'page' }
 const SELECT_ALL = { id: 'all', value: 'all' }
 
-const selectFilter = [{
-  label: "Est égal à ...",
-  value: "="
-}, {
-  label: "Est différent de ...",
-  value: "!="
-}]
-const selectFilterString = [{
-  label: "Contient ...",
-  value: "contain"
-},
-{
-  label: "Ne contient pas ...",
-  value: "notContain"
-}]
-const selectFilterNum = [{
-  label: "Supérieur à ...",
-  value: ">"
-},
-{
-  label: "Inférieur à ...",
-  value: "<"
-}, 
-{
-  label: "Entre ...",
-  value: "between"
-}]
-const selectFilterDate = [{
-  label: "Avant ...",
-  value: "before"
-},
-{
-  label: "Après ...",
-  value: "after"
-},
-{
-  label: "Entre ...",
-  value: "between"
-}]
-
-const getCellComponent = (props) => {
-  const {
-    column: { type },
-  } = props;
-  return CELL_TYPES(props)[type] || CELL_TYPES(props)["TEXT"];
-};
-
 export class MvTable extends LitElement {
+  selectFilter = [{
+    label: msg('Est égale à ...', {id: 'SP.table.filtreEgalite'}),
+    value: "="
+  }, {
+    label: msg('Est different de ...', {id: 'SP.table.filtreDifferent'}),
+    value: "!="
+  }]
+
+  selectFilterString = [{
+    label: msg('Contient', {id: 'SP.table.filtreContient'}),
+    value: "contain"
+  },
+  {
+    label: msg('Ne contient pas', {id: 'SP.table.filtreContientPas'}),
+    value: "notContain"
+  }]
+  selectFilterNum = [{
+    label: msg('Supérieur à ...', {id: 'SP.table.filtreSuperieur'}),
+    value: ">"
+  },
+  {
+    label: msg('Inférieur à ...', {id: 'SP.table.filtreInferieur'}),
+    value: "<"
+  }, 
+  {
+    label: msg('Entre', {id: 'SP.table.filtreEntre'}),
+    value: "between"
+  }]
+  selectFilterDate = [{
+    label: msg('Avant ...', {id: 'SP.table.filtreAvant'}),
+    value: "before"
+  },
+  {
+    label: msg('Après ...', {id: 'SP.table.filtreApres'}),
+    value: "after"
+  },
+  {
+    label: msg('Entre', {id: 'SP.table.filtreEntre'}),
+    value: "between"
+  }]
+
   static get properties() {
     return {
       formFields: { type: Array, attribute: false },
@@ -113,7 +71,7 @@ export class MvTable extends LitElement {
       "row-actions": { type: Array, attribute: false },
       "selected-rows": { type: Array, attribute: false },
       pagination: { type: Array },
-      //  valid theme values are: "light", "lightV2", "dark"
+      //  valid theme values are: "light", "dark"
       //    default: "light"
       theme: { type: String, attribute: false },
       datePattern: { type: String, attribute: "date-pattern" },
@@ -121,6 +79,7 @@ export class MvTable extends LitElement {
       sortable: { type: Boolean },
       dataIsLoading: { type: Boolean },
       filterValues: { type: Array, reflect: true },
+      customTypes: { type: Object }
     };
   }
 
@@ -131,30 +90,49 @@ export class MvTable extends LitElement {
         --font-size: var(--font-size-s, 1rem);
         --font-size-s: 8px;
         --font-size-m: 13px;
+        --td-light-color: var(--mv-table-td-light-color);
+        --light-color: var(--mv-table-light-color);
         --table-header-font-family: var(
           --mv-table-header-font-family,
           var(--font-family, Arial)
         );
+        --no-border-spacing: var(--mv-table-no-border-spacing);
+        --mv-input-inactive-box-shadow: var(--mv-table-input-inactive-box-shadow);
+        --mv-checkbox-shadow: var(--mv-table-checkbox-shadow);
+        --transparent-background: var(--mv-table-transparent-background);
         --table-row-height: var(--mv-table-row-height, 66px);
         --table-row-cursor: var(--mv-table-row-cursor, default);
-        --head-light-background: var(--mv-table-head-light-background, #f5f6fa);
+        --table-td-font-size: var(--mv-table-td-font-size);
         --body-light-background: var(--mv-table-body-light-background);
         --hover-light-background: var(
           --mv-table-hover-light-background,
           #ededed
         );
-        --head-lightV2-background: var(--mv-table-head-lightV2-background, #328cc0);
-        --body-lightV2-background: var(--mv-table-body-lightV2-background, #dedede);
-        --table-lightV2-row-height: var(--table-lightV2-row-height)
-        --hover-lightV2-background: #c4c4c4;
+
+        --table-light-row-height: var(--mv-table-light-row-height)
         --head-dark-background: var(--mv-table-head-dark-background, #23404c);
         --body-dark-background: var(--mv-table-body-dark-background, #373e48);
         --hover-dark-background: var(--mv-table-hover-dark-background, #4e686d);
         --color: var(--mv-table-color);
         --mv-button-padding: 5px 5px;
         --mv-button-min-width: 55px;
-        --mv-dropdown-content-max-height: max-content;
+        --input-border: var(--mv-input-border);
       }
+
+      .advancedFilter > mv-select {
+        /* mv-select */
+        --mv-select-max-height: 20px;
+        --mv-select-selected-option-font-size: 10px;
+        --mv-select-background-color: #328cc0;
+        --mv-select-option-background: #328cc0;
+        --mv-select-color: white;
+        --mv-select-width: 90px;
+        --mv-select-border: none;
+        --mv-select-font-size: var(--font-size-s);
+        --mv-select-input-padding: 1px 4px;
+        --mv-select-selected-option-font-size: 8px;
+      }
+
       *::-webkit-scrollbar {
             width: 27px;
             height: 30px;
@@ -202,19 +180,19 @@ export class MvTable extends LitElement {
           margin: 4px;
         }
         .advancedFilter mv-input {
-          --mv-input-border: none;
+          border: var(--input-border);
           --mv-input-min-width: 80px;
           width: 90px;
           --mv-input-max-width: 90px;
         }
         .button_container {
-          float: right;
+          text-align: end;
         }
         .cell_container {
           display: flex;
           align-items: center;
           overflow: hidden;
-          font-size: var(--mv-table-td-font-size);
+          font-size: var(--table-td-font-size);
         }
         .checkbox {
           width: 5px;
@@ -227,7 +205,7 @@ export class MvTable extends LitElement {
           --head-background: var(--head-dark-background);
           --body-background: var(--body-dark-background);
           --hover-background: var(--hover-dark-background);
-          --color: #ffffff;
+          --color: var(--dark-color, #ffffff);
           --hover-color: #b3b3b3;
           --mv-checkbox-border-color: var(--color);
           --mv-table-url-color: var(--td-color);
@@ -235,9 +213,10 @@ export class MvTable extends LitElement {
           --table-head-height: var(--mv-table-head-height, 60px);
           --table-row-height: var(--mv-table-row-height, 66px);
           --head-first-child-radius:var(--mv-table-head-classic-first-radius);
+          --body-td-first-child-radius: var(--mv-table-head-classic-first-radius);
           --head-last-child-radius:var(--mv-table-head-classic-last-radius);
           --word-wrap: break-word;
-          --mv-table-overflow-y: hidden;
+          --table-overflow-y: hidden;
         }
         .header_menu {
           font-size: 10px;
@@ -255,61 +234,24 @@ export class MvTable extends LitElement {
           --head-background: var(--head-light-background);
           --body-background: var(--body-light-background);
           --hover-background: var(--hover-light-background);
-          --color: #80828c;
-          --td-color: #6C6C6C // Couleur proposée par contrast-finder.tanaguru.com avec constrat de 3.9 #9e9e9e;
+          --mv-input-box-padding: var(--mv-table-input-box-padding);
+          --border-spacing: var(--mv-table-border-spacing);
+          --color: var(--light-color, #80828c);
+          --td-color: var(--td-light-color) // Couleur proposée par contrast-finder.tanaguru.com avec constrat de 3.9 #9e9e9e; */
           --hover-color: #5c5e65;
           --mv-checkbox-border-color: var(--color);
           --mv-table-url-color: var(--td-color);
-          --border-colapse: collapse;
+          --border-colapse: var(--mv-table-border-colapse, collapse)
           --table-head-height: var(--mv-table-head-height, 60px);
           --table-row-height: var(--mv-table-row-height, 66px);
-          --head-first-child-radius:var(--mv-table-head-classic-first-radius);
-          --head-last-child-radius:var(--mv-table-head-classic-last-radius);
-          --word-wrap: break-word;
-          --mv-table-overflow-y: hidden;
+          --head-first-child-radius: var(--mv-table-head-light-first-radius);
+          --head-last-child-radius: var(--mv-table-head-light-last-radius);
+          --body-td-first-child-radius: var(--mv-table-head-light-first-radius);
+          --body-td-last-child-radius: var(--mv-table-head-light-last-radius);
+          --word-wrap: var(--mv-table-word-wrap, break-word);
+          --table-overflow-y: var(--mv-table-overflow-y, hidden);
         }
-        .lightV2 {
-          --head-background: var(--head-lightV2-background);
-          --body-background: var(--body-lightV2-background);
-          --hover-background: var(--hover-lightV2-background, #C4C4C4);
-          --color: white;
-          --td-color: #6C6C6C // Couleur proposée par contrast-finder.tanaguru.com avec constrat de 3.9 #9e9e9e;
-          --hover-color: #5c5e65;
-          --mv-checkbox-border-color: var(--color);
-          --mv-checkbox-shadow: inset 0px 1.8928px 1.8928px rgba(0, 0, 0, 0.25);
-          --mv-table-url-color: var(--td-color);
-          --border-colapse: inherit;
-          --border-spacing: 0px 14px !important;
-          --transparent-background: transparent;
-          --table-head-height: var(--mv-table-lightV2-head-height, 60px);
-          --table-row-height: var(--mv-table-lightV2-row-height, 60px);
-          --table-lightV2-row-height: var(--mv-table-lightV2-row-height, 26px);
-          --no-border-spacing: 0px 0px !important;
-          --head-first-child-radius: var(--mv-table-lightV2-first-radius);
-          --head-last-child-radius: var(--mv-table-lightV2-last-radius);
-          --body-td-first-child-radius: var(--mv-table-lightV2-first-radius);
-          --body-td-last-child-radius: var(--mv-table-lightV2-last-radius);
-          --word-wrap: anywhere;
-          --mv-table-body-td-border: solid 1px #00000000;
-          --mv-table-body-td-border-style: solid none;
-          --mv-table-overflow-y: auto;
-          --mv-table-td-font-size: var(--font-size-m, 13px);
-          --mv-dropdown-background: linear-gradient(180deg, #B3E1FC 0%, rgba(162, 212, 242, 0.97) 100%);
-          --mv-dropdown-content-overflow: visible;
-          --mv-select-color: white;
-          --mv-select-width: 90px;
-          --mv-select-border: none;
-          --mv-select-background-color: #328cc0;
-          --mv-select-option-background: #328cc0;
-          --mv-select-font-size: var(--font-size-s);
-          --mv-select-input-padding: 1px 4px;
-          --mv-select-selected-option-font-size: 8px;
-          --mv-input-border: none;
-          --mv-input-box-padding: 1px 4px;
-          --mv-input-inactive-box-shadow: inset 1px 2px 3px rgba(0, 0, 0, 0.15);
-          --mv-input-box-height: 20px;
-          --mv-dropdown-min-width: 130px;
-        }
+
         .loading {
           display: block;
           text-align: center;
@@ -324,7 +266,7 @@ export class MvTable extends LitElement {
           height: 78%;
           max-height: 78%;
           overflow-x: auto;
-          overflow-y: var(--mv-table-overflow-y);
+          overflow-y: var(--table-overflow-y);
         }
         
         .no-data {
@@ -354,17 +296,17 @@ export class MvTable extends LitElement {
           color: var(--hover-color);
         }
         .subMenu {
-        position: absolute;
-        left: 130px;
-        top: -25px;
-        min-width: 210px;
-        width: 100%;
-        color: var(--mv-dropdown-lightV2-color, #328cc0);
-        background: var(--mv-dropdown-background, #3f4753);
-        border-radius: 5px;
-        border: none;
-        padding: 5px;
-        font-size: 10px;
+          position: absolute;
+          left: 130px;
+          top: -25px;
+          min-width: 210px;
+          width: 100%;
+          color: var(--mv-dropdown-light-color, #328cc0);
+          background: var(--mv-dropdown-background, #3f4753);
+          border-radius: 5px;
+          border: none;
+          padding: 5px;
+          font-size: 10px;
       }
         .subMenu div,
         .header_menu div {
@@ -393,13 +335,6 @@ export class MvTable extends LitElement {
           width: 95%;
           height: 1px;
         }
-        input[type="checkbox"] + span.lightV2::before {
-          box-shadow: inset 0px 1.8928px 1.8928px rgb(0 0 0 / 25%); 
-        }
-        mv-checkbox {
-        --mv-checkbox-label-width: 100%;
-        margin: auto;
-      }
         mv-dropdown {
           font-size: 10px;
         }
@@ -420,7 +355,7 @@ export class MvTable extends LitElement {
           position: sticky;
           top: 0;
           z-index: 9;
-          height: var(--table-lightV2-row-height)
+          height: var(--table-light-row-height)
         }
         tbody {
           overflow-y: scroll;
@@ -445,9 +380,9 @@ export class MvTable extends LitElement {
           overflow: initial;
           white-space: nowrap;
           text-overflow: ellipsis;
-          height: var(--table-lightV2-row-height);
-          max-height: var(--table-lightV2-row-height);
-          color: var(--td-color);
+          height: var(--table-light-row-height);
+          max-height: var(--table-light-row-height);
+          color: var(--td-light-color);
           white-space: normal;
           word-wrap: var(--word-wrap);
           border: var(--mv-table-body-td-border);
@@ -511,6 +446,10 @@ export class MvTable extends LitElement {
         tr.is-loading {
           height: 80px !important;
         }
+
+        ul {
+          padding: 0 10px;
+        }
         
         .locked {
           --mv-checkbox-checked-content: '🔒'
@@ -547,7 +486,64 @@ export class MvTable extends LitElement {
       filters: {}
     };
     this.hasActiveFilter = false;
+    this.customTypes = {};
   }
+
+  getCellComponent (props) {
+    const {
+      column: { type },
+    } = props;
+    return this.CELL_TYPES(props)[type] || this.CELL_TYPES(props)["TEXT"]
+  }
+
+  CELL_TYPES (props) {
+    const { row, column, datePattern } = props;
+    const { name, target } = column;
+    const value = row[name];
+    const { href, alt, label, title, content } = value || {};
+    let customCell;
+    if(this.customTypes){
+      customCell = this.customTypes(props)
+    }
+
+    const defaultCellTypes = {
+      ARRAY: html`<mv-array-cell .value="${value || []}"></mv-array-cell>`,
+      BOOLEAN: html`<mv-boolean-cell .value="${value}"></mv-boolean-cell>`,
+      DATE: html`
+        <mv-date-cell
+          .value="${value}"
+          .datePattern="${datePattern}"
+        ></mv-date-cell>
+      `,
+      ENTITY: html`<mv-entity-cell .value="${value}"></mv-entity-cell>`,
+      LIST: html`<mv-list-cell
+        .value="${value}"
+        .options="${column.options}"
+      ></mv-list-cell>`,
+      IMAGE: html`
+        <mv-image-cell
+          .href="${href}"
+          .alt="${alt}"
+          .title="${title}"
+          .content="${content}"
+        ></mv-image-cell>
+      `,
+      STRING: html`<mv-text-cell .value="${value || ""}"></mv-text-cell>`,
+      TEXT: html`<mv-text-cell .value="${value || ""}"></mv-text-cell>`,
+      URL: html`
+        <mv-url-cell
+          .href="${href}"
+          .label="${label}"
+          .target="${target}"
+        ></mv-url-cell>
+      `,
+    };
+
+    customCell ? defaultCellTypes[column.type] = customCell : null
+
+    return defaultCellTypes;
+  }
+
   render() {
     const withCheckbox = this.withCheckbox;
     const rowActions = this["row-actions"];
@@ -561,7 +557,6 @@ export class MvTable extends LitElement {
       <mv-table-options
         .columns="${this.columns}"
         .formFields="${this.formFields}"
-        .theme="${this.theme}"
         .pagination="${this.pagination}"
       >
       </mv-table-options>
@@ -569,7 +564,7 @@ export class MvTable extends LitElement {
       ${this.selection.selectAll == true ? html`<div style="text-align: center"><span style="color: red">ATTENTION TOUTES</span> les lignes sont sélectionnées</div>` : this.selection.selectedRows.length ? html`<div style="text-align: center">${this.selection.selectedRows.length} lignes sélectionnées</div>` : null}
         <table>
           <thead>
-            <tr id="table_header">
+          <tr id="table_header">
               ${withCheckbox && !this.selectOne
                 ? html`
                   <td>
@@ -620,7 +615,7 @@ export class MvTable extends LitElement {
                 ? html`<td></td>`
                 : html``}
               ${this.columns.map((column) =>
-                this.sortable && this.theme == "lightV2"
+                this.sortable
                   ? html`
                     <td class="${this.filterValues.find(elt => elt.hasOwnProperty(column.name)) && this.hasActiveFilter ? 'filtered' : '' }">
                       <mv-dropdown
@@ -634,9 +629,9 @@ export class MvTable extends LitElement {
                       </mv-dropdown>
                         <mv-dropdown content theme="${this.theme}" style="overflow: visible !important">
                           <ul class="header_menu" style="padding-left: 10px; padding-right: 10px">
-                            <div @click="${this.handleSort(column, "asc")}"><mv-fa icon="sort-alpha-down" ></mv-fa>Tri de A à Z</div>
-                            <div @click="${this.handleSort(column, "desc")}"><mv-fa icon="sort-alpha-up-alt"></mv-fa>Tri de Z à A</div>
-                            <div>${this.renderFilterItem(column)}</div>
+                          <div @click="${this.handleSort(column, "asc")}"><mv-fa icon="sort-alpha-down" ></mv-fa>${msg("Tri croissant", {id: 'SP.table.sortAZ'})}</div>
+                          <div @click="${this.handleSort(column, "desc")}"><mv-fa icon="sort-alpha-up-alt"></mv-fa>${msg("Tri decroissant", {id: 'SP.table.sortZA'})}</div>
+                          <div>${this.renderFilterItem(column)}</div>
                             <mv-dropdown
                               container
                               justify="left"
@@ -644,11 +639,11 @@ export class MvTable extends LitElement {
                               theme="${this.theme}"
                             >
                               <mv-dropdown trigger>
-                                <mv-fa icon="filter"></mv-fa>Filtres avancés<mv-fa icon="angle-right"></mv-fa>
+                                <mv-fa icon="filter"></mv-fa>${msg("Advanced filters", {id: 'SP.popup.advancedFilters'})}<mv-fa icon="angle-right"></mv-fa>
                               </mv-dropdown>
                               <mv-dropdown content theme="${this.theme}">
                                 <div class="subMenu" >
-                                  <div>Filtres avancés</div> 
+                                  <div>${msg("Advanced filters", {id: 'SP.popup.advancedFilters'})}</div> 
                                   <div>
                                     ${this.renderAdvancedFilter(column)}
                                   </div>
@@ -677,7 +672,7 @@ export class MvTable extends LitElement {
                     </mv-dropdown>
               </td>
                   `
-                  : this.sortable && this.theme != "lightV2" ? html`
+                  : this.sortable ? html`
                       <td @click="${this.handleSort(column)}">
                         <span class="title">${column.title}</span>
                         <span>${this.sortIcon(column)}</span>
@@ -722,7 +717,7 @@ export class MvTable extends LitElement {
               const selected = this.selection.selectAll ? true : this.isSelectVisible(row);
               const rowClass = `mv-table-row${selected ? " selected" : ""}`;
               return html`
-                <tr @click="${this.theme=="lightV2" ? null : this.handleRowClick(row)}" class="${rowClass} ${this.selectionOption=="all" ? "disabled" : ""}">
+                <tr @click="${this.theme=="light" ? null : this.handleRowClick(row)}" class="${rowClass} ${this.selectionOption=="all" ? "disabled" : ""}">
                   ${withCheckbox
                     ? html`
                         <td>
@@ -740,7 +735,7 @@ export class MvTable extends LitElement {
                       `
                     : html``}
                   ${this.columns.map((column) => {
-                    const cellComponent = getCellComponent({
+                    const cellComponent = this.getCellComponent({
                       row,
                       column,
                       datePattern,
@@ -861,7 +856,7 @@ export class MvTable extends LitElement {
   
   renderAdvancedFilter = (column) => {
     var selectFilterValues;
-    column.type == "STRING" ? selectFilterValues = [...selectFilter, ...selectFilterString] : selectFilterValues = [...selectFilter, ...selectFilterNum];
+    column.type == "STRING" ? selectFilterValues = [...this.selectFilter, ...this.selectFilterString] : selectFilterValues = [...this.selectFilter, ...this.selectFilterNum];
     return html`
     <div class="advancedFilter">
       <mv-select
@@ -1082,13 +1077,6 @@ export class MvTable extends LitElement {
     ];
   }
     alert("Filtre sur la colonne : " + code + " valeur du filtre : " + this.filterType +" " + value)
-    // this.dispatchEvent(new CustomEvent("new-filter", {
-    //   detail: { filters: this.filterValues },
-    //   bubbles: true,
-    //   composed: true,
-    // })
-    // );
   };
-
 }
 customElements.define("mv-table", MvTable);
