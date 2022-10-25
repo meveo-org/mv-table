@@ -11,7 +11,6 @@ import "./cell_types/mv-text-cell.js";
 import "./cell_types/mv-url-cell.js";
 import "./cell_types/mv-image-cell.js";
 import "./cell_types/mv-list-cell.js";
-import '@meveo-org/mv-table/mv-table-options.js'
 
 const SELECT_PAGE = { id: 'page', value: 'page' }
 const SELECT_ALL = { id: 'all', value: 'all' }
@@ -116,7 +115,6 @@ export class MvTable extends LitElement {
         --hover-dark-background: var(--mv-table-hover-dark-background, #4e686d);
         --color: var(--mv-table-color);
         --mv-button-padding: 5px 5px;
-        --mv-button-min-width: 55px;
         --input-border: var(--mv-input-border);
       }
 
@@ -220,6 +218,8 @@ export class MvTable extends LitElement {
           --table-overflow-y: hidden;
         }
         .header_menu {
+          text-transform: none;
+          font-weight: normal;
           font-size: 10px;
           padding-left: 10px !important;
           padding-right: 10px !important;
@@ -392,12 +392,16 @@ export class MvTable extends LitElement {
         /**
         * ? Si filtre appliqué sur la colonne (class filtered)
         */
-        td.filtered {
+        .filtered {
           border-radius: 14px;
-          background-color: #317297 !important; 
+          background-color: #317297 !important;
+          height: 100%;
+          line-height: var(--table-row-height);
+          padding: 0 8px 0 8px;
         }
-        span.filtered {
-          background-color: #328cc0;
+
+        mv-lnr[icon="chevron-down"]::before {
+          content : "-";
         }
         td:first-child {
           border-radius: var(--body-td-first-child-radius);
@@ -458,6 +462,10 @@ export class MvTable extends LitElement {
         
         .locked {
           --mv-checkbox-checked-content: '🔒'
+        }
+
+        span.dropdown-trigger {
+          float: right;
         }
     `;
   }
@@ -573,7 +581,7 @@ export class MvTable extends LitElement {
       ${this.selection.selectAll == true ? html`<div style="text-align: center"><span style="color: red">ATTENTION TOUTES</span> les lignes sont sélectionnées</div>` : this.selection.selectedRows.length ? html`<div style="text-align: center">${this.selection.selectedRows.length} lignes sélectionnées</div>` : null}
         <table>
           <thead>
-          <tr id="table_header">
+            <tr id="table_header">
               ${withCheckbox && !this.selectOne
                 ? html`
                   <td>
@@ -626,59 +634,64 @@ export class MvTable extends LitElement {
               ${this.columns.map((column) =>
                 this.sortable
                   ? html`
-                    <td class="${this.filterValues.find(elt => elt.hasOwnProperty(column.name)) && this.hasActiveFilter ? 'filtered' : '' }">
-                      <mv-dropdown
-                        container
-                        justify="left"
-                        position="bottom"
-                        theme="${this.theme}"
-                      >
-                      <mv-dropdown trigger>
-                      <span class="title ${this.filterValues.find(elt => elt.hasOwnProperty(column.name)) && this.hasActiveFilter ? 'filtered' : '' }">${column.title} <mv-lnr icon="chevron-down"></mv-lnr></span>
-                      </mv-dropdown>
-                        <mv-dropdown content theme="${this.theme}" style="overflow: visible !important">
-                          <ul class="header_menu" style="padding-left: 10px; padding-right: 10px">
-                          <div @click="${this.handleSort(column, "asc")}"><mv-fa icon="sort-alpha-down" ></mv-fa>${msg("Tri croissant", {id: 'SP.table.sortAZ'})}</div>
-                          <div @click="${this.handleSort(column, "desc")}"><mv-fa icon="sort-alpha-up-alt"></mv-fa>${msg("Tri decroissant", {id: 'SP.table.sortZA'})}</div>
-                          <div>${this.renderFilterItem(column)}</div>
-                            <mv-dropdown
-                              container
-                              justify="left"
-                              position="bottom"
-                              theme="${this.theme}"
-                            >
-                              <mv-dropdown trigger>
-                                <mv-fa icon="filter"></mv-fa>${msg("Advanced filters", {id: 'SP.popup.advancedFilters'})}<mv-fa icon="angle-right"></mv-fa>
-                              </mv-dropdown>
-                              <mv-dropdown content theme="${this.theme}">
-                                <div class="subMenu" >
-                                  <div>${msg("Advanced filters", {id: 'SP.popup.advancedFilters'})}</div> 
-                                  <div>
-                                    ${this.renderAdvancedFilter(column)}
+                    <td>
+                      <div class="title ${this.filterValues.find(elt => elt.hasOwnProperty(column.name)) && this.hasActiveFilter ? 'filtered' : '' }">
+                        <span>${column.title}</span> 
+                        <span class="dropdown-trigger">
+                        <mv-dropdown
+                          container
+                            justify="right"
+                            position="bottom"
+                            theme="${this.theme}"
+                          >
+                          <mv-dropdown trigger>
+                            <mv-lnr icon="chevron-down"></mv-lnr>
+                          </mv-dropdown>
+                          <mv-dropdown content theme="${this.theme}" style="overflow: visible !important">
+                            <ul class="header_menu" style="padding-left: 10px; padding-right: 10px">
+                            <div @click="${this.handleSort(column, "asc")}"><mv-fa icon="sort-alpha-down" ></mv-fa>${msg("Tri croissant", {id: 'SP.table.sortAZ'})}</div>
+                            <div @click="${this.handleSort(column, "desc")}"><mv-fa icon="sort-alpha-up-alt"></mv-fa>${msg("Tri decroissant", {id: 'SP.table.sortZA'})}</div>
+                            <div>${this.renderFilterItem(column)}</div>
+                              <mv-dropdown
+                                container
+                                justify="left"
+                                position="bottom"
+                                theme="${this.theme}"
+                              >
+                                <mv-dropdown trigger>
+                                  <mv-fa icon="filter"></mv-fa>${msg("Advanced filters", {id: 'SP.popup.advancedFilters'})}<mv-fa icon="angle-right"></mv-fa>
+                                </mv-dropdown>
+                                <mv-dropdown content theme="${this.theme}">
+                                  <div class="subMenu" >
+                                    <div>${msg("Advanced filters", {id: 'SP.popup.advancedFilters'})}</div> 
+                                    <div>
+                                      ${this.renderAdvancedFilter(column)}
+                                    </div>
+                                    <div class="button_container">
+                                      <mv-button
+                                        type="default" style="--mv-button-custom-color: #4f4f7a;" theme="${this.theme}"
+                                        @button-clicked="${this.applyFilters}"
+                                      >OK</mv-button>
+                                      <mv-button
+                                        type="default" style="--mv-button-custom-color: #4f4f7a;" theme="${this.theme}"
+                                        @button-clicked="${this.clearFilters}"
+                                      >Annuler</mv-button>
+                                    </div>
                                   </div>
-                                  <div class="button_container">
-                                  <mv-button
-                                    type="default" style="--mv-button-custom-color: #4f4f7a;" theme="${this.theme}"
-                                    @button-clicked="${this.applyFilters}"
-                                  >OK</mv-button>
-                                  <mv-button
-                                    type="default" style="--mv-button-custom-color: #4f4f7a;" theme="${this.theme}"
-                                    @button-clicked="${this.clearFilters}"
-                                  >Annuler</mv-button>
-                                </div>
-                                </div>
+                                </mv-dropdown>
                               </mv-dropdown>
-                            </mv-dropdown>
-                            <hr/> 
-                            <div class="button_container">
-                              <mv-button
-                                type="default" style="--mv-button-custom-color: #4f4f7a;" theme="${this.theme}"
-                                @button-clicked="${this.applyFilters}"
-                              >Appliquer</mv-button>
-                            </div>
-                          </ul>
-                        </mv-dropdown>  
-                    </mv-dropdown>
+                              <hr/> 
+                              <div class="button_container">
+                                <mv-button
+                                  type="default" style="--mv-button-custom-color: #4f4f7a;" theme="${this.theme}"
+                                  @button-clicked="${this.applyFilters}"
+                                >Appliquer</mv-button>
+                              </div>
+                            </ul>
+                          </mv-dropdown>  
+                        </mv-dropdown>
+                      </span>
+                    </div>
               </td>
                   `
                   : this.sortable ? html`
@@ -1093,7 +1106,6 @@ export class MvTable extends LitElement {
       filter,
     ];
   }
-    alert("Filtre sur la colonne : " + code + " valeur du filtre : " + this.filterType +" " + value)
   };
 }
 customElements.define("mv-table", MvTable);
