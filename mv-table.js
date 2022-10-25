@@ -79,7 +79,8 @@ export class MvTable extends LitElement {
       sortable: { type: Boolean },
       dataIsLoading: { type: Boolean },
       filterValues: { type: Array, reflect: true },
-      customTypes: { type: Object }
+      customTypes: { type: Object },
+      position: { type: String}
     };
   }
 
@@ -392,7 +393,11 @@ export class MvTable extends LitElement {
         * ? Si filtre appliqué sur la colonne (class filtered)
         */
         td.filtered {
-          background-color: #8cc032 !important; 
+          border-radius: 14px;
+          background-color: #317297 !important; 
+        }
+        span.filtered {
+          background-color: #328cc0;
         }
         td:first-child {
           border-radius: var(--body-td-first-child-radius);
@@ -487,6 +492,8 @@ export class MvTable extends LitElement {
     };
     this.hasActiveFilter = false;
     this.customTypes = {};
+    // Values : top or bottom. Other ignored. Default top
+    this.position = "top";
   }
 
   getCellComponent (props) {
@@ -554,12 +561,14 @@ export class MvTable extends LitElement {
     this.isPageSelected = this.hasPageSelected();
     this.isAllSelected = this.hasAllSelected();
     return html`
-      <mv-table-options
-        .columns="${this.columns}"
-        .formFields="${this.formFields}"
-        .pagination="${this.pagination}"
-      >
-      </mv-table-options>
+      ${this.position == "top" ?
+        html`      
+          <mv-table-options
+            .columns="${this.columns}"
+            .formFields="${this.formFields}"
+            .pagination="${this.pagination}"
+        ></mv-table-options>`
+        : null }
       <div class="mv-table-container${sortableClass} ${this.theme}">
       ${this.selection.selectAll == true ? html`<div style="text-align: center"><span style="color: red">ATTENTION TOUTES</span> les lignes sont sélectionnées</div>` : this.selection.selectedRows.length ? html`<div style="text-align: center">${this.selection.selectedRows.length} lignes sélectionnées</div>` : null}
         <table>
@@ -625,7 +634,7 @@ export class MvTable extends LitElement {
                         theme="${this.theme}"
                       >
                       <mv-dropdown trigger>
-                        <span class="title">${column.title} <mv-lnr icon="chevron-down"></mv-lnr></span>
+                      <span class="title ${this.filterValues.find(elt => elt.hasOwnProperty(column.name)) && this.hasActiveFilter ? 'filtered' : '' }">${column.title} <mv-lnr icon="chevron-down"></mv-lnr></span>
                       </mv-dropdown>
                         <mv-dropdown content theme="${this.theme}" style="overflow: visible !important">
                           <ul class="header_menu" style="padding-left: 10px; padding-right: 10px">
@@ -766,7 +775,15 @@ export class MvTable extends LitElement {
           </tbody>
         </table>
       </div>
-    `;
+      ${this.position == "bottom" ?
+        html`      
+          <mv-table-options
+            .columns="${this.columns}"
+            .formFields="${this.formFields}"
+            .pagination="${this.pagination}"
+        ></mv-table-options>`
+        : null }
+        `
   }
 
   applyFilters = () => {
