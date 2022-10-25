@@ -37,6 +37,7 @@ export class MvTableOptions extends LitElement {
         position: sticky;
         top: 0px;
         z-index: 20;
+        --mv-button-font-size: 14px;
       }
 
       ul {
