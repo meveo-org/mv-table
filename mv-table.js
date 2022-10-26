@@ -395,8 +395,14 @@ export class MvTable extends LitElement {
         .filtered {
           border-radius: 14px;
           background-color: #317297 !important;
-          height: 100%;
+          height: var(--table-row-height);
           padding: 0 8px 0 8px;
+        }
+
+        .display-middle {
+          display: inline-flex;
+          align-items: center;
+          height: 100%;
         }
 
         td:first-child {
@@ -632,8 +638,8 @@ export class MvTable extends LitElement {
                   ? html`
                     <td>
                       <div class="title ${this.filterValues.find(elt => elt.hasOwnProperty(column.name)) && this.hasActiveFilter ? 'filtered' : '' }">
-                        <span>${column.title}</span> 
-                        <span class="dropdown-trigger">
+                        <span class="${this.filterValues.find(elt => elt.hasOwnProperty(column.name)) && this.hasActiveFilter ? 'display-middle' : '' }">${column.title}</span> 
+                        <span class="dropdown-trigger ${this.filterValues.find(elt => elt.hasOwnProperty(column.name)) && this.hasActiveFilter ? 'display-middle' : '' }">${column.title}">
                         <mv-dropdown
                           container
                             justify="right"
