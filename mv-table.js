@@ -396,13 +396,9 @@ export class MvTable extends LitElement {
           border-radius: 14px;
           background-color: #317297 !important;
           height: 100%;
-          line-height: var(--table-row-height);
           padding: 0 8px 0 8px;
         }
 
-        mv-lnr[icon="chevron-down"]::before {
-          content : "-";
-        }
         td:first-child {
           border-radius: var(--body-td-first-child-radius);
         }
