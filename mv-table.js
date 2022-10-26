@@ -639,7 +639,7 @@ export class MvTable extends LitElement {
                     <td>
                       <div class="title ${this.filterValues.find(elt => elt.hasOwnProperty(column.name)) && this.hasActiveFilter ? 'filtered' : '' }">
                         <span class="${this.filterValues.find(elt => elt.hasOwnProperty(column.name)) && this.hasActiveFilter ? 'display-middle' : '' }">${column.title}</span> 
-                        <span class="dropdown-trigger ${this.filterValues.find(elt => elt.hasOwnProperty(column.name)) && this.hasActiveFilter ? 'display-middle' : '' }">${column.title}">
+                        <span class="dropdown-trigger ${this.filterValues.find(elt => elt.hasOwnProperty(column.name)) && this.hasActiveFilter ? 'display-middle' : '' }">
                         <mv-dropdown
                           container
                             justify="right"
