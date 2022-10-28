@@ -18,48 +18,51 @@ import "./filters/MvSelectFilter";
 import "./filters/MvTextFilter";
 import "./filters/MvBooleanFilter";
 
+import { updateWhenLocaleChanges, configureLocalization } from '@lit/localize'
+import { targetLocales, sourceLocale } from "./src/generated/locales/module.js";
+
 const SELECT_PAGE = { id: 'page', value: 'page' }
 const SELECT_ALL = { id: 'all', value: 'all' }
 
 export class MvTable extends LitElement {
   selectFilter = [{
-    label: msg('Est égale à ...', {id: 'SP.table.filtreEgalite'}),
+    label: msg('Est égale à ...', {id: 'table.equalsFilter'}),
     value: "="
   }, {
-    label: msg('Est different de ...', {id: 'SP.table.filtreDifferent'}),
+    label: msg('Est different de ...', {id: 'table.differentFilter'}),
     value: "!="
   }]
 
   selectFilterString = [{
-    label: msg('Contient', {id: 'SP.table.filtreContient'}),
+    label: msg('Contient', {id: 'table.containsFilter'}),
     value: "contain"
   },
   {
-    label: msg('Ne contient pas', {id: 'SP.table.filtreContientPas'}),
+    label: msg('Ne contient pas', {id: 'table.notContainsFilter'}),
     value: "notContain"
   }]
   selectFilterNum = [{
-    label: msg('Supérieur à ...', {id: 'SP.table.filtreSuperieur'}),
+    label: msg('Supérieur à ...', {id: 'table.moreThanFilter'}),
     value: ">"
   },
   {
-    label: msg('Inférieur à ...', {id: 'SP.table.filtreInferieur'}),
+    label: msg('Inférieur à ...', {id: 'table.lessThanFilter'}),
     value: "<"
   }, 
   {
-    label: msg('Entre', {id: 'SP.table.filtreEntre'}),
+    label: msg('Entre', {id: 'table.betweenFilter'}),
     value: "between"
   }]
   selectFilterDate = [{
-    label: msg('Avant ...', {id: 'SP.table.filtreAvant'}),
+    label: msg('Avant ...', {id: 'table.beforeFilter'}),
     value: "before"
   },
   {
-    label: msg('Après ...', {id: 'SP.table.filtreApres'}),
+    label: msg('Après ...', {id: 'table.afterFilter'}),
     value: "after"
   },
   {
-    label: msg('Entre', {id: 'SP.table.filtreEntre'}),
+    label: msg('Entre', {id: 'table.betweenFilter'}),
     value: "between"
   }]
 
@@ -480,6 +483,7 @@ export class MvTable extends LitElement {
 
   constructor() {
     super();
+    updateWhenLocaleChanges(this);
     this.formFields = [];
     this.pages = 1;
     this.filterValues = [];
@@ -509,6 +513,16 @@ export class MvTable extends LitElement {
     this.hasActiveFilter = false;
     // Values : top or bottom. Other ignored. Default top
     this.position = "top";
+  }
+
+  firstUpdated(){
+    const {getLocale, setLocale} = configureLocalization({
+      sourceLocale,
+      targetLocales,
+      loadLocale: (locale) => import(`./src/generated/locales/${locale}.js`)
+    })
+    let language = targetLocales.includes(navigator.language.substr(0,2)) ? navigator.language.substr(0,2) : sourceLocale
+    setLocale(language);
   }
 
   getCellComponent (props) {
@@ -657,8 +671,8 @@ export class MvTable extends LitElement {
                           </mv-dropdown>
                           <mv-dropdown content theme="${this.theme}" style="overflow: visible !important">
                             <ul class="header_menu" style="padding-left: 10px; padding-right: 10px">
-                            <div @click="${this.handleSort(column, "asc")}"><mv-fa icon="sort-alpha-down" ></mv-fa>${msg("Tri croissant", {id: 'SP.table.sortAZ'})}</div>
-                            <div @click="${this.handleSort(column, "desc")}"><mv-fa icon="sort-alpha-up-alt"></mv-fa>${msg("Tri decroissant", {id: 'SP.table.sortZA'})}</div>
+                            <div @click="${this.handleSort(column, "asc")}"><mv-fa icon="sort-alpha-down" ></mv-fa>${msg("Tri croissant", {id: 'table.sortAZ'})}</div>
+                            <div @click="${this.handleSort(column, "desc")}"><mv-fa icon="sort-alpha-up-alt"></mv-fa>${msg("Tri decroissant", {id: 'table.sortZA'})}</div>
                             <div>${this.renderFilterItem(column)}</div>
                               <mv-dropdown
                                 container
@@ -667,11 +681,11 @@ export class MvTable extends LitElement {
                                 theme="${this.theme}"
                               >
                                 <mv-dropdown trigger>
-                                  <mv-fa icon="filter"></mv-fa>${msg("Advanced filters", {id: 'SP.popup.advancedFilters'})}<mv-fa icon="angle-right"></mv-fa>
+                                  <mv-fa icon="filter"></mv-fa>${msg("Advanced filters", {id: 'popup.advancedFilters'})}<mv-fa icon="angle-right"></mv-fa>
                                 </mv-dropdown>
                                 <mv-dropdown content theme="${this.theme}">
                                   <div class="subMenu" >
-                                    <div>${msg("Advanced filters", {id: 'SP.popup.advancedFilters'})}</div> 
+                                    <div>${msg("Advanced filters", {id: 'popup.advancedFilters'})}</div> 
                                     <div>
                                       ${this.renderAdvancedFilter(column)}
                                     </div>

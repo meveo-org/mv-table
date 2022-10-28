@@ -167,7 +167,7 @@ export class MvTableOptions extends LitElement {
 
   renderRowsPerPage = () => html`
     <div class="rows-per-page">
-      <span>${ msg("Show", {id: 'SP.listContent.show'}) } </span>
+      <span>${ msg("Show", {id: 'listContent.show'}) } </span>
       <mv-select
         .value="${this.selectedRowsPerPage}"
         .options="${ROWS_PER_PAGE}"
@@ -227,7 +227,7 @@ export class MvTableOptions extends LitElement {
                 >
                   <mv-fa icon="sliders-h"></mv-fa>
                 </mv-button>
-                <span slot="tooltip-content">${ msg('Show or hide columns', {id: 'SP.listContent.showOrHide'}) }</span>
+                <span slot="tooltip-content">${ msg('Show or hide columns', {id: 'listContent.showOrHide'}) }</span>
               </mv-tooltip>
             </mv-dropdown>
             ${this.formFields.map((group) => this.renderFieldGroup(group))}
