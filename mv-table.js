@@ -11,6 +11,12 @@ import "./cell_types/mv-text-cell.js";
 import "./cell_types/mv-url-cell.js";
 import "./cell_types/mv-image-cell.js";
 import "./cell_types/mv-list-cell.js";
+import "./filters/MvDateFilter";
+import "./filters/MvIconFilter";
+import "./filters/MvListFilter";
+import "./filters/MvSelectFilter";
+import "./filters/MvTextFilter";
+import "./filters/MvBooleanFilter";
 
 const SELECT_PAGE = { id: 'page', value: 'page' }
 const SELECT_ALL = { id: 'all', value: 'all' }
@@ -501,7 +507,6 @@ export class MvTable extends LitElement {
       filters: {}
     };
     this.hasActiveFilter = false;
-    this.customTypes = {};
     // Values : top or bottom. Other ignored. Default top
     this.position = "top";
   }
@@ -634,6 +639,7 @@ export class MvTable extends LitElement {
                 ? html`<td></td>`
                 : html``}
               ${this.columns.map((column) =>
+                column.disabled ? null : 
                 this.sortable
                   ? html`
                     <td>
@@ -694,7 +700,7 @@ export class MvTable extends LitElement {
                         </mv-dropdown>
                       </span>
                     </div>
-              </td>
+                  </td>
                   `
                   : this.sortable ? html`
                       <td @click="${this.handleSort(column)}">
@@ -707,6 +713,7 @@ export class MvTable extends LitElement {
                         <span class="title">${column.title}</span>
                       </td>
                     `
+
               )}
               ${hasActionColumn
                 ? html`
@@ -904,17 +911,16 @@ export class MvTable extends LitElement {
   } 
   
   renderFilterItem = (column, type) => {
-    const field = this.formFields[0].fields.find(elt => elt.code == column.name)
-    const value = this.filterValues.filter ? this.filterValues.filter[field?.code] : "";
-    if (field?.filter) {
-      switch (field.fieldType) {
+    const value = this.filterValues.filter ? this.filterValues.filter[column?.code] : "";
+    if (column?.filter) {
+      switch (column.fieldType) {
         case "BOOLEAN":
           return html`
             <boolean-filter
               no-label
-              .field="${field}"
+              .field="${column}"
               .value="${value}"
-              @update-value="${this.updateValue(field, type)}"
+              @update-value="${this.updateValue(column, type)}"
             ></boolean-filter>
           `;
         case "DATE":
@@ -922,19 +928,19 @@ export class MvTable extends LitElement {
           return html`
             <date-filter
               no-label
-              .field="${field}"
+              .field="${column}"
               start="${start || ""}"
               end="${end || ""}"
-              @update-value="${this.updateValue(field, type)}"
+              @update-value="${this.updateValue(column, type)}"
             ></date-filter>
           `;
         case "LIST":
           return html`
             <list-filter
               no-label
-              .field="${field}"
+              .field="${column}"
               .value="${value}"
-              @update-value="${this.updateValue(field, type)}"
+              @update-value="${this.updateValue(column, type)}"
             ></list-filter>
           `;
         case "BINARY":
@@ -952,18 +958,18 @@ export class MvTable extends LitElement {
           return html`
             <text-filter
               no-label
-              .field="${field}"
+              .field="${column}"
               .value="${value}"
-              @update-value="${this.updateValue(field, type)}"
+              @update-value="${this.updateValue(column, type)}"
             ></text-filter>
           `;
         default:
-          console.error("Unsupported field: ", field);
+          console.error("Unsupported field: ", column);
           return html` ${!this.filtersInTable ? html`
           <div>
-            <div>Filter: ${field.code}</div>
-            <div>Filter Type: ${field.fieldType}</div>
-            <div>Storage Type: ${field.storageType}</div>
+            <div>Filter: ${column.code}</div>
+            <div>Filter Type: ${column.fieldType}</div>
+            <div>Storage Type: ${column.storageType}</div>
           </div>`
         : null}`
       }
