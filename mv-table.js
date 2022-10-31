@@ -17,9 +17,7 @@ import "./filters/MvListFilter";
 import "./filters/MvSelectFilter";
 import "./filters/MvTextFilter";
 import "./filters/MvBooleanFilter";
-
-import { updateWhenLocaleChanges, configureLocalization } from '@lit/localize'
-import { targetLocales, sourceLocale } from "./src/generated/locales/module.js";
+import "./mv-table-options";
 
 const SELECT_PAGE = { id: 'page', value: 'page' }
 const SELECT_ALL = { id: 'all', value: 'all' }
@@ -483,7 +481,6 @@ export class MvTable extends LitElement {
 
   constructor() {
     super();
-    updateWhenLocaleChanges(this);
     this.formFields = [];
     this.pages = 1;
     this.filterValues = [];
@@ -513,16 +510,6 @@ export class MvTable extends LitElement {
     this.hasActiveFilter = false;
     // Values : top or bottom. Other ignored. Default top
     this.position = "top";
-  }
-
-  firstUpdated(){
-    const {getLocale, setLocale} = configureLocalization({
-      sourceLocale,
-      targetLocales,
-      loadLocale: (locale) => import(`./src/generated/locales/${locale}.js`)
-    })
-    let language = targetLocales.includes(navigator.language.substr(0,2)) ? navigator.language.substr(0,2) : sourceLocale
-    setLocale(language);
   }
 
   getCellComponent (props) {
