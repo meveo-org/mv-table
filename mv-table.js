@@ -3,6 +3,7 @@ import { msg } from '@lit/localize'
 import "@meveo-org/mv-checkbox";
 import "@meveo-org/mv-font-awesome";
 import "@meveo-org/mv-progress-bar";
+import "@meveo-org/mv-button";
 import "./cell_types/mv-array-cell.js";
 import "./cell_types/mv-boolean-cell.js";
 import "./cell_types/mv-date-cell.js";
@@ -17,7 +18,7 @@ import "./filters/MvListFilter";
 import "./filters/MvSelectFilter";
 import "./filters/MvTextFilter";
 import "./filters/MvBooleanFilter";
-import "./mv-table-options";
+import "./mv-table-options.js";
 
 const SELECT_PAGE = { id: 'page', value: 'page' }
 const SELECT_ALL = { id: 'all', value: 'all' }
@@ -68,7 +69,7 @@ export class MvTable extends LitElement {
     return {
       formFields: { type: Array, attribute: false },
       rows: { type: Array, attribute: false },
-      columns: { type: Array },
+      columns: { type: Object },
       selectable: { type: Boolean },
       selectOne: { type: Boolean, attribute: "select-one" },
       withCheckbox: { type: Boolean, attribute: "with-checkbox" },
@@ -86,7 +87,8 @@ export class MvTable extends LitElement {
       dataIsLoading: { type: Boolean },
       filterValues: { type: Array, reflect: true },
       customTypes: { type: Object },
-      position: { type: String}
+      position: { type: String},
+      isButtonVisible: { type: Boolean }
     };
   }
 
@@ -199,6 +201,9 @@ export class MvTable extends LitElement {
           align-items: center;
           overflow: hidden;
           font-size: var(--table-td-font-size);
+        }
+        .cell_container>table-actions {
+          margin: auto;
         }
         .checkbox {
           width: 5px;
@@ -510,13 +515,14 @@ export class MvTable extends LitElement {
     this.hasActiveFilter = false;
     // Values : top or bottom. Other ignored. Default top
     this.position = "top";
+    this.isButtonVisible = true;
   }
 
   getCellComponent (props) {
     const {
-      column: { type },
+      column: { type, code },
     } = props;
-    return this.CELL_TYPES(props)[type] || this.CELL_TYPES(props)["TEXT"]
+    return this.CELL_TYPES(props)[code] || this.CELL_TYPES(props)[type] || this.CELL_TYPES(props)["TEXT"]
   }
 
   CELL_TYPES (props) {
@@ -562,7 +568,7 @@ export class MvTable extends LitElement {
       `,
     };
 
-    customCell ? defaultCellTypes[column.type] = customCell : null
+    customCell ? defaultCellTypes[column.code] = customCell : null
 
     return defaultCellTypes;
   }
@@ -580,9 +586,11 @@ export class MvTable extends LitElement {
       ${this.position == "top" ?
         html`      
           <mv-table-options
+            .actions="${this["action-column"]}"
             .columns="${this.columns}"
             .formFields="${this.formFields}"
             .pagination="${this.pagination}"
+            .isButtonVisible="${this.isButtonVisible}"
         ></mv-table-options>`
         : null }
       <div class="mv-table-container${sortableClass} ${this.theme}">
@@ -639,13 +647,14 @@ export class MvTable extends LitElement {
                 : this.selectOne
                 ? html`<td></td>`
                 : html``}
-              ${this.columns.map((column) =>
+              ${this.columns.fields.map((column) =>
                 column.disabled ? null : 
                 this.sortable
                   ? html`
                     <td>
                       <div class="title ${this.filterValues.find(elt => elt.hasOwnProperty(column.name)) && this.hasActiveFilter ? 'filtered' : '' }">
                         <span class="${this.filterValues.find(elt => elt.hasOwnProperty(column.name)) && this.hasActiveFilter ? 'display-middle' : '' }">${column.title}</span> 
+                        ${column.filter ? html`
                         <span class="dropdown-trigger ${this.filterValues.find(elt => elt.hasOwnProperty(column.name)) && this.hasActiveFilter ? 'display-middle' : '' }">
                         <mv-dropdown
                           container
@@ -700,6 +709,7 @@ export class MvTable extends LitElement {
                           </mv-dropdown>  
                         </mv-dropdown>
                       </span>
+                    `: null }
                     </div>
                   </td>
                   `
@@ -766,7 +776,7 @@ export class MvTable extends LitElement {
                         </td>
                       `
                     : html``}
-                  ${this.columns.map((column) => {
+                  ${this.columns.fields.map((column) => {
                     const cellComponent = this.getCellComponent({
                       row,
                       column,
@@ -804,6 +814,7 @@ export class MvTable extends LitElement {
             .columns="${this.columns}"
             .formFields="${this.formFields}"
             .pagination="${this.pagination}"
+            .isButtonVisible="${this.isButtonVisible}"
         ></mv-table-options>`
         : null }
         `
@@ -1032,7 +1043,7 @@ export class MvTable extends LitElement {
         if (checked) {
           removed = [];
           added = [row];
-          const isExists = this.isSelected(row);
+          const isExists = this.isSelectVisible(row);
           this["selected-rows"] = isExists
             ? this["selected-rows"]
             : [...this["selected-rows"], row];
@@ -1040,8 +1051,12 @@ export class MvTable extends LitElement {
             this.selection.selectedRows = this["selected-rows"]
             this.selection.filters = this.filterValues
         } else {
+          let identifier
+          this.formFields[0].fields.forEach((elt) => 
+            elt.identifier ? identifier = elt.code : null
+          )
           const index = this["selected-rows"].findIndex(
-            (item) => item.id === row.id
+            (item) => item[identifier] === row[identifier]
           );
           if (index > -1) {
             removed = [this["selected-rows"][index]];
@@ -1053,6 +1068,7 @@ export class MvTable extends LitElement {
               ...this["selected-rows"].slice(0, index),
               ...this["selected-rows"].slice(index + 1),
             ];
+            this.selection.selectedRows = this["selected-rows"]
           }
         }
       }

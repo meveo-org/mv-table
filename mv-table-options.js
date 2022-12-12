@@ -19,11 +19,13 @@ export class MvTableOptions extends LitElement {
       //  valid theme values are: "light", "dark"
       // default : "light"
       theme: { type: String, attribute: true },
+      actions: { type: Object, attribute: false },
       fields: { type: Array },
-      formFields: { type: Array, attribute: false },
-      columns: { type: Array, reflect: true },
+      formFields: { type: Object, attribute: false },
+      columns: { type: Object, reflect: true },
       displayed: { type: Boolean },
-      pagination: { type: Array }
+      pagination: { type: Array },
+      isButtonVisible: { type: Boolean}
     };
   }
 
@@ -71,7 +73,7 @@ export class MvTableOptions extends LitElement {
 
       .choose-columns {
         display: flex;
-        justify-content: left;
+        justify-content: space-between;
         align-items: center;
         flex-shrink: 3;
       }
@@ -115,10 +117,12 @@ export class MvTableOptions extends LitElement {
     this.pages = 1;
     this.currentPage = 1;
     this.theme = "light";
-    this.formFields = [];
-    this.columns = [];
+    this.formFields = {};
+    this.columns = {};
     this.displayed = true;
     this.maxButtons = 5;
+    this.isButtonVisible = true;
+    this.actions = {};
   }
   
   selectColumn = (group, item) => () => {
@@ -232,6 +236,9 @@ export class MvTableOptions extends LitElement {
             </mv-dropdown>
             ${this.formFields.map((group) => this.renderFieldGroup(group))}
           </mv-dropdown>
+
+          ${this.actions.label}
+
         </div>
           <div class="pagination ${this.theme}">
             <mv-pagination
@@ -242,6 +249,7 @@ export class MvTableOptions extends LitElement {
               .max-buttons="${this.maxButtons}"
               .theme=${this.theme}
               @change-page="${this.gotoPage}"
+              .isButtonVisible = "${this.isButtonVisible}"
             ></mv-pagination>
           </div>
           <div class="displayed-rows">
