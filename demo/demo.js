@@ -1,18 +1,26 @@
 import { LitElement, html, css } from "lit";
+import { ref, createRef } from "lit/directives/ref.js";
 
-import { getSchema, getPeople } from "./mock_data/api.js";
+import { getPeople, people } from "../mock_data/api.js";
+import schemaAsTxt from "../mock_data/schema.txt";
 
-import "@meveo-org/mv-pagination";
 import "@meveo-org/mv-button";
 import "@meveo-org/mv-toast";
-import "./mv-table.js";
+import "@meveo-org/mv-dialog";
+
+import "../mv-table.js";
+import "../mv-pagination.js";
 
 export class MvTableDemo extends LitElement {
   static get properties() {
     return {
       page: { type: Number, reflect: true, attribute: false },
       message: { type: String, reflect: true, attribute: false },
-      theme: { type: String, attribute: false, reflect: false }
+      theme: { type: String, attribute: false, reflect: false },
+      isDialogSchemaOpen: {type: Boolean, state: true },
+      isDialogDataOpen: {type: Boolean, state: true },
+      columns : { type: Array, state: true, reflect: true },
+      list: { type: Array, state: true },
     };
   }
 
@@ -70,8 +78,13 @@ export class MvTableDemo extends LitElement {
     `;
   }
 
+  schemaRef = createRef();
+  dataRef = createRef();
+
   constructor() {
     super();
+    this.data = people;
+    this.columnsClass = schemaAsTxt;
     this.limit = 10;
     this.page = 1;
     this.pages = 0;
@@ -130,25 +143,95 @@ export class MvTableDemo extends LitElement {
     this.theme = "light";
   }
 
+  toggleDialog(modalName) {
+    return () => {
+      this[modalName] = !this[modalName];
+    }
+  }
+
+  updateSchema() {
+    this.isDialogSchemaOpen = false;
+    this.columnsClass = this.schemaRef.value.value;
+    this.columns = eval(this.columnsClass)
+    this.loadData(1);
+  }
+
+  updateData() {
+    this.isDialogDataOpen = false;
+
+    this.data = JSON.parse(this.dataRef.value.value);
+    this.loadData(1);
+  }
+
   render() {
     const hasList = this.list && this.list.length > 0;
     const { theme } = this;
+
     return hasList
       ? html`
         <div class="table-demo">
           <div class="toasts">
             <mv-toast type="information" .closeable="${false}" .theme="${theme}"><pre>${this.message}</pre></mv-toast>
+            <mv-button @button-clicked="${this.toggleDialog('isDialogSchemaOpen')}" button-style="info" .theme="${theme}">Edit schema</mv-button>
+            <mv-button @button-clicked="${this.toggleDialog('isDialogDataOpen')}" button-style="info" .theme="${theme}">Edit data</mv-button>
+
+            <mv-dialog
+                ?open="${this.isDialogSchemaOpen}"
+                closeable
+                .theme="${theme}"
+                header-label="Edit schema"
+                @close-dialog="${this.toggleDialog('isDialogSchemaOpen')}"
+                @ok-dialog="${this.updateSchema}"
+              >
+                <textarea
+                  ${ref(this.schemaRef)}
+                  style="width: 100%; height: 95%; resize: none"
+                >${this.columnsClass}</textarea>
+            </mv-dialog>
+
+            <mv-dialog
+              ?open="${this.isDialogDataOpen}"
+              closeable
+              header-label="Edit data"
+              .theme="${theme}"
+              @close-dialog="${this.toggleDialog('isDialogDataOpen')}"
+              @ok-dialog="${this.updateData}"
+            >
+              <textarea
+                ${ref(this.dataRef)}
+                style="width: 100%; height: 95%; resize: none"
+              >${JSON.stringify(people, null, 2)}</textarea>
+            </mv-dialog>
+
             <fieldset>
               <legend>Theme</legend>
               <label><input type="radio" name="theme" value="light" checked @change="${this.changeTheme}" />Light</label>
               <label><input type="radio" name="theme" value="dark" @change="${this.changeTheme}" />Dark</label>
             </fieldset>
           </div>
+
           <ul>
             <li><em>Names are links which open in a new window</em></li>
             <li><em>Click on a birth year to trigger a cell action</em></li>
             <li><em>Click on any other cell to trigger a row action</em></li>
           </ul>
+
+          <mv-table-options
+            .columns="${this.columns}"
+            .isButtonVisible="${this.isButtonVisible}"
+            @changeRowsPerPage="${this.changeRowPerPage}"
+            @changeColumnsDiplayed=${this.changeColumnsDiplayed}
+          >
+            <mv-pagination
+                slot="pagination"
+                type="text"
+                .page="${this.page}"
+                .pages="${this.pages}"
+                @change-page="${this.gotoPage}"
+                .theme="${theme}"
+              ></mv-pagination>
+          </mv-table-options>
+
           <mv-table
             .columns="${this.columns}"
             .rows="${this.list}"
@@ -158,8 +241,10 @@ export class MvTableDemo extends LitElement {
             @select-row="${this.handleRowSelect}"
             with-checkbox
             selectable
+            @change-page="${this.gotoPage}"
             .theme="${theme}"
           ></mv-table>
+
           <mv-pagination
             .page="${this.page}"
             .pages="${this.pages}"
@@ -172,8 +257,8 @@ export class MvTableDemo extends LitElement {
   }
 
   connectedCallback() {
-    const schema = getSchema();
-    this.columns = this.parseColumns(schema.properties);
+    window.html = html;
+    this.columns = eval(`(${schemaAsTxt})`);
     this.loadData(1);
     super.connectedCallback();
   }
@@ -181,8 +266,11 @@ export class MvTableDemo extends LitElement {
   loadData(page) {
     this.page = page < 1 ? 1 : page;
     this.offset = (this.page - 1) * this.limit;
-    const people = getPeople(this.offset, this.limit);
+    const people = getPeople(this.data, this.offset, this.limit);
     const count = people.count || 0;
+    if (this.offset > count) {
+      this.page = 1;
+    }
     this.pages = this.limit > 0 ? Math.ceil(count / this.limit) : 0;
     this.list = this.buildList(people.results);
   }
@@ -190,8 +278,7 @@ export class MvTableDemo extends LitElement {
   buildList(results) {
     const tableData = (results || []).reduce((list, rowItem) => {
       const row = Object.keys(rowItem).reduce((data, key) => {
-        const column =
-          this.columns.find(columnItem => columnItem.name === key) || {};
+        const column = this.columns.find(columnItem => columnItem.name === key) || {};
         const item = rowItem[key];
 
         // special case for URL, add href
@@ -269,6 +356,16 @@ export class MvTableDemo extends LitElement {
     if (detail.page > 0) {
       this.loadData(event.detail.page);
     }
+  }
+
+  changeRowPerPage(event) {
+    const { detail = {} } = event || {};
+    this.limit = detail.value;
+    this.loadData(this.page);
+  }
+
+  changeColumnsDiplayed() {
+    this.columns = [ ...this.columns ]; // Trigger component update
   }
 
   handleRowClick(event) {

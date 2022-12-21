@@ -1,5 +1,5 @@
 import { html, css } from "lit";
-import FilterTemplate from "@meveo-org/mv-table/filters/MvFilterTemplate";
+import FilterTemplate from "./MvFilterTemplate";
 import "@meveo-org/mv-select";
 
 export default class MvSelectFilter extends FilterTemplate {

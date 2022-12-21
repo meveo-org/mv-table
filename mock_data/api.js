@@ -5,9 +5,11 @@ export function getSchema() {
   return schema;
 }
 
-export function getPeople(offset, limit) {
+export function getPeople(data, offset, limit) {
   return {
-    count: people.count,
-    results: people.list.slice(offset, offset + limit)
+    count: data.count,
+    results: data.count < offset ? data.list : data.list.slice(offset, offset + limit)
   };
 }
+
+export { people };

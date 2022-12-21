@@ -1,10 +1,11 @@
 import { LitElement, html, css } from "lit";
 import "@meveo-org/mv-button";
 import "@meveo-org/mv-select";
-import "@meveo-org/mv-pagination";
 import "@meveo-org/mv-button";
 import "@meveo-org/mv-checkbox";
-import { msg, str } from '@lit/localize';
+import "@meveo-org/mv-font-awesome";
+
+import { msg } from '@lit/localize';
 
 const ROWS_PER_PAGE = [
   { label: '10', value: 10 },
@@ -19,12 +20,8 @@ export class MvTableOptions extends LitElement {
       //  valid theme values are: "light", "dark"
       // default : "light"
       theme: { type: String, attribute: true },
-      actions: { type: Object, attribute: false },
-      fields: { type: Array },
-      formFields: { type: Object, attribute: false },
       columns: { type: Object, reflect: true },
       displayed: { type: Boolean },
-      pagination: { type: Array },
       isButtonVisible: { type: Boolean}
     };
   }
@@ -117,18 +114,17 @@ export class MvTableOptions extends LitElement {
     this.pages = 1;
     this.currentPage = 1;
     this.theme = "light";
-    this.formFields = {};
     this.columns = {};
     this.displayed = true;
     this.maxButtons = 5;
     this.isButtonVisible = true;
-    this.actions = {};
   }
   
-  selectColumn = (group, item) => () => {
+  selectColumn = (group, item) => (event) => {
+    item.displayed = event.detail.checked;
     this.dispatchEvent(
       new CustomEvent('changeColumnsDiplayed', {
-        detail: { group, item },
+        detail: { group, item, ...event.detail },
         bubbles: true,
         composed: true
       }),
@@ -139,30 +135,28 @@ export class MvTableOptions extends LitElement {
   * ? Fonctions pour le choix des colonnes à afficher
   */
 
-  renderFieldGroup = (group) => {
-    const { fields, label } = group
+  renderFieldGroup = () => {
     return html`
-      <mv-dropdown header theme=${this.theme}>${label}</mv-dropdown>
       <mv-dropdown content theme=${this.theme}>
         <ul>
-          ${fields.map((item) => this.renderFieldItem(group, item))}
+          ${this.columns.map((item) => this.renderColumnItem(item))}
         </ul>
       </mv-dropdown>
     `
   }
 
-  renderFieldItem = (group, item) => {
-    const { summary, label } = item
-    return summary ? html`
+  renderColumnItem = (item) => {
+    const { title, displayed=true } = item;
+    return html`
       <li style="list-style-type: none">
         <mv-checkbox
           .theme="${this.theme}"
-          .checked="${summary}"
-          @click-checkbox="${this.selectColumn(group, item)}"
-          label="${label}"
+          .checked="${displayed}"
+          @click-checkbox="${this.selectColumn(null, item)}"
+          label="${title}"
         ></mv-checkbox>
       </li> 
-    ` : null
+    `
   }
 
   /**
@@ -185,12 +179,12 @@ export class MvTableOptions extends LitElement {
   changeRowsPerPage = (event) => {
     const {
       detail: { option },
-    } = event
-    this.selectedRowsPerPage = option
-    this.rowsPerPage = option.value
+    } = event;
+    this.selectedRowsPerPage = option;
+    this.rowsPerPage = option.value;
     this.dispatchEvent(
       new CustomEvent('changeRowsPerPage', {
-        detail: { option },
+        detail: { option, value: this.rowsPerPage },
         bubbles: true,
         composed: true
       }),
@@ -202,7 +196,6 @@ export class MvTableOptions extends LitElement {
   */
 
   gotoPage = (event) => {
-    const { detail = {} } = event || {}
     this.dispatchEvent(
       new CustomEvent('change-page', {
         detail: { event },
@@ -213,7 +206,6 @@ export class MvTableOptions extends LitElement {
   }
 
   render() {
-    const { rowActions } = this
     return html`
       ${this.displayed ? html`
         <div class="container">
@@ -234,25 +226,15 @@ export class MvTableOptions extends LitElement {
                 <span slot="tooltip-content">${ msg('Show or hide columns', {id: 'listContent.showOrHide'}) }</span>
               </mv-tooltip>
             </mv-dropdown>
-            ${this.formFields.map((group) => this.renderFieldGroup(group))}
+            ${this.renderFieldGroup(null)}
           </mv-dropdown>
 
-          ${this.actions.label}
-
         </div>
-          <div class="pagination ${this.theme}">
-            <mv-pagination
-              type="text"
-              .page="${this.pagination[0]}"
-              .pages="${this.pagination[1]}"
-              .justify=${"center"}
-              .max-buttons="${this.maxButtons}"
-              .theme=${this.theme}
-              @change-page="${this.gotoPage}"
-              .isButtonVisible = "${this.isButtonVisible}"
-            ></mv-pagination>
-          </div>
-          <div class="displayed-rows">
+        <div class="pagination ${this.theme}">
+          <slot name="pagination">
+          </slot>
+        </div>
+        <div class="displayed-rows">
             ${this.renderRowsPerPage()}
           </div>
         </div>

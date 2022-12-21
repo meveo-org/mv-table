@@ -1,0 +1,54 @@
+[
+  {
+    "name": "name",
+    "title": " Name",
+    "tooltip": "The name of this person.",
+    "type": "URL",
+    "hrefProp": "url",
+    "target": "_blank",
+    "displayed": true,
+  },
+  {
+    "name": "gender",
+    "title": " Gender",
+    "tooltip": "The gender of this person (if known).",
+    "type": "STRING",
+    "render": value => html`<span>${value}</span>`,
+    "displayed": true,
+  },
+  {
+    "name": "hair_color",
+    "title": " Hair Color",
+    "tooltip": "The hair color of this person.",
+    "type": "STRING",
+    "displayed": false,
+  },
+  {
+    "name": "eye_color",
+    "title": " Eye Color",
+    "tooltip": "The eye color of this person.",
+    "type": "STRING",
+    "displayed": true,
+  },
+  {
+    "name": "birth_year",
+    "title": " Birth Year",
+    "tooltip": "The birth year of this person. BBY (Before the Battle of Yavin) or ABY (After the Battle of Yavin).",
+    "type": "STRING",
+    "displayed": true,
+  },
+  {
+    "name": "films",
+    "title": " Films",
+    "tooltip": "An array of urls of film resources that this person has been in.",
+    "type": "ARRAY",
+    "displayed": true,
+  },
+  {
+    "name": "created",
+    "title": " Created",
+    "tooltip": "The ISO 8601 date format of the time that this resource was created.",
+    "type": "DATE",
+    "displayed": true,
+  }
+]

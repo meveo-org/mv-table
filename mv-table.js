@@ -486,6 +486,7 @@ export class MvTable extends LitElement {
 
   constructor() {
     super();
+    this.pagination = {};
     this.formFields = [];
     this.pages = 1;
     this.filterValues = [];
@@ -520,9 +521,15 @@ export class MvTable extends LitElement {
 
   getCellComponent (props) {
     const {
-      column: { type, code },
+      column: { type, name, render},
+      row,
     } = props;
-    return this.CELL_TYPES(props)[code] || this.CELL_TYPES(props)[type] || this.CELL_TYPES(props)["TEXT"]
+
+    if (render) {
+      return render(row[name])
+    }
+
+    return this.CELL_TYPES(props)[type] || this.CELL_TYPES(props)["TEXT"]
   }
 
   CELL_TYPES (props) {
@@ -570,29 +577,26 @@ export class MvTable extends LitElement {
 
     customCell ? defaultCellTypes[column.code] = customCell : null
 
+    if(column.render) {
+
+    } else {
+      defaultCellTypes;
+    }
     return defaultCellTypes;
   }
 
   render() {
+    console.log("Render");
     const withCheckbox = this.withCheckbox;
     const rowActions = this["row-actions"];
     const hasRowActions = rowActions && rowActions.length > 0;
     const hasActionColumn = !!this["action-column"] || hasRowActions;
     const sortableClass = this.sortable ? " sortable" : "";
     const { datePattern } = this;
+    const displayColumns = this.columns.filter(col => col.displayed !== false);
     this.isPageSelected = this.hasPageSelected();
     this.isAllSelected = this.hasAllSelected();
     return html`
-      ${this.position == "top" ?
-        html`      
-          <mv-table-options
-            .actions="${this["action-column"]}"
-            .columns="${this.columns}"
-            .formFields="${this.formFields}"
-            .pagination="${this.pagination}"
-            .isButtonVisible="${this.isButtonVisible}"
-        ></mv-table-options>`
-        : null }
       <div class="mv-table-container${sortableClass} ${this.theme}">
       ${this.selection.selectAll == true ? html`<div style="text-align: center"><span style="color: red">ATTENTION TOUTES</span> les lignes sont sélectionnées</div>` : this.selection.selectedRows.length ? html`<div style="text-align: center">${this.selection.selectedRows.length} lignes sélectionnées</div>` : null}
         <table>
@@ -647,7 +651,7 @@ export class MvTable extends LitElement {
                 : this.selectOne
                 ? html`<td></td>`
                 : html``}
-              ${this.columns.fields.map((column) =>
+              ${displayColumns.map((column) =>
                 column.disabled ? null : 
                 this.sortable
                   ? html`
@@ -776,7 +780,7 @@ export class MvTable extends LitElement {
                         </td>
                       `
                     : html``}
-                  ${this.columns.fields.map((column) => {
+                  ${displayColumns.map((column) => {
                     const cellComponent = this.getCellComponent({
                       row,
                       column,
@@ -807,17 +811,7 @@ export class MvTable extends LitElement {
             })}
           </tbody>
         </table>
-      </div>
-      ${this.position == "bottom" ?
-        html`      
-          <mv-table-options
-            .columns="${this.columns}"
-            .formFields="${this.formFields}"
-            .pagination="${this.pagination}"
-            .isButtonVisible="${this.isButtonVisible}"
-        ></mv-table-options>`
-        : null }
-        `
+      </div>`
   }
 
   applyFilters = () => {

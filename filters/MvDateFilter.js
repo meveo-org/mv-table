@@ -1,5 +1,5 @@
 import { html, css } from "lit";
-import FilterTemplate from "@meveo-org/mv-table/filters/MvFilterTemplate";
+import FilterTemplate from "./MvFilterTemplate";
 import { EMPTY_DATE } from "@meveo-org/mv-calendar/utils/index.js";
 import "@meveo-org/mv-calendar";
 

@@ -4,7 +4,8 @@
   "description": "MvTable is a Meveo table component (based on lit-element) that renders a table component given data in JSON format.",
   "main": "mv-table.js",
   "scripts": {
-    "serve": "es-dev-server --node-resolve --watch"
+    "start": "webpack serve --config ./demo/webpack.config.cjs",
+    "docs": "webpack --config ./demo/webpack.config.cjs --mode production"
   },
   "repository": {
     "type": "git",
@@ -17,13 +18,29 @@
   },
   "homepage": "https://github.com/meveo-org/mv-table#readme",
   "dependencies": {
+    "@lit/localize": "^0.11.4",
     "@meveo-org/mv-button": "^1.0.0",
+    "@meveo-org/mv-calendar": "^1.0.1",
     "@meveo-org/mv-checkbox": "^1.0.0",
     "@meveo-org/mv-font-awesome": "^1.0.0",
-    "@meveo-org/mv-pagination": "^1.0.0",
-    "@meveo-org/mv-select": "^1.0.0"
+    "@meveo-org/mv-input": "^1.0.1",
+    "@meveo-org/mv-progress-bar": "^1.0.0",
+    "@meveo-org/mv-radio": "^1.0.0",
+    "@meveo-org/mv-select": "^1.0.0",
+    "@meveo-org/mv-tooltip": "^1.0.0"
   },
   "devDependencies": {
-    "es-dev-server": "^1.46.1"
+    "@meveo-org/mv-dialog": "^1.0.5",
+    "@meveo-org/mv-toast": "^1.0.0",
+    "css-loader": "^6.7.3",
+    "es-dev-server": "^1.46.1",
+    "file-loader": "^6.2.0",
+    "highlight.js": "^11.7.0",
+    "html-webpack-plugin": "^5.5.0",
+    "raw-loader": "^4.0.2",
+    "syntaxhighlight-webcomponent": "^5.1.0",
+    "webpack": "^5.75.0",
+    "webpack-cli": "^5.0.1",
+    "webpack-dev-server": "^4.11.1"
   }
 }
