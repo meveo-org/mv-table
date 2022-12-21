@@ -83,7 +83,7 @@ export class MvTable extends LitElement {
       theme: { type: String, attribute: false },
       datePattern: { type: String, attribute: "date-pattern" },
       "sort-order": { type: Object, attribute: false },
-      sortable: { type: Boolean },
+      sortable: { type: Boolean, attribute: true },
       dataIsLoading: { type: Boolean },
       filterValues: { type: Array, reflect: true },
       customTypes: { type: Object },
@@ -919,7 +919,7 @@ export class MvTable extends LitElement {
   renderFilterItem = (column, type) => {
     const value = this.filterValues.filter ? this.filterValues.filter[column?.code] : "";
     if (column?.filter) {
-      switch (column.fieldType) {
+      switch (column.type) {
         case "BOOLEAN":
           return html`
             <boolean-filter

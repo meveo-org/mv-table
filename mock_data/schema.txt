@@ -15,6 +15,7 @@
     "type": "STRING",
     "render": value => html`<span>${value}</span>`,
     "displayed": true,
+    "filter": true,
   },
   {
     "name": "hair_color",

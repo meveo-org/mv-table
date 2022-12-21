@@ -241,6 +241,7 @@ export class MvTableDemo extends LitElement {
             @select-row="${this.handleRowSelect}"
             with-checkbox
             selectable
+            sortable
             @change-page="${this.gotoPage}"
             .theme="${theme}"
           ></mv-table>
