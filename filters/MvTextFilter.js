@@ -26,6 +26,12 @@ export default class MvTextFilter extends FilterTemplate {
     `;
   }
 
+  connectedCallback() {
+    super.connectedCallback();
+    window.addEventListener('clear-filters', this.clearFilters);
+  
+  }
+
   renderInput = () => html`
     <mv-input
       name="${this.field.code}"
@@ -33,13 +39,6 @@ export default class MvTextFilter extends FilterTemplate {
       value="${this.value}"
       @input-change="${this.inputChange}"
     ></mv-input>
-    ${this.advanced ? html`
-    <input type="checkbox" id="includes" name="includes">
-      <label for="includes">${ msg("Includes", {id: 'SP.textFilter.includes'})}</label>
-    <input type="checkbox" id="excludes" name="excludes">
-      <label for="excludes">${ msg("Excludes", {id: 'SP.textFilter.excludes'})}</label>
-    </div>
-    `:null}
   `;
 
   inputChange = (event) => {
@@ -48,6 +47,10 @@ export default class MvTextFilter extends FilterTemplate {
     } = event;
     this.updateValue(value);
   };
+
+  clearFilters = (event) => {
+    this.updateValue("")
+  }
 
   handleRadioClicked = (event) => {
     const {

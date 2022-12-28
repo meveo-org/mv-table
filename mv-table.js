@@ -117,7 +117,6 @@ export class MvTable extends LitElement {
           --mv-table-hover-light-background,
           #ededed
         );
-
         --table-light-row-height: var(--mv-table-light-row-height)
         --head-dark-background: var(--mv-table-head-dark-background, #23404c);
         --body-dark-background: var(--mv-table-body-dark-background, #373e48);
@@ -125,6 +124,15 @@ export class MvTable extends LitElement {
         --color: var(--mv-table-color);
         --mv-button-padding: 5px 5px;
         --input-border: var(--mv-input-border);
+        --content-max-height: none;
+        --mv-dropdown-content-max-height: max-content;
+        --mv-dropdown-min-width: 150px;
+        --mv-dropdown-content-overflow: visible;
+        --mv-dropdown-light-border: none;
+        --mv-input-box-padding: none;
+        --font-size: 10px;
+        --mv-input-font-size: 10px;
+        --mv-table-input-box-padding: 1px;
       }
 
       .advancedFilter > mv-select {
@@ -276,10 +284,10 @@ export class MvTable extends LitElement {
         }
         .mv-table-container {
           width: 100%;
-          height: 78%;
           max-height: 78%;
           overflow-x: auto;
           overflow-y: var(--table-overflow-y);
+          min-height: 300px;
         }
         
         .no-data {
@@ -310,10 +318,10 @@ export class MvTable extends LitElement {
         }
         .subMenu {
           position: absolute;
-          left: 130px;
+          left: calc(var(--mv-dropdown-min-width) + 10px);
           top: -25px;
-          min-width: 210px;
-          width: 100%;
+          min-width: max-content;
+          width: calc(max-content + 40px);
           color: var(--mv-dropdown-light-color, #328cc0);
           background: var(--mv-dropdown-background, #3f4753);
           border-radius: 5px;
@@ -453,6 +461,9 @@ export class MvTable extends LitElement {
           font-weight: 700;
           text-transform: uppercase;
           white-space: nowrap;
+          display: flex;
+          align-items: center;
+          vertical-align: middle;
         }
         thead td:first-child {
           border-radius: var(--head-first-child-radius);
@@ -597,7 +608,7 @@ export class MvTable extends LitElement {
     this.isPageSelected = this.hasPageSelected();
     this.isAllSelected = this.hasAllSelected();
     return html`
-      <div class="mv-table-container${sortableClass} ${this.theme}">
+      <div id="mv-table-container" class="mv-table-container${sortableClass} ${this.theme}">
       ${this.selection.selectAll == true ? html`<div style="text-align: center"><span style="color: red">ATTENTION TOUTES</span> les lignes sont sélectionnées</div>` : this.selection.selectedRows.length ? html`<div style="text-align: center">${this.selection.selectedRows.length} lignes sélectionnées</div>` : null}
         <table>
           <thead>
@@ -657,7 +668,7 @@ export class MvTable extends LitElement {
                   ? html`
                     <td>
                       <div class="title ${this.filterValues.find(elt => elt.hasOwnProperty(column.name)) && this.hasActiveFilter ? 'filtered' : '' }">
-                        <span class="${this.filterValues.find(elt => elt.hasOwnProperty(column.name)) && this.hasActiveFilter ? 'display-middle' : '' }">${column.title}</span> 
+                        <div class="${this.filterValues.find(elt => elt.hasOwnProperty(column.name)) && this.hasActiveFilter ? 'display-middle' : '' }" style="width: calc(100% - 20px)">${column.title}</div> 
                         ${column.filter ? html`
                         <span class="dropdown-trigger ${this.filterValues.find(elt => elt.hasOwnProperty(column.name)) && this.hasActiveFilter ? 'display-middle' : '' }">
                         <mv-dropdown
@@ -667,7 +678,7 @@ export class MvTable extends LitElement {
                             theme="${this.theme}"
                           >
                           <mv-dropdown trigger>
-                            <mv-lnr icon="chevron-down"></mv-lnr>
+                            <span style="font-size: 18px;">&#9662;</span>
                           </mv-dropdown>
                           <mv-dropdown content theme="${this.theme}" style="overflow: visible !important">
                             <ul class="header_menu" style="padding-left: 10px; padding-right: 10px">
@@ -825,9 +836,16 @@ export class MvTable extends LitElement {
     );
   };
 
-  clearFilters = () => {
+  clearFilters = () => {  
     this.filterValues = []
-    this.applyFilters()
+    this.dispatchEvent(
+      new CustomEvent("clear-filters", {
+        detail: { filters: (this.filterValues = []) },
+        bubbles: true,
+        composed: true,
+      })
+    );
+    this.applyFilters();
   }
 
   handleCellClick = (row, column) => (originalEvent) => {
@@ -901,12 +919,12 @@ export class MvTable extends LitElement {
   
   renderAdvancedFilter = (column) => {
     var selectFilterValues;
-    column.type == "STRING" ? selectFilterValues = [...this.selectFilter, ...this.selectFilterString] : selectFilterValues = [...this.selectFilter, ...this.selectFilterNum];
+    column.type == "STRING" || "URL" ? selectFilterValues = [...this.selectFilter, ...this.selectFilterString] : selectFilterValues = [...this.selectFilter, ...this.selectFilterNum];
     return html`
-    <div class="advancedFilter">
+    <div id="${column.name}" class="advancedFilter">
       <mv-select
         .theme="${this.theme}"
-        .value="${selectFilterValues[0]}"
+        .value="${selectFilterValues[0] || ""}"
         .options="${selectFilterValues}"
         @select-option="${this.handleSelectOption}"
         no-clear-button
@@ -917,7 +935,9 @@ export class MvTable extends LitElement {
   } 
   
   renderFilterItem = (column, type) => {
-    const value = this.filterValues.filter ? this.filterValues.filter[column?.code] : "";
+    const value = this.filterValues.find((elt) => elt.hasOwnProperty[column?.name]) != undefined ? 
+      this.filterValues.find((elt) => elt.hasOwnProperty[column?.name]) : 
+      "";
     if (column?.filter) {
       switch (column.type) {
         case "BOOLEAN":
@@ -967,7 +987,7 @@ export class MvTable extends LitElement {
               .field="${column}"
               .value="${value}"
               @update-value="${this.updateValue(column, type)}"
-            ></text-filter>
+            ></text-filter>  
           `;
         default:
           console.error("Unsupported field: ", column);
@@ -1096,20 +1116,20 @@ export class MvTable extends LitElement {
   }
 
   sortIcon = (column) => {
+    // Get the `sort-order` property of the current element, or an empty object if it is not defined
     const sortOrder = this["sort-order"] || {};
+    // Get the sort order for the specified `column`
     const order = sortOrder[column.name];
-    if (order) {
-      const isAscending = order === "ASCENDING";
-      if (isAscending) {
-        return html`<mv-fa icon="sort-up"></mv-fa>`;
-      }
-      return html`<mv-fa icon="sort-down"></mv-fa>`;
-    }
-    return html`<mv-fa icon="sort"></mv-fa>`;
+    // If the sort order is not defined, return a sort icon
+    if (!order) return html`<mv-fa icon="sort"></mv-fa>`;
+    // If the sort order is "ASCENDING", return an ascending sort icon, otherwise return a descending sort icon
+    return order === "ASCENDING" ?
+      html`<mv-fa icon="sort-up"></mv-fa>` :
+      html`<mv-fa icon="sort-down"></mv-fa>`;
   };
 
   updateValue = (field, filterType="simple") => (event) => {
-    const { code } = field;
+    const code = field.name;
     const {
       detail: { value },
     } = event;
@@ -1125,6 +1145,7 @@ export class MvTable extends LitElement {
       filter,
     ];
   }
+  this.click();
   };
 }
 customElements.define("mv-table", MvTable);

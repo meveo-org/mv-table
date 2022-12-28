@@ -23,7 +23,7 @@
     "@meveo-org/mv-calendar": "^1.0.1",
     "@meveo-org/mv-checkbox": "^1.0.0",
     "@meveo-org/mv-font-awesome": "^1.0.0",
-    "@meveo-org/mv-input": "^1.0.1",
+    "@meveo-org/mv-input": "^1.0.2",
     "@meveo-org/mv-progress-bar": "^1.0.0",
     "@meveo-org/mv-radio": "^1.0.0",
     "@meveo-org/mv-select": "^1.0.0",

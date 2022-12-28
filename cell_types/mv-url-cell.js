@@ -19,10 +19,11 @@ export class MvUrlCell extends LitElement {
 
       a {
         color: var(--color);
-        text-decoration: none;
+        //text-decoration: none;
       }
 
       a:hover {
+        color: #328CC0;
         text-decoration: underline;
       }
 	`;

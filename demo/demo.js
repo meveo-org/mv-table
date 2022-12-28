@@ -85,6 +85,7 @@ export class MvTableDemo extends LitElement {
     super();
     this.data = people;
     this.columnsClass = schemaAsTxt;
+    this.sortType = '';
     this.limit = 10;
     this.page = 1;
     this.pages = 0;
@@ -100,7 +101,7 @@ export class MvTableDemo extends LitElement {
     ];
     this.list = [];
     this.message = "";
-
+    this.sortedColumn = "";
     const actionColumnStyles = {
       container: `
         display: flex;
@@ -166,7 +167,6 @@ export class MvTableDemo extends LitElement {
   render() {
     const hasList = this.list && this.list.length > 0;
     const { theme } = this;
-
     return hasList
       ? html`
         <div class="table-demo">
@@ -239,10 +239,14 @@ export class MvTableDemo extends LitElement {
             @row-click="${this.handleRowClick}"
             @cell-click="${this.handleCellClick}"
             @select-row="${this.handleRowSelect}"
+            @column-sort="${this.sortData}"
+            @change-page="${this.gotoPage}"
+            @apply-filters="${this.applyFilters}"
+            @clear-filters="${this.clearFilters}"
             with-checkbox
             selectable
             sortable
-            @change-page="${this.gotoPage}"
+
             .theme="${theme}"
           ></mv-table>
 
@@ -267,7 +271,15 @@ export class MvTableDemo extends LitElement {
   loadData(page) {
     this.page = page < 1 ? 1 : page;
     this.offset = (this.page - 1) * this.limit;
-    const people = getPeople(this.data, this.offset, this.limit);
+    // sort data
+    if(this.sortType != '') {
+      this.data.list.sort((a, b) => a[this.sortedColumn].localeCompare(b[this.sortedColumn]))
+      this.sortType == 'DESCENDING' ?
+        this.data.list.reverse()
+      : null
+      this.sortType == '';
+    }
+    const people = getPeople(this.data, this.offset, this.limit, this.filters);
     const count = people.count || 0;
     if (this.offset > count) {
       this.page = 1;
@@ -291,9 +303,25 @@ export class MvTableDemo extends LitElement {
       const url = rowItem.url.split("/");
       row.id = url[url.length - 2];
       list.push(row);
+
       return list;
     }, []);
     return tableData;
+  }
+
+  sortData(event) {
+    const { detail = {} } = event || {};
+    this.sortType = detail.order;
+    this.sortedColumn = detail.column.name;
+    this.loadData(this.page);
+  }
+
+  applyFilters(event) {
+    const {
+      detail: { filters },
+    } = event
+    this.filters = { ...filters }
+    this.loadData(this.page);
   }
 
   createColumnTitle(key) {
