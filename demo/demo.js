@@ -39,12 +39,12 @@ export class MvTableDemo extends LitElement {
       .table-demo {
         display: flex;
         flex-direction: column;
-        width: calc(100% - 60px);
+        width: calc(100% - 4.402vw);
         margin: 0 auto;
       }
       
       .page-buttons {
-        font-size: var(--page-button-font-size, 16px);
+        font-size: var(--page-button-font-size, 1.174vw);
       }
 
       .toasts {
@@ -53,7 +53,7 @@ export class MvTableDemo extends LitElement {
       }
 
       .toasts mv-toast {
-        padding: 10px;
+        padding: 0.734vw;
       }
       
       fieldset > label, label > input {
@@ -61,14 +61,14 @@ export class MvTableDemo extends LitElement {
       }
       
       fieldset {
-        width: 120px;
-        margin-left: 10px;
-        border:2px solid red;
-        -moz-border-radius: 8px;
-        -webkit-border-radius: 8px;	
-        border-radius: 8px;
+        width: 8.804vw;
+        margin-left: 0.734vw;
+        border:0.147vw solid red;
+        -moz-border-radius: 0.587vw;
+        -webkit-border-radius: 0.587vw;	
+        border-radius: 0.587vw;
         color: #818181;
-        height: 45px;
+        height: 3.302vw;
       }
       
       legend {
@@ -110,8 +110,8 @@ export class MvTableDemo extends LitElement {
         justify-content: center;
       `,
       button: `
-        --mv-button-min-width: 50px;
-        --mv-button-padding: 11px 15px;
+        --mv-button-min-width: 3.668vw;
+        --mv-button-padding: 0.807vw 1.101vw;
       `
     };
     this.actionColumn = {

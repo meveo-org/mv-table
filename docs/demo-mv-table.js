@@ -26,7 +26,7 @@
       }
 
       .mv-pagination-container {
-        margin-top: var(--pagination-group-top-margin, 10px);
+        margin-top: var(--pagination-group-top-margin, 0.734vw);
         display: flex;
         flex-direction: row;
       }
@@ -54,34 +54,34 @@
         justify-content: space-evenly;
         align-items: center;
         background-color: var(--background-color);
-        border-radius: 55px;
-        margin: 0px 15px;
-        --mv-button-margin: 0 5px;
+        border-radius: 4.035vw;
+        margin: 0px 1.101vw;
+        --mv-button-margin: 0 0.367vw;
       }
 
       .button-group mv-button:first-child,
       .button-group mv-button:nth-child(2) {
-        --mv-button-margin: 0 5px 0 0;
+        --mv-button-margin: 0 0.367vw 0 0;
       }
 
       .button-group mv-button:last-child,
       .button-group mv-button:nth-last-child(2) {
-        --mv-button-margin: 0 0 0 5px;
+        --mv-button-margin: 0 0 0 0.367vw;
       }
 
       .page-buttons {
-        font-size: var(--font-size-m, 16px);
+        font-size: var(--font-size-m, 1.174vw);
         font-weight: var(--pagination-button-font-weight, normal);
       }
 
       .page-buttons.large {
-        font-size: var(--font-size-xxl, 24px);
+        font-size: var(--font-size-xxl, 1.761vw);
         font-weight: var(--pagination-button-font-weight-large, bold);
-        height: 24px;
-        width: 24px;
+        height: 1.761vw;
+        width: 1.761vw;
         display: inline-block;
         position: relative;
-        top: -6px;
+        top: -0.44vw;
       }
 
       .current-page {
@@ -444,8 +444,8 @@
       }
 
       ul.scrollbar {
-        width: calc(100% - 8px);
-        max-height: 66px;
+        width: calc(100% - 0.587vw);
+        max-height: 4.842vw;
         float: left;
         overflow-y: auto;
         margin: 0;
@@ -459,21 +459,21 @@
       }
     
       ul.scrollbar::-webkit-scrollbar-track {
-        box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-        border-radius: 10px;
+        box-shadow: inset 0 0 0.44vw rgba(0, 0, 0, 0.3);
+        border-radius: 0.734vw;
         background-color: #788394;
       }
     
       ul.scrollbar::-webkit-scrollbar {
-        width: 8px;
-        height: 8px;
+        width: 0.587vw;
+        height: 0.587vw;
         background-color: #788394;
-        border-radius: 10px;
+        border-radius: 0.734vw;
       }
     
       ul.scrollbar::-webkit-scrollbar-thumb {
-        border-radius: 10px;
-        box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+        border-radius: 0.734vw;
+        box-shadow: inset 0 0 0.44vw rgba(0, 0, 0, 0.3);
         background-color: #5A6473;
       }
     
@@ -483,7 +483,7 @@
       }
 
       ul.scrollbar.light::-webkit-scrollbar-track {
-        box-shadow: inset 0 0 5px 0 rgba(29, 155, 201, 0.3);
+        box-shadow: inset 0 0 0.367vw 0 rgba(29, 155, 201, 0.3);
         background-color: #EAEBF0 !important;
       }
   
@@ -492,7 +492,7 @@
       }
   
       ul.scrollbar.light::-webkit-scrollbar-thumb {
-        box-shadow: inset 0 0 5px 0 rgba(29, 155, 201, 0.3);
+        box-shadow: inset 0 0 0.367vw 0 rgba(29, 155, 201, 0.3);
         background-color: #008FC3;
       }
     `}constructor(){super()}render(){return this.value&&this.value.length>0&&a.dy`     
@@ -521,7 +521,7 @@
         overflow: auto;
       }
       .entity-value ul {
-        padding: 10px 0;
+        padding: 0.734vw 0;
         margin: 0;
       }
     `}render=()=>{const e=Array.isArray(this.value);return a.dy`
@@ -800,8 +800,8 @@
       :host {
         font-family: var(--font-family, Arial);
         font-size: var(--font-size-m, 10pt);
-        --width: var(--mv-table-image-width, 50px);
-        --height: var(--mv-table-image-height, 50px);
+        --width: var(--mv-table-image-width, 3.668vw);
+        --height: var(--mv-table-image-height, 3.668vw);
         --radius: var(--mv-table-image-border-radius, 50%);
       }
       
@@ -1950,8 +1950,8 @@
             :host {
                 font-family: var(--font-family, Arial);
                 font-size: var(--font-size-, 10pt);
-                --width: var(--mv-table-image-width, 50px);
-                --height: var(--mv-table-image-height, 50px);
+                --width: var(--mv-table-image-width, 3.668vw);
+                --height: var(--mv-table-image-height, 3.668vw);
                 --radius: var(--mv-table-image-border-radius, 50%);
             }
 
@@ -2289,9 +2289,9 @@
       </mv-click-away>
     `}connectedCallback(){this.hasEmptyOption&&(this.emptyOption.label=this.emptyLabel||"- Select one -",this.value||(this.value=this.emptyOption)),this.addEventListener("select-option",this.setValue),super.connectedCallback()}attributeChangedCallback(e,t,o){"value"===e&&!this.value&&this.hasEmptyOption&&(this.value=this.emptyOption),super.attributeChangedCallback(e,t,o)}handleClickAway=()=>{this.open=!1,this.showInput=!1};handleKeyPress=((e,t,o)=>{let a;return(...t)=>{const o=void 0;clearTimeout(a),a=setTimeout((function(){a=null,e.apply(o,t)}),300)}})((e=>{const{path:t,originalTarget:o}=e,a=t||e.composedPath(),[r]=a,{value:i}=r||o;this.dispatchEvent(new CustomEvent("on-search",{detail:{value:i,originalEvent:e}}))}));toggleDropdown=e=>{if(this.open=!this.open,this.searchable){this.showInput=!!this.alwaysOpen||this.open;const t=this;setTimeout((()=>{t.shadowRoot.querySelector(".mv-select-input").focus(),t.dispatchEvent(new CustomEvent("on-search",{detail:{value:null,originalEvent:e}}))}),0)}};setValue=e=>{const{detail:{option:t}}=e;this.value=t,this.open=!1,this.searchable&&(this.showInput=!1)};selectItem=e=>{const t=this;return()=>{t.dispatchEvent(new CustomEvent("select-option",{detail:{option:e}}))}};clearSearch=e=>{const t=this.shadowRoot.querySelector(".mv-select-input");t.value="",this.dispatchEvent(new CustomEvent("on-clear",{detail:{originalEvent:e}})),t.focus()}}customElements.define("mv-select",F),customElements.define("list-filter",class extends g{static get properties(){return{...super.properties,options:{type:Array,attribute:!1}}}static get styles(){return a.iv`
       mv-select {
-        --mv-select-font-size: 16px;
-        --mv-select-input-padding: 6.25px;
-        --mv-select-width: calc(100% - 14px);
+        --mv-select-font-size: 1.174vw;
+        --mv-select-input-padding: 0.459vw;
+        --mv-select-width: calc(100% - 1.027vw);
       }
     `}constructor(){super(),this.options=[]}connectedCallback(){super.connectedCallback();const{listValues:e}=this.field;this.options=Object.keys(this.field.listValues||{}).map((t=>({label:e[t],value:t})))}renderInput=()=>{const e=this.options.find((e=>e.value===this.value));return a.dy`
       <mv-select
@@ -2313,7 +2313,7 @@
     }
 
     .show {
-      max-height: 150px;
+      max-height: 11.005vw;
       transition: max-height 2s;
     }
     `}static get properties(){return{...super.properties,field:{type:Array,attribute:!1},options:{type:Array,attribute:!1},filtersInTable:{type:Boolean,attribute:!1,reflect:!0}}}constructor(){super(),this.field=[],this.options=[],this.filtersInTable=!1}renderInput(){return a.dy`
@@ -2605,7 +2605,7 @@
     }
 
     .show {
-      max-height: 150px;
+      max-height: 11.005vw;
       transition: max-height 2s;
     }
     `}connectedCallback(){super.connectedCallback(),window.addEventListener("clear-filters",this.clearFilters)}renderInput=()=>a.dy`
@@ -2617,9 +2617,9 @@
     ></mv-input>
   `;inputChange=e=>{const{detail:{value:t}}=e;this.updateValue(t)};clearFilters=e=>{this.updateValue("")};handleRadioClicked=e=>{const{detail:{value:t}}=e;console.log(e),console.log(this.field.code+" et value : "+t)}});const W=[{value:!0,label:"True"},{value:!1,label:"False"}];customElements.define("boolean-filter",class extends g{static get styles(){return a.iv`
       mv-select {
-        --mv-select-font-size: 16px;
-        --mv-select-input-padding: 6.25px;
-        --mv-select-width: calc(100% - 14px);
+        --mv-select-font-size: 1.174vw;
+        --mv-select-input-padding: 0.459vw;
+        --mv-select-width: calc(100% - 1.027vw);
       }
     `}renderInput=()=>{const e=W.find((e=>e.value===this.value));return a.dy`
       <mv-select
@@ -2631,24 +2631,24 @@
     `};selectOption=e=>{const{detail:{option:t}}=e;this.updateValue(t.value)}});const K=[{label:"10",value:10},{label:"20",value:20},{label:"50",value:50},{label:"100",value:100}];class G extends a.oi{static get properties(){return{theme:{type:String,attribute:!0},columns:{type:Object,reflect:!0},displayed:{type:Boolean},isButtonVisible:{type:Boolean}}}static get styles(){return a.iv`
       :host {
         font-family: var(--font-family, Arial);
-        font-size: var(--font-size-m, 13px);
+        font-size: var(--font-size-m, 0.954vw);
         --light-background: var(--mv-pagination-light-background, #eaebf0);
         --dark-background: var(--mv-pagination-dark-background, #3999c1);
         position: sticky;
         top: 0px;
         z-index: 20;
-        --mv-button-font-size: 14px;
+        --mv-button-font-size: 1.027vw;
       }
 
       ul {
-        padding-inline-start: 10px !important;
+        padding-inline-start: 0.734vw !important;
       }
       
       .container {
         display: flex;
         justify-content: space-evenly;
-        height: 90px;
-        max-height: 110px;
+        height: 6.603vw;
+        max-height: 10.734vw;
         background-color: white;
       }
 
@@ -2666,7 +2666,7 @@
       }
 
       .rows-per-page > mv-select {
-        margin: 0 5px;
+        margin: 0 0.367vw;
       }
 
       .choose-columns {
@@ -2695,8 +2695,8 @@
       }
 
       .small-button {
-        --mv-button-min-width: 28px;
-        --mv-button-padding: 10px;
+        --mv-button-min-width: 2.054vw;
+        --mv-button-padding: 0.734vw;
         --mv-button-color: #328cc0;
         --mv-button-custom-color: #E6E6E6;
       }
@@ -2768,8 +2768,8 @@
       :host {
         font-family: var(--font-family, Arial);
         --font-size: var(--font-size-s, 1rem);
-        --font-size-s: 8px;
-        --font-size-m: 13px;
+        --font-size-s: 0.587vw;
+        --font-size-m: 0.954vw;
         --td-light-color: var(--mv-table-td-light-color);
         --light-color: var(--mv-table-light-color);
         --table-header-font-family: var(
@@ -2780,7 +2780,7 @@
         --mv-input-inactive-box-shadow: var(--mv-table-input-inactive-box-shadow);
         --mv-checkbox-shadow: var(--mv-table-checkbox-shadow);
         --transparent-background: var(--mv-table-transparent-background);
-        --table-row-height: var(--mv-table-row-height, 66px);
+        --table-row-height: var(--mv-table-row-height, 4.842vw);
         --table-row-cursor: var(--mv-table-row-cursor, default);
         --table-td-font-size: var(--mv-table-td-font-size);
         --body-light-background: var(--mv-table-body-light-background);
@@ -2793,41 +2793,41 @@
         --body-dark-background: var(--mv-table-body-dark-background, #373e48);
         --hover-dark-background: var(--mv-table-hover-dark-background, #4e686d);
         --color: var(--mv-table-color);
-        --mv-button-padding: 5px 5px;
+        --mv-button-padding: 0.367vw 0.367vw;
         --input-border: var(--mv-input-border);
         --content-max-height: none;
         --mv-dropdown-content-max-height: max-content;
-        --mv-dropdown-min-width: 150px;
+        --mv-dropdown-min-width: 11.005vw;
         --mv-dropdown-content-overflow: visible;
         --mv-dropdown-light-border: none;
         --mv-input-box-padding: none;
-        --font-size: 10px;
-        --mv-input-font-size: 10px;
-        --mv-table-input-box-padding: 1px;
+        --font-size: 0.734vw;
+        --mv-input-font-size: 0.734vw;
+        --mv-table-input-box-padding: 0.073vw;
       }
 
       .advancedFilter > mv-select {
         /* mv-select */
-        --mv-select-max-height: 20px;
-        --mv-select-selected-option-font-size: 10px;
+        --mv-select-max-height: 1.467vw;
+        --mv-select-selected-option-font-size: 0.734vw;
         --mv-select-background-color: #328cc0;
         --mv-select-option-background: #328cc0;
         --mv-select-color: white;
-        --mv-select-width: 90px;
+        --mv-select-width: 6.603vw;
         --mv-select-border: none;
         --mv-select-font-size: var(--font-size-s);
-        --mv-select-input-padding: 1px 4px;
-        --mv-select-selected-option-font-size: 8px;
+        --mv-select-input-padding: 0.073vw 0.293vw;
+        --mv-select-selected-option-font-size: 0.587vw;
       }
 
       *::-webkit-scrollbar {
-            width: 27px;
-            height: 30px;
+            width: 1.981vw;
+            height: 2.201vw;
         }
         *::-webkit-scrollbar-track {
-          border-radius: 3px;
+          border-radius: 0.22vw;
           background-color: #CECECE;
-          border: 10px solid #FFFFFF;
+          border: 0.734vw solid #FFFFFF;
         }
         *::-webkit-scrollbar-track:hover {
             background-color: #B8C0C2;
@@ -2836,9 +2836,9 @@
             background-color: #B8C0C2;
         }   
         *::-webkit-scrollbar-thumb {
-            border-radius: 16px;
+            border-radius: 1.174vw;
             background-color: #676767;
-            border: 10px solid #FFFFFF;
+            border: 0.734vw solid #FFFFFF;
         }
         *::-webkit-scrollbar-thumb:hover {
             background-color: #328cc0
@@ -2860,17 +2860,17 @@
           flex-direction: row;
           align-items: center;
           justify-content: space-around;
-          max-height: 18px;
+          max-height: 1.321vw;
         }
         
         .advancedFilter > * {
-          margin: 4px;
+          margin: 0.293vw;
         }
         .advancedFilter mv-input {
           border: var(--input-border);
-          --mv-input-min-width: 80px;
-          width: 90px;
-          --mv-input-max-width: 90px;
+          --mv-input-min-width: 5.869vw;
+          width: 6.603vw;
+          --mv-input-max-width: 6.603vw;
         }
         .button_container {
           text-align: end;
@@ -2885,11 +2885,11 @@
           margin: auto;
         }
         .checkbox {
-          width: 5px;
+          width: 0.367vw;
         }
         .container_progressbar {
-          padding-top: 30px;
-          padding-bottom: 30px;
+          padding-top: 2.201vw;
+          padding-bottom: 2.201vw;
         }
         .dark {
           --head-background: var(--head-dark-background);
@@ -2900,8 +2900,8 @@
           --mv-checkbox-border-color: var(--color);
           --mv-table-url-color: var(--td-color);
           --border-colapse: collapse;
-          --table-head-height: var(--mv-table-head-height, 60px);
-          --table-row-height: var(--mv-table-row-height, 66px);
+          --table-head-height: var(--mv-table-head-height, 4.402vw);
+          --table-row-height: var(--mv-table-row-height, 4.842vw);
           --head-first-child-radius:var(--mv-table-head-classic-first-radius);
           --body-td-first-child-radius: var(--mv-table-head-classic-first-radius);
           --head-last-child-radius:var(--mv-table-head-classic-last-radius);
@@ -2911,16 +2911,16 @@
         .header_menu {
           text-transform: none;
           font-weight: normal;
-          font-size: 10px;
-          padding-left: 10px !important;
-          padding-right: 10px !important;
+          font-size: 0.734vw;
+          padding-left: 0.734vw !important;
+          padding-right: 0.734vw !important;
         }
         .header_menu > div {
-          width: 115px;
+          width: 8.437vw;
         }
         .is-loading {
-          padding-top: 15px;
-          padding-bottom: 15px;
+          padding-top: 1.101vw;
+          padding-bottom: 1.101vw;
         }
         .light {
           --head-background: var(--head-light-background);
@@ -2934,8 +2934,8 @@
           --mv-checkbox-border-color: var(--color);
           --mv-table-url-color: var(--td-color);
           --border-colapse: var(--mv-table-border-colapse, collapse)
-          --table-head-height: var(--mv-table-head-height, 60px);
-          --table-row-height: var(--mv-table-row-height, 66px);
+          --table-head-height: var(--mv-table-head-height, 4.402vw);
+          --table-row-height: var(--mv-table-row-height, 4.842vw);
           --head-first-child-radius: var(--mv-table-head-light-first-radius);
           --head-last-child-radius: var(--mv-table-head-light-last-radius);
           --body-td-first-child-radius: var(--mv-table-head-light-first-radius);
@@ -2951,29 +2951,29 @@
           color: #FFFFFF;
         }
         .mv-input.box {
-          box-shadow: inset 1px 2px 3px rgba(0, 0, 0, 0.15);
+          box-shadow: inset 0.073vw 0.147vw 0.22vw rgba(0, 0, 0, 0.15);
         }
         .mv-table-container {
           width: 100%;
           max-height: 78%;
           overflow-x: auto;
           overflow-y: var(--table-overflow-y);
-          min-height: 300px;
+          min-height: 22.01vw;
         }
         
         .no-data {
-          font-size: 24px;
+          font-size: 1.761vw;
           font-weight: bold;
           text-align: center;
           color: var(--warning-color);
-          padding-top: 15px;
-          padding-bottom: 15px;
+          padding-top: 1.101vw;
+          padding-bottom: 1.101vw;
         }
         .numeric {
           text-align: right;
         }
         .progressbar mv-progressbar, mv-progressbar[type="infinite"] {
-          --mv-progressbar-height: 20px;
+          --mv-progressbar-height: 1.467vw;
         }
         .selected {
           color: #328cc0;
@@ -2989,20 +2989,20 @@
         }
         .subMenu {
           position: absolute;
-          left: calc(var(--mv-dropdown-min-width) + 10px);
-          top: -25px;
+          left: calc(var(--mv-dropdown-min-width) + 0.734vw);
+          top: -1.834vw;
           min-width: max-content;
-          width: calc(max-content + 40px);
+          width: calc(max-content + 2.935vw);
           color: var(--mv-dropdown-light-color, #328cc0);
           background: var(--mv-dropdown-background, #3f4753);
-          border-radius: 5px;
+          border-radius: 0.367vw;
           border: none;
-          padding: 5px;
-          font-size: 10px;
+          padding: 0.367vw;
+          font-size: 0.734vw;
       }
         .subMenu div,
         .header_menu div {
-          margin-bottom: 5px;
+          margin-bottom: 0.367vw;
         }
         .table-container {
         max-height: 85%;
@@ -3010,25 +3010,25 @@
         a {
           font-style: normal;
           font-weight: 400;
-          font-size: 12px;
+          font-size: 0.88vw;
           line-height: 0px;
           font-feature-settings: 'kern' off;
           color: #02657e;
           text-decoration: none;
-          margin-left: 30px;
+          margin-left: 2.201vw;
         }
         div.progress_container {
-          line-height: 40px !important;
+          line-height: 2.935vw !important;
         }
         hr {
           background-color: white;
           border: 0px;
           border-color: white;
           width: 95%;
-          height: 1px;
+          height: 0.073vw;
         }
         mv-dropdown {
-          font-size: 10px;
+          font-size: 0.734vw;
         }
         span>mv-fa:hover {
           cursor: pointer;
@@ -3053,7 +3053,7 @@
           overflow-y: scroll;
         }
         tbody tr {
-          border-bottom: 1px solid #e9e9e9;
+          border-bottom: 0.073vw solid #e9e9e9;
           cursor: var(--table-row-cursor);
           background-color: var(--body-background);
           z-index: 8;
@@ -3067,7 +3067,7 @@
         }
         td {
           border-bottom: none;
-          padding: 0 15px 0 15px;
+          padding: 0 1.101vw 0 1.101vw;
           text-align: left;
           overflow: initial;
           white-space: nowrap;
@@ -3084,10 +3084,10 @@
         * ? Si filtre appliqué sur la colonne (class filtered)
         */
         .filtered {
-          border-radius: 14px;
+          border-radius: 10.293vw;
           background-color: #317297 !important;
           height: var(--table-row-height);
-          padding: 0 8px 0 8px;
+          padding: 0 0.587vw 0 0.587vw;
         }
 
         .display-middle {
@@ -3106,7 +3106,7 @@
           vertical-align: top;
         }
         td.is-loading {
-          height: 80px !important;
+          height: 5.869vw !important;
         }
         thead {
           margin: auto;
@@ -3143,17 +3143,17 @@
           border-radius: var(--head-last-child-radius);
         }
         tr {
-          max-height: 26px;
-          height: 26px;
+          max-height: 1.908vw;
+          height: 1.908vw;
           // 8 because, need to pass under thead, and thead have 9 in z-index
           z-index: 8;
         }
         tr.is-loading {
-          height: 80px !important;
+          height: 5.869vw !important;
         }
 
         ul {
-          padding: 0 10px;
+          padding: 0 0.734vw;
         }
         
         .locked {
@@ -3234,7 +3234,7 @@
               ${l.map((e=>e.disabled?null:this.sortable?a.dy`
                     <td>
                       <div class="title ${this.filterValues.find((t=>t.hasOwnProperty(e.name)))&&this.hasActiveFilter?"filtered":""}">
-                        <div class="${this.filterValues.find((t=>t.hasOwnProperty(e.name)))&&this.hasActiveFilter?"display-middle":""}" style="width: calc(100% - 20px)">${e.title}</div> 
+                        <div class="${this.filterValues.find((t=>t.hasOwnProperty(e.name)))&&this.hasActiveFilter?"display-middle":""}" style="width: calc(100% - 1.467vw)">${e.title}</div> 
                         ${e.filter?a.dy`
                         <span class="dropdown-trigger ${this.filterValues.find((t=>t.hasOwnProperty(e.name)))&&this.hasActiveFilter?"display-middle":""}">
                         <mv-dropdown
@@ -3244,10 +3244,10 @@
                             theme="${this.theme}"
                           >
                           <mv-dropdown trigger>
-                            <span style="font-size: 18px;">&#9662;</span>
+                            <span style="font-size: 1.321vw;">&#9662;</span>
                           </mv-dropdown>
                           <mv-dropdown content theme="${this.theme}" style="overflow: visible !important">
-                            <ul class="header_menu" style="padding-left: 10px; padding-right: 10px">
+                            <ul class="header_menu" style="padding-left: 0.734vw; padding-right: 0.734vw">
                             <div @click="${this.handleSort(e,"asc")}"><mv-fa icon="sort-alpha-down" ></mv-fa>${i("Tri croissant")}</div>
                             <div @click="${this.handleSort(e,"desc")}"><mv-fa icon="sort-alpha-up-alt"></mv-fa>${i("Tri decroissant")}</div>
                             <div>${this.renderFilterItem(e)}</div>

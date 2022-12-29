@@ -97,8 +97,8 @@ export class MvTable extends LitElement {
       :host {
         font-family: var(--font-family, Arial);
         --font-size: var(--font-size-s, 1rem);
-        --font-size-s: 8px;
-        --font-size-m: 13px;
+        --font-size-s: 0.587vw;
+        --font-size-m: 0.954vw;
         --td-light-color: var(--mv-table-td-light-color);
         --light-color: var(--mv-table-light-color);
         --table-header-font-family: var(
@@ -108,8 +108,9 @@ export class MvTable extends LitElement {
         --no-border-spacing: var(--mv-table-no-border-spacing);
         --mv-input-inactive-box-shadow: var(--mv-table-input-inactive-box-shadow);
         --mv-checkbox-shadow: var(--mv-table-checkbox-shadow);
+        --mv-checkbox-border-radius: 3px;
         --transparent-background: var(--mv-table-transparent-background);
-        --table-row-height: var(--mv-table-row-height, 66px);
+        --table-row-height: var(--mv-table-row-height, 4.842vw);
         --table-row-cursor: var(--mv-table-row-cursor, default);
         --table-td-font-size: var(--mv-table-td-font-size);
         --body-light-background: var(--mv-table-body-light-background);
@@ -122,41 +123,41 @@ export class MvTable extends LitElement {
         --body-dark-background: var(--mv-table-body-dark-background, #373e48);
         --hover-dark-background: var(--mv-table-hover-dark-background, #4e686d);
         --color: var(--mv-table-color);
-        --mv-button-padding: 5px 5px;
+        --mv-button-padding: 0.367vw 0.367vw;
         --input-border: var(--mv-input-border);
         --content-max-height: none;
         --mv-dropdown-content-max-height: max-content;
-        --mv-dropdown-min-width: 150px;
+        --mv-dropdown-min-width: 11.005vw;
         --mv-dropdown-content-overflow: visible;
         --mv-dropdown-light-border: none;
         --mv-input-box-padding: none;
-        --font-size: 10px;
-        --mv-input-font-size: 10px;
-        --mv-table-input-box-padding: 1px;
+        --font-size: 0.734vw;
+        --mv-input-font-size: 0.734vw;
+        --mv-table-input-box-padding: 0.073vw;
       }
 
       .advancedFilter > mv-select {
         /* mv-select */
-        --mv-select-max-height: 20px;
-        --mv-select-selected-option-font-size: 10px;
+        --mv-select-max-height: 1.467vw;
+        --mv-select-selected-option-font-size: 0.734vw;
         --mv-select-background-color: #328cc0;
         --mv-select-option-background: #328cc0;
         --mv-select-color: white;
-        --mv-select-width: 90px;
+        --mv-select-width: 6.603vw;
         --mv-select-border: none;
         --mv-select-font-size: var(--font-size-s);
-        --mv-select-input-padding: 1px 4px;
-        --mv-select-selected-option-font-size: 8px;
+        --mv-select-input-padding: 0.073vw 0.293vw;
+        --mv-select-selected-option-font-size: 0.587vw;
       }
 
       *::-webkit-scrollbar {
-            width: 27px;
-            height: 30px;
+            width: 1.981vw;
+            height: 2.201vw;
         }
         *::-webkit-scrollbar-track {
-          border-radius: 3px;
+          border-radius: 0.22vw;
           background-color: #CECECE;
-          border: 10px solid #FFFFFF;
+          border: 0.734vw solid #FFFFFF;
         }
         *::-webkit-scrollbar-track:hover {
             background-color: #B8C0C2;
@@ -165,9 +166,9 @@ export class MvTable extends LitElement {
             background-color: #B8C0C2;
         }   
         *::-webkit-scrollbar-thumb {
-            border-radius: 16px;
+            border-radius: 1.174vw;
             background-color: #676767;
-            border: 10px solid #FFFFFF;
+            border: 0.734vw solid #FFFFFF;
         }
         *::-webkit-scrollbar-thumb:hover {
             background-color: #328cc0
@@ -189,17 +190,17 @@ export class MvTable extends LitElement {
           flex-direction: row;
           align-items: center;
           justify-content: space-around;
-          max-height: 18px;
+          max-height: 1.321vw;
         }
         
         .advancedFilter > * {
-          margin: 4px;
+          margin: 0.293vw;
         }
         .advancedFilter mv-input {
           border: var(--input-border);
-          --mv-input-min-width: 80px;
-          width: 90px;
-          --mv-input-max-width: 90px;
+          --mv-input-min-width: 5.869vw;
+          width: 6.603vw;
+          --mv-input-max-width: 6.603vw;
         }
         .button_container {
           text-align: end;
@@ -214,11 +215,11 @@ export class MvTable extends LitElement {
           margin: auto;
         }
         .checkbox {
-          width: 5px;
+          width: 0.367vw;
         }
         .container_progressbar {
-          padding-top: 30px;
-          padding-bottom: 30px;
+          padding-top: 2.201vw;
+          padding-bottom: 2.201vw;
         }
         .dark {
           --head-background: var(--head-dark-background);
@@ -229,8 +230,8 @@ export class MvTable extends LitElement {
           --mv-checkbox-border-color: var(--color);
           --mv-table-url-color: var(--td-color);
           --border-colapse: collapse;
-          --table-head-height: var(--mv-table-head-height, 60px);
-          --table-row-height: var(--mv-table-row-height, 66px);
+          --table-head-height: var(--mv-table-head-height, 4.402vw);
+          --table-row-height: var(--mv-table-row-height, 4.842vw);
           --head-first-child-radius:var(--mv-table-head-classic-first-radius);
           --body-td-first-child-radius: var(--mv-table-head-classic-first-radius);
           --head-last-child-radius:var(--mv-table-head-classic-last-radius);
@@ -240,16 +241,16 @@ export class MvTable extends LitElement {
         .header_menu {
           text-transform: none;
           font-weight: normal;
-          font-size: 10px;
-          padding-left: 10px !important;
-          padding-right: 10px !important;
+          font-size: 0.734vw;
+          padding-left: 0.734vw !important;
+          padding-right: 0.734vw !important;
         }
         .header_menu > div {
-          width: 115px;
+          width: 8.437vw;
         }
         .is-loading {
-          padding-top: 15px;
-          padding-bottom: 15px;
+          padding-top: 1.101vw;
+          padding-bottom: 1.101vw;
         }
         .light {
           --head-background: var(--head-light-background);
@@ -263,8 +264,8 @@ export class MvTable extends LitElement {
           --mv-checkbox-border-color: var(--color);
           --mv-table-url-color: var(--td-color);
           --border-colapse: var(--mv-table-border-colapse, collapse)
-          --table-head-height: var(--mv-table-head-height, 60px);
-          --table-row-height: var(--mv-table-row-height, 66px);
+          --table-head-height: var(--mv-table-head-height, 4.402vw);
+          --table-row-height: var(--mv-table-row-height, 4.842vw);
           --head-first-child-radius: var(--mv-table-head-light-first-radius);
           --head-last-child-radius: var(--mv-table-head-light-last-radius);
           --body-td-first-child-radius: var(--mv-table-head-light-first-radius);
@@ -280,29 +281,28 @@ export class MvTable extends LitElement {
           color: #FFFFFF;
         }
         .mv-input.box {
-          box-shadow: inset 1px 2px 3px rgba(0, 0, 0, 0.15);
+          box-shadow: inset 0.073vw 0.147vw 0.22vw rgba(0, 0, 0, 0.15);
         }
         .mv-table-container {
           width: 100%;
           max-height: 78%;
-          overflow-x: auto;
           overflow-y: var(--table-overflow-y);
-          min-height: 300px;
+          min-height: 22.01vw;
         }
         
         .no-data {
-          font-size: 24px;
+          font-size: 1.761vw;
           font-weight: bold;
           text-align: center;
           color: var(--warning-color);
-          padding-top: 15px;
-          padding-bottom: 15px;
+          padding-top: 1.101vw;
+          padding-bottom: 1.101vw;
         }
         .numeric {
           text-align: right;
         }
         .progressbar mv-progressbar, mv-progressbar[type="infinite"] {
-          --mv-progressbar-height: 20px;
+          --mv-progressbar-height: 1.467vw;
         }
         .selected {
           color: #328cc0;
@@ -318,20 +318,20 @@ export class MvTable extends LitElement {
         }
         .subMenu {
           position: absolute;
-          left: calc(var(--mv-dropdown-min-width) + 10px);
-          top: -25px;
+          left: calc(var(--mv-dropdown-min-width) + 0.734vw);
+          top: -1.834vw;
           min-width: max-content;
-          width: calc(max-content + 40px);
+          width: calc(max-content + 2.935vw);
           color: var(--mv-dropdown-light-color, #328cc0);
           background: var(--mv-dropdown-background, #3f4753);
-          border-radius: 5px;
+          border-radius: 0.367vw;
           border: none;
-          padding: 5px;
-          font-size: 10px;
+          padding: 0.367vw;
+          font-size: 0.734vw;
       }
         .subMenu div,
         .header_menu div {
-          margin-bottom: 5px;
+          margin-bottom: 0.367vw;
         }
         .table-container {
         max-height: 85%;
@@ -339,25 +339,25 @@ export class MvTable extends LitElement {
         a {
           font-style: normal;
           font-weight: 400;
-          font-size: 12px;
+          font-size: 0.88vw;
           line-height: 0px;
           font-feature-settings: 'kern' off;
           color: #02657e;
           text-decoration: none;
-          margin-left: 30px;
+          margin-left: 2.201vw;
         }
         div.progress_container {
-          line-height: 40px !important;
+          line-height: 2.935vw !important;
         }
         hr {
           background-color: white;
           border: 0px;
           border-color: white;
           width: 95%;
-          height: 1px;
+          height: 0.073vw;
         }
         mv-dropdown {
-          font-size: 10px;
+          font-size: 0.734vw;
         }
         span>mv-fa:hover {
           cursor: pointer;
@@ -382,7 +382,7 @@ export class MvTable extends LitElement {
           overflow-y: scroll;
         }
         tbody tr {
-          border-bottom: 1px solid #e9e9e9;
+          border-bottom: 0.073vw solid #e9e9e9;
           cursor: var(--table-row-cursor);
           background-color: var(--body-background);
           z-index: 8;
@@ -396,7 +396,7 @@ export class MvTable extends LitElement {
         }
         td {
           border-bottom: none;
-          padding: 0 15px 0 15px;
+          padding: 0 1.101vw 0 1.101vw;
           text-align: left;
           overflow: initial;
           white-space: nowrap;
@@ -413,10 +413,10 @@ export class MvTable extends LitElement {
         * ? Si filtre appliqué sur la colonne (class filtered)
         */
         .filtered {
-          border-radius: 14px;
+          border-radius: 10.293vw;
           background-color: #317297 !important;
           height: var(--table-row-height);
-          padding: 0 8px 0 8px;
+          padding: 0 0.587vw 0 0.587vw;
         }
 
         .display-middle {
@@ -435,7 +435,7 @@ export class MvTable extends LitElement {
           vertical-align: top;
         }
         td.is-loading {
-          height: 80px !important;
+          height: 5.869vw !important;
         }
         thead {
           margin: auto;
@@ -472,17 +472,17 @@ export class MvTable extends LitElement {
           border-radius: var(--head-last-child-radius);
         }
         tr {
-          max-height: 26px;
-          height: 26px;
+          max-height: 1.908vw;
+          height: 1.908vw;
           // 8 because, need to pass under thead, and thead have 9 in z-index
           z-index: 8;
         }
         tr.is-loading {
-          height: 80px !important;
+          height: 5.869vw !important;
         }
 
         ul {
-          padding: 0 10px;
+          padding: 0 0.734vw;
         }
         
         .locked {
@@ -668,7 +668,7 @@ export class MvTable extends LitElement {
                   ? html`
                     <td>
                       <div class="title ${this.filterValues.find(elt => elt.hasOwnProperty(column.name)) && this.hasActiveFilter ? 'filtered' : '' }">
-                        <div class="${this.filterValues.find(elt => elt.hasOwnProperty(column.name)) && this.hasActiveFilter ? 'display-middle' : '' }" style="width: calc(100% - 20px)">${column.title}</div> 
+                        <div class="${this.filterValues.find(elt => elt.hasOwnProperty(column.name)) && this.hasActiveFilter ? 'display-middle' : '' }" style="width: calc(100% - 1.467vw)">${column.title}</div> 
                         ${column.filter ? html`
                         <span class="dropdown-trigger ${this.filterValues.find(elt => elt.hasOwnProperty(column.name)) && this.hasActiveFilter ? 'display-middle' : '' }">
                         <mv-dropdown
@@ -678,10 +678,10 @@ export class MvTable extends LitElement {
                             theme="${this.theme}"
                           >
                           <mv-dropdown trigger>
-                            <span style="font-size: 18px;">&#9662;</span>
+                            <span style="font-size: 1.321vw;">&#9662;</span>
                           </mv-dropdown>
                           <mv-dropdown content theme="${this.theme}" style="overflow: visible !important">
-                            <ul class="header_menu" style="padding-left: 10px; padding-right: 10px">
+                            <ul class="header_menu" style="padding-left: 0.734vw; padding-right: 0.734vw">
                             <div @click="${this.handleSort(column, "asc")}"><mv-fa icon="sort-alpha-down" ></mv-fa>${msg("Tri croissant", {id: 'table.sortAZ'})}</div>
                             <div @click="${this.handleSort(column, "desc")}"><mv-fa icon="sort-alpha-up-alt"></mv-fa>${msg("Tri decroissant", {id: 'table.sortZA'})}</div>
                             <div>${this.renderFilterItem(column)}</div>

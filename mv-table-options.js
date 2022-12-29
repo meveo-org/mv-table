@@ -30,24 +30,24 @@ export class MvTableOptions extends LitElement {
     return css`
       :host {
         font-family: var(--font-family, Arial);
-        font-size: var(--font-size-m, 13px);
+        font-size: var(--font-size-m, 0.954vw);
         --light-background: var(--mv-pagination-light-background, #eaebf0);
         --dark-background: var(--mv-pagination-dark-background, #3999c1);
         position: sticky;
         top: 0px;
         z-index: 20;
-        --mv-button-font-size: 14px;
+        --mv-button-font-size: 1.027vw;
       }
 
       ul {
-        padding-inline-start: 10px !important;
+        padding-inline-start: 0.734vw !important;
       }
       
       .container {
         display: flex;
         justify-content: space-evenly;
-        height: 90px;
-        max-height: 110px;
+        height: 6.603vw;
+        max-height: 10.734vw;
         background-color: white;
       }
 
@@ -65,7 +65,7 @@ export class MvTableOptions extends LitElement {
       }
 
       .rows-per-page > mv-select {
-        margin: 0 5px;
+        margin: 0 0.367vw;
       }
 
       .choose-columns {
@@ -94,8 +94,8 @@ export class MvTableOptions extends LitElement {
       }
 
       .small-button {
-        --mv-button-min-width: 28px;
-        --mv-button-padding: 10px;
+        --mv-button-min-width: 2.054vw;
+        --mv-button-padding: 0.734vw;
         --mv-button-color: #328cc0;
         --mv-button-custom-color: #E6E6E6;
       }

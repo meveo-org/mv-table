@@ -20,7 +20,7 @@ export default class MvTextFilter extends FilterTemplate {
     }
 
     .show {
-      max-height: 150px;
+      max-height: 11.005vw;
       transition: max-height 2s;
     }
     `;

@@ -13,9 +13,9 @@ export default class MvListFilter extends FilterTemplate {
   static get styles() {
     return css`
       mv-select {
-        --mv-select-font-size: 16px;
-        --mv-select-input-padding: 6.25px;
-        --mv-select-width: calc(100% - 14px);
+        --mv-select-font-size: 1.174vw;
+        --mv-select-input-padding: 0.459vw;
+        --mv-select-width: calc(100% - 1.027vw);
       }
     `;
   }

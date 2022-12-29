@@ -16,8 +16,8 @@ export class MvImageCell extends LitElement {
       :host {
         font-family: var(--font-family, Arial);
         font-size: var(--font-size-m, 10pt);
-        --width: var(--mv-table-image-width, 50px);
-        --height: var(--mv-table-image-height, 50px);
+        --width: var(--mv-table-image-width, 3.668vw);
+        --height: var(--mv-table-image-height, 3.668vw);
         --radius: var(--mv-table-image-border-radius, 50%);
       }
       

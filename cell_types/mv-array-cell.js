@@ -21,8 +21,8 @@ export class MvArrayCell extends LitElement {
       }
 
       ul.scrollbar {
-        width: calc(100% - 8px);
-        max-height: 66px;
+        width: calc(100% - 0.587vw);
+        max-height: 4.842vw;
         float: left;
         overflow-y: auto;
         margin: 0;
@@ -36,21 +36,21 @@ export class MvArrayCell extends LitElement {
       }
     
       ul.scrollbar::-webkit-scrollbar-track {
-        box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-        border-radius: 10px;
+        box-shadow: inset 0 0 0.44vw rgba(0, 0, 0, 0.3);
+        border-radius: 0.734vw;
         background-color: #788394;
       }
     
       ul.scrollbar::-webkit-scrollbar {
-        width: 8px;
-        height: 8px;
+        width: 0.587vw;
+        height: 0.587vw;
         background-color: #788394;
-        border-radius: 10px;
+        border-radius: 0.734vw;
       }
     
       ul.scrollbar::-webkit-scrollbar-thumb {
-        border-radius: 10px;
-        box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+        border-radius: 0.734vw;
+        box-shadow: inset 0 0 0.44vw rgba(0, 0, 0, 0.3);
         background-color: #5A6473;
       }
     
@@ -60,7 +60,7 @@ export class MvArrayCell extends LitElement {
       }
 
       ul.scrollbar.light::-webkit-scrollbar-track {
-        box-shadow: inset 0 0 5px 0 rgba(29, 155, 201, 0.3);
+        box-shadow: inset 0 0 0.367vw 0 rgba(29, 155, 201, 0.3);
         background-color: #EAEBF0 !important;
       }
   
@@ -69,7 +69,7 @@ export class MvArrayCell extends LitElement {
       }
   
       ul.scrollbar.light::-webkit-scrollbar-thumb {
-        box-shadow: inset 0 0 5px 0 rgba(29, 155, 201, 0.3);
+        box-shadow: inset 0 0 0.367vw 0 rgba(29, 155, 201, 0.3);
         background-color: #008FC3;
       }
     `;

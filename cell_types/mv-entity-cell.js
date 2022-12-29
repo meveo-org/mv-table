@@ -18,7 +18,7 @@ export class MvEntityCell extends LitElement {
         overflow: auto;
       }
       .entity-value ul {
-        padding: 10px 0;
+        padding: 0.734vw 0;
         margin: 0;
       }
     `;

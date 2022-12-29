@@ -48,7 +48,7 @@ export class MvPagination extends LitElement {
       }
 
       .mv-pagination-container {
-        margin-top: var(--pagination-group-top-margin, 10px);
+        margin-top: var(--pagination-group-top-margin, 0.734vw);
         display: flex;
         flex-direction: row;
       }
@@ -76,34 +76,34 @@ export class MvPagination extends LitElement {
         justify-content: space-evenly;
         align-items: center;
         background-color: var(--background-color);
-        border-radius: 55px;
-        margin: 0px 15px;
-        --mv-button-margin: 0 5px;
+        border-radius: 4.035vw;
+        margin: 0px 1.101vw;
+        --mv-button-margin: 0 0.367vw;
       }
 
       .button-group mv-button:first-child,
       .button-group mv-button:nth-child(2) {
-        --mv-button-margin: 0 5px 0 0;
+        --mv-button-margin: 0 0.367vw 0 0;
       }
 
       .button-group mv-button:last-child,
       .button-group mv-button:nth-last-child(2) {
-        --mv-button-margin: 0 0 0 5px;
+        --mv-button-margin: 0 0 0 0.367vw;
       }
 
       .page-buttons {
-        font-size: var(--font-size-m, 16px);
+        font-size: var(--font-size-m, 1.174vw);
         font-weight: var(--pagination-button-font-weight, normal);
       }
 
       .page-buttons.large {
-        font-size: var(--font-size-xxl, 24px);
+        font-size: var(--font-size-xxl, 1.761vw);
         font-weight: var(--pagination-button-font-weight-large, bold);
-        height: 24px;
-        width: 24px;
+        height: 1.761vw;
+        width: 1.761vw;
         display: inline-block;
         position: relative;
-        top: -6px;
+        top: -0.44vw;
       }
 
       .current-page {
