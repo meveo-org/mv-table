@@ -15,7 +15,7 @@ module.exports = {
   mode: 'development',
   output: {
     path: path.resolve(__dirname, '../docs'),
-    filename: 'demo-mv-select.js',
+    filename: 'demo-mv-table.js',
   },
   devServer: {
     hot: false,
