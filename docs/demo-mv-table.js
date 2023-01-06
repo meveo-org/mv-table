@@ -3335,7 +3335,7 @@
                     `))}
               ${r?a.dy`
                     <td class="action-header">
-                    ${this.columnPicker.getColumnPicker(this.columns)}
+                    ${null!=this.columnPicker?this.columnPicker.getColumnPicker(this.columns):null}
                     </td>
                   `:a.dy``}
             </tr>
