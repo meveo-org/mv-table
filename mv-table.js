@@ -748,9 +748,10 @@ export class MvTable extends LitElement {
               ${hasActionColumn
                 ? html`
                     <td class="action-header">
-                    ${this["columnPicker"].getColumnPicker(
+                    ${this["columnPicker"] != null ? 
+                      this["columnPicker"].getColumnPicker(
                             this.columns
-                          )}
+                          ) : null }
                     </td>
                   `
                 : html``}
