@@ -88,7 +88,8 @@ export class MvTable extends LitElement {
       filterValues: { type: Array, reflect: true },
       customTypes: { type: Object },
       position: { type: String},
-      isButtonVisible: { type: Boolean }
+      isButtonVisible: { type: Boolean },
+      "columnPicker": { type: Object },
     };
   }
 
@@ -98,7 +99,7 @@ export class MvTable extends LitElement {
         font-family: var(--font-family, Arial);
         --font-size: var(--font-size-s, 1rem);
         --font-size-s: 0.587vw;
-        --font-size-m: 0.954vw;
+        --font-size-m: 0.683vw;
         --td-light-color: var(--mv-table-td-light-color);
         --light-color: var(--mv-table-light-color);
         --table-header-font-family: var(
@@ -108,9 +109,8 @@ export class MvTable extends LitElement {
         --no-border-spacing: var(--mv-table-no-border-spacing);
         --mv-input-inactive-box-shadow: var(--mv-table-input-inactive-box-shadow);
         --mv-checkbox-shadow: var(--mv-table-checkbox-shadow);
-        --mv-checkbox-border-radius: 3px;
         --transparent-background: var(--mv-table-transparent-background);
-        --table-row-height: var(--mv-table-row-height, 4.842vw);
+        --table-row-height: var(--mv-table-row-height, 66px);
         --table-row-cursor: var(--mv-table-row-cursor, default);
         --table-td-font-size: var(--mv-table-td-font-size);
         --body-light-background: var(--mv-table-body-light-background);
@@ -118,16 +118,17 @@ export class MvTable extends LitElement {
           --mv-table-hover-light-background,
           #ededed
         );
-        --table-light-row-height: var(--mv-table-light-row-height)
+        --table-light-row-height: var(--mv-table-light-row-height);
+        --action-header-background: var(--mv-table-action-header-background);
         --head-dark-background: var(--mv-table-head-dark-background, #23404c);
         --body-dark-background: var(--mv-table-body-dark-background, #373e48);
         --hover-dark-background: var(--mv-table-hover-dark-background, #4e686d);
         --color: var(--mv-table-color);
-        --mv-button-padding: 0.367vw 0.367vw;
+        --mv-button-padding: 5px 5px;
         --input-border: var(--mv-input-border);
         --content-max-height: none;
         --mv-dropdown-content-max-height: max-content;
-        --mv-dropdown-min-width: 11.005vw;
+        --mv-dropdown-min-width: 200px;
         --mv-dropdown-content-overflow: visible;
         --mv-dropdown-light-border: none;
         --mv-input-box-padding: none;
@@ -138,26 +139,26 @@ export class MvTable extends LitElement {
 
       .advancedFilter > mv-select {
         /* mv-select */
-        --mv-select-max-height: 1.467vw;
-        --mv-select-selected-option-font-size: 0.734vw;
+        --mv-select-max-height: 20px;
+        --mv-select-selected-option-font-size: 10px;
         --mv-select-background-color: #328cc0;
         --mv-select-option-background: #328cc0;
         --mv-select-color: white;
-        --mv-select-width: 6.603vw;
+        --mv-select-width: 90px;
         --mv-select-border: none;
         --mv-select-font-size: var(--font-size-s);
-        --mv-select-input-padding: 0.073vw 0.293vw;
-        --mv-select-selected-option-font-size: 0.587vw;
+        --mv-select-input-padding: 1px 4px;
+        --mv-select-selected-option-font-size: 8px;
       }
 
       *::-webkit-scrollbar {
-            width: 1.981vw;
-            height: 2.201vw;
+            width: 27px;
+            height: 30px;
         }
         *::-webkit-scrollbar-track {
-          border-radius: 0.22vw;
+          border-radius: 3px;
           background-color: #CECECE;
-          border: 0.734vw solid #FFFFFF;
+          border: 10px solid #FFFFFF;
         }
         *::-webkit-scrollbar-track:hover {
             background-color: #B8C0C2;
@@ -166,9 +167,9 @@ export class MvTable extends LitElement {
             background-color: #B8C0C2;
         }   
         *::-webkit-scrollbar-thumb {
-            border-radius: 1.174vw;
+            border-radius: 16px;
             background-color: #676767;
-            border: 0.734vw solid #FFFFFF;
+            border: 10px solid #FFFFFF;
         }
         *::-webkit-scrollbar-thumb:hover {
             background-color: #328cc0
@@ -177,7 +178,8 @@ export class MvTable extends LitElement {
             background-color: #328cc0
         }
         .action-header {
-          text-align: center;
+          background-color: var(--action-header-background);
+          padding-left: 0px;
         }
         .action-header>span:hover {
           color: var(--hover-color);
@@ -190,17 +192,17 @@ export class MvTable extends LitElement {
           flex-direction: row;
           align-items: center;
           justify-content: space-around;
-          max-height: 1.321vw;
+          max-height: 18px;
         }
         
         .advancedFilter > * {
-          margin: 0.293vw;
+          margin: 4px;
         }
         .advancedFilter mv-input {
           border: var(--input-border);
-          --mv-input-min-width: 5.869vw;
-          width: 6.603vw;
-          --mv-input-max-width: 6.603vw;
+          --mv-input-min-width: 80px;
+          width: 90px;
+          --mv-input-max-width: 90px;
         }
         .button_container {
           text-align: end;
@@ -213,13 +215,14 @@ export class MvTable extends LitElement {
         }
         .cell_container>table-actions {
           margin: auto;
+          width: 100%;
         }
         .checkbox {
-          width: 0.367vw;
+          width: 5px;
         }
         .container_progressbar {
-          padding-top: 2.201vw;
-          padding-bottom: 2.201vw;
+          padding-top: 30px;
+          padding-bottom: 30px;
         }
         .dark {
           --head-background: var(--head-dark-background);
@@ -230,8 +233,8 @@ export class MvTable extends LitElement {
           --mv-checkbox-border-color: var(--color);
           --mv-table-url-color: var(--td-color);
           --border-colapse: collapse;
-          --table-head-height: var(--mv-table-head-height, 4.402vw);
-          --table-row-height: var(--mv-table-row-height, 4.842vw);
+          --table-head-height: var(--mv-table-head-height, 60px);
+          --table-row-height: var(--mv-table-row-height, 66px);
           --head-first-child-radius:var(--mv-table-head-classic-first-radius);
           --body-td-first-child-radius: var(--mv-table-head-classic-first-radius);
           --head-last-child-radius:var(--mv-table-head-classic-last-radius);
@@ -241,9 +244,9 @@ export class MvTable extends LitElement {
         .header_menu {
           text-transform: none;
           font-weight: normal;
-          font-size: 0.734vw;
-          padding-left: 0.734vw !important;
-          padding-right: 0.734vw !important;
+          font-size: 10px;
+          padding-left: 10px !important;
+          padding-right: 10px !important;
         }
         .header_menu > div {
           width: 8.437vw;
@@ -264,8 +267,8 @@ export class MvTable extends LitElement {
           --mv-checkbox-border-color: var(--color);
           --mv-table-url-color: var(--td-color);
           --border-colapse: var(--mv-table-border-colapse, collapse)
-          --table-head-height: var(--mv-table-head-height, 4.402vw);
-          --table-row-height: var(--mv-table-row-height, 4.842vw);
+          --table-head-height: var(--mv-table-head-height, 60px);
+          --table-row-height: var(--mv-table-row-height, 66px);
           --head-first-child-radius: var(--mv-table-head-light-first-radius);
           --head-last-child-radius: var(--mv-table-head-light-last-radius);
           --body-td-first-child-radius: var(--mv-table-head-light-first-radius);
@@ -281,13 +284,14 @@ export class MvTable extends LitElement {
           color: #FFFFFF;
         }
         .mv-input.box {
-          box-shadow: inset 0.073vw 0.147vw 0.22vw rgba(0, 0, 0, 0.15);
+          box-shadow: inset 1px 2px 3px rgba(0, 0, 0, 0.15);
         }
         .mv-table-container {
           width: 100%;
           max-height: 78%;
+          overflow-x: auto;
           overflow-y: var(--table-overflow-y);
-          min-height: 22.01vw;
+          min-height: 300px;
         }
         
         .no-data {
@@ -318,20 +322,20 @@ export class MvTable extends LitElement {
         }
         .subMenu {
           position: absolute;
-          left: calc(var(--mv-dropdown-min-width) + 0.734vw);
-          top: -1.834vw;
+          left: calc(var(--mv-dropdown-min-width) + 10px);
+          top: -25px;
           min-width: max-content;
-          width: calc(max-content + 2.935vw);
+          width: calc(max-content + 40px);
           color: var(--mv-dropdown-light-color, #328cc0);
           background: var(--mv-dropdown-background, #3f4753);
-          border-radius: 0.367vw;
+          border-radius: 5px;
           border: none;
-          padding: 0.367vw;
-          font-size: 0.734vw;
+          padding: 5px;
+          font-size: 10px;
       }
         .subMenu div,
         .header_menu div {
-          margin-bottom: 0.367vw;
+          margin-bottom: 5px;
         }
         .table-container {
         max-height: 85%;
@@ -347,7 +351,7 @@ export class MvTable extends LitElement {
           margin-left: 2.201vw;
         }
         div.progress_container {
-          line-height: 2.935vw !important;
+          line-height: 40px !important;
         }
         hr {
           background-color: white;
@@ -396,7 +400,7 @@ export class MvTable extends LitElement {
         }
         td {
           border-bottom: none;
-          padding: 0 1.101vw 0 1.101vw;
+          padding: 0 15px 0 15px;
           text-align: left;
           overflow: initial;
           white-space: nowrap;
@@ -413,10 +417,10 @@ export class MvTable extends LitElement {
         * ? Si filtre appliqué sur la colonne (class filtered)
         */
         .filtered {
-          border-radius: 10.293vw;
+          border-radius: 14px;
           background-color: #317297 !important;
           height: var(--table-row-height);
-          padding: 0 0.587vw 0 0.587vw;
+          padding: 0 8px 0 8px;
         }
 
         .display-middle {
@@ -435,7 +439,7 @@ export class MvTable extends LitElement {
           vertical-align: top;
         }
         td.is-loading {
-          height: 5.869vw !important;
+          height: 80px !important;
         }
         thead {
           margin: auto;
@@ -472,17 +476,17 @@ export class MvTable extends LitElement {
           border-radius: var(--head-last-child-radius);
         }
         tr {
-          max-height: 1.908vw;
-          height: 1.908vw;
+          max-height: 26px;
+          height: 26px;
           // 8 because, need to pass under thead, and thead have 9 in z-index
           z-index: 8;
         }
         tr.is-loading {
-          height: 5.869vw !important;
+          height: 80px !important;
         }
 
         ul {
-          padding: 0 0.734vw;
+          padding: 0 10px;
         }
         
         .locked {
@@ -497,6 +501,7 @@ export class MvTable extends LitElement {
 
   constructor() {
     super();
+    this["columnPicker"] = null;
     this.pagination = {};
     this.formFields = [];
     this.pages = 1;
@@ -537,7 +542,7 @@ export class MvTable extends LitElement {
     } = props;
 
     if (render) {
-      return render(row[name])
+      return render(props)
     }
 
     return this.CELL_TYPES(props)[type] || this.CELL_TYPES(props)["TEXT"]
@@ -587,9 +592,8 @@ export class MvTable extends LitElement {
     };
 
     customCell ? defaultCellTypes[column.code] = customCell : null
-
     if(column.render) {
-
+      defaultCellTypes[column.code] = customCell
     } else {
       defaultCellTypes;
     }
@@ -744,7 +748,9 @@ export class MvTable extends LitElement {
               ${hasActionColumn
                 ? html`
                     <td class="action-header">
-                      ${this["action-column"].label}
+                    ${this["columnPicker"].getColumnPicker(
+                            this.columns
+                          )}
                     </td>
                   `
                 : html``}
@@ -892,7 +898,6 @@ export class MvTable extends LitElement {
     const { detail: { option }, } = event;
     this.filterType = option.value;
   }
-
 
   handleSort = (column, direction) => (originalEvent) => {
     const sortOrder = this["sort-order"] || {};
