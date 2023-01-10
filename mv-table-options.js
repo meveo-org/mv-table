@@ -20,9 +20,11 @@ export class MvTableOptions extends LitElement {
       //  valid theme values are: "light", "dark"
       // default : "light"
       theme: { type: String, attribute: true },
+      actions: { type: Object, attribute: false },
       columns: { type: Object, reflect: true },
       displayed: { type: Boolean },
-      isButtonVisible: { type: Boolean}
+      isButtonVisible: { type: Boolean},
+      selectedRows: { type: Array, reflect: true }
     };
   }
 
@@ -55,6 +57,14 @@ export class MvTableOptions extends LitElement {
         display: flex;
         flex-basis: 33%;
         height:100%;
+      }
+
+      .container div.custom-actions {
+        display: flex;
+        flex-direction: row;
+        //justify-content: space-evenly;
+        align-items: center;
+        font-size: 20px;
       }
 
       .rows-per-page {
@@ -117,19 +127,11 @@ export class MvTableOptions extends LitElement {
     this.columns = {};
     this.displayed = true;
     this.maxButtons = 5;
-    this.isButtonVisible = true;
+    this.isButtonVisible = false;
+    this.actions= {};
+    this.selectedRows = [];
   }
-  
-  selectColumn = (group, item) => (event) => {
-    item.displayed = event.detail.checked;
-    this.dispatchEvent(
-      new CustomEvent('changeColumnsDiplayed', {
-        detail: { group, item, ...event.detail },
-        bubbles: true,
-        composed: true
-      }),
-    )
-  }
+
 
   /**
   * ? Fonctions pour le choix des colonnes à afficher
@@ -158,6 +160,18 @@ export class MvTableOptions extends LitElement {
       </li> 
     `
   }
+
+  selectColumn = (group, item) => (event) => {
+    item.displayed = event.detail.checked;
+    this.dispatchEvent(
+      new CustomEvent('changeColumnsDiplayed', {
+        detail: { group, item, ...event.detail },
+        bubbles: true,
+        composed: true
+      }),
+    )
+  }
+
 
   /**
   * ? Fonctions pour le choix du nombre de lignes affichées
@@ -209,25 +223,10 @@ export class MvTableOptions extends LitElement {
     return html`
       ${this.displayed ? html`
         <div class="container">
-        <div class="choose-columns">
-          <mv-dropdown
-              container
-              justify="left"
-              position="bottom"
-              theme="${this.theme}"
-            >
-            <mv-dropdown trigger>
-              <mv-tooltip position="right">
-                <mv-button
-                  class="small-button"
-                >
-                  <mv-fa icon="sliders-h"></mv-fa>
-                </mv-button>
-                <span slot="tooltip-content">${ msg('Show or hide columns', {id: 'listContent.showOrHide'}) }</span>
-              </mv-tooltip>
-            </mv-dropdown>
-            ${this.renderFieldGroup(null)}
-          </mv-dropdown>
+        <div class="custom-actions">
+          ${this.isButtonVisible ? 
+            this.actions.label
+          : null }
 
         </div>
         <div class="pagination ${this.theme}">
