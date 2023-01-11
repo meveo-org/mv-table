@@ -501,7 +501,6 @@ export class MvTable extends LitElement {
 
   constructor() {
     super();
-    this["columnPicker"] = null;
     this.pagination = {};
     this.formFields = [];
     this.pages = 1;
@@ -748,10 +747,7 @@ export class MvTable extends LitElement {
               ${hasActionColumn
                 ? html`
                     <td class="action-header">
-                    ${this["columnPicker"] != null ? 
-                      this["columnPicker"].getColumnPicker(
-                            this.columns
-                          ) : null }
+                      <slot name="columnPicker"></slot>
                     </td>
                   `
                 : html``}
@@ -1100,7 +1096,7 @@ export class MvTable extends LitElement {
           removed,
           added,
           selected: this.selection,
-        },
+        }
       })
     );
   };

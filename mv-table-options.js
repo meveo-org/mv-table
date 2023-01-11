@@ -132,7 +132,6 @@ export class MvTableOptions extends LitElement {
     this.selectedRows = [];
   }
 
-
   /**
   * ? Fonctions pour le choix des colonnes à afficher
   */
@@ -171,7 +170,6 @@ export class MvTableOptions extends LitElement {
       }),
     )
   }
-
 
   /**
   * ? Fonctions pour le choix du nombre de lignes affichées
@@ -227,7 +225,6 @@ export class MvTableOptions extends LitElement {
           ${this.isButtonVisible ? 
             this.actions.label
           : null }
-
         </div>
         <div class="pagination ${this.theme}">
           <slot name="pagination">
