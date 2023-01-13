@@ -135,6 +135,7 @@ export class MvTable extends LitElement {
         --font-size: 0.734vw;
         --mv-input-font-size: 0.734vw;
         --mv-table-input-box-padding: 0.073vw;
+        --tr-max-height: var(--mv-table-tr-max-height, 30px);
       }
 
       .advancedFilter > mv-select {
@@ -476,7 +477,7 @@ export class MvTable extends LitElement {
           border-radius: var(--head-last-child-radius);
         }
         tr {
-          max-height: 26px;
+          max-height: var(--tr-max-height);
           height: 26px;
           // 8 because, need to pass under thead, and thead have 9 in z-index
           z-index: 8;
