@@ -2665,6 +2665,8 @@
         top: 0px;
         z-index: 20;
         --mv-button-font-size: 14px;
+        --body-dark-background: var(--mv-table-body-dark-background, #373e48);
+        --body-light-background: var(--mv-table-body-light-background);
       }
 
       .light {
@@ -2787,7 +2789,7 @@
     </div>
   `;changeRowsPerPage=e=>{const{detail:{option:t}}=e;this.selectedRowsPerPage=t,this.rowsPerPage=t.value,this.dispatchEvent(new CustomEvent("changeRowsPerPage",{detail:{option:t,value:this.rowsPerPage},bubbles:!0,composed:!0}))};gotoPage=e=>{this.dispatchEvent(new CustomEvent("change-page",{detail:{event:e},bubbles:!0,composed:!0}))};render(){return a.dy`
       ${this.displayed?a.dy`
-        <div class="container${this.theme}">
+        <div class="container ${this.theme}">
         <div class="custom-actions">
           ${this.isButtonVisible?this.actions.label:null}
         </div>
