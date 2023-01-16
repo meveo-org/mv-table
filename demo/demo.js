@@ -217,6 +217,7 @@ export class MvTableDemo extends LitElement {
           </ul>
 
           <mv-table-options
+            .theme="${theme}"
             .columns="${this.columns}"
             .isButtonVisible="${this.isButtonVisible}"
             @changeRowsPerPage="${this.changeRowPerPage}"

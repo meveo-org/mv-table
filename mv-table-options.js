@@ -41,6 +41,24 @@ export class MvTableOptions extends LitElement {
         --mv-button-font-size: 1.027vw;
       }
 
+      .light {
+          --head-background: var(--head-light-background);
+          --body-background: var(--body-light-background);
+          --hover-background: var(--hover-light-background);
+          --color: var(--light-color, #80828c);
+          --hover-color: #5c5e65;
+          --mv-checkbox-border-color: var(--color);
+        }
+
+      .dark {
+          --head-background: var(--head-dark-background);
+          --body-background: var(--body-dark-background);
+          --hover-background: var(--hover-dark-background);
+          --color: var(--dark-color, #ffffff);
+          --hover-color: #b3b3b3;
+          --mv-checkbox-border-color: var(--color);
+        }
+
       ul {
         padding-inline-start: 0.734vw !important;
       }
@@ -50,7 +68,7 @@ export class MvTableOptions extends LitElement {
         justify-content: space-evenly;
         height: 6.603vw;
         max-height: 10.734vw;
-        background-color: white;
+        background-color: var(--body-background, white);
       }
 
       .container div {
@@ -179,6 +197,7 @@ export class MvTableOptions extends LitElement {
     <div class="rows-per-page">
       <span>${ msg("Show", {id: 'listContent.show'}) } </span>
       <mv-select
+        .theme="${this.theme}"
         .value="${this.selectedRowsPerPage}"
         .options="${ROWS_PER_PAGE}"
         @select-option="${this.changeRowsPerPage}"
@@ -218,6 +237,7 @@ export class MvTableOptions extends LitElement {
   }
 
   render() {
+    console.log("theme: ", theme)
     return html`
       ${this.displayed ? html`
         <div class="container">
