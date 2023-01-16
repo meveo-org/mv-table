@@ -39,6 +39,8 @@ export class MvTableOptions extends LitElement {
         top: 0px;
         z-index: 20;
         --mv-button-font-size: 1.027vw;
+        --body-dark-background: var(--mv-table-body-dark-background, #373e48);
+        --body-light-background: var(--mv-table-body-light-background);
       }
 
       .light {
@@ -240,7 +242,7 @@ export class MvTableOptions extends LitElement {
     console.log("theme: ", this.theme)
     return html`
       ${this.displayed ? html`
-        <div class="container">
+        <div class="container ${this.theme}">
         <div class="custom-actions">
           ${this.isButtonVisible ? 
             this.actions.label
