@@ -2785,7 +2785,7 @@
       ></mv-select>
       <span> rows</span>
     </div>
-  `;changeRowsPerPage=e=>{const{detail:{option:t}}=e;this.selectedRowsPerPage=t,this.rowsPerPage=t.value,this.dispatchEvent(new CustomEvent("changeRowsPerPage",{detail:{option:t,value:this.rowsPerPage},bubbles:!0,composed:!0}))};gotoPage=e=>{this.dispatchEvent(new CustomEvent("change-page",{detail:{event:e},bubbles:!0,composed:!0}))};render(){return console.log("theme: ",theme),a.dy`
+  `;changeRowsPerPage=e=>{const{detail:{option:t}}=e;this.selectedRowsPerPage=t,this.rowsPerPage=t.value,this.dispatchEvent(new CustomEvent("changeRowsPerPage",{detail:{option:t,value:this.rowsPerPage},bubbles:!0,composed:!0}))};gotoPage=e=>{this.dispatchEvent(new CustomEvent("change-page",{detail:{event:e},bubbles:!0,composed:!0}))};render(){return console.log("theme: ",this.theme),a.dy`
       ${this.displayed?a.dy`
         <div class="container">
         <div class="custom-actions">
