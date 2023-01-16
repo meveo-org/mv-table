@@ -2785,9 +2785,9 @@
       ></mv-select>
       <span> rows</span>
     </div>
-  `;changeRowsPerPage=e=>{const{detail:{option:t}}=e;this.selectedRowsPerPage=t,this.rowsPerPage=t.value,this.dispatchEvent(new CustomEvent("changeRowsPerPage",{detail:{option:t,value:this.rowsPerPage},bubbles:!0,composed:!0}))};gotoPage=e=>{this.dispatchEvent(new CustomEvent("change-page",{detail:{event:e},bubbles:!0,composed:!0}))};render(){return console.log("theme: ",this.theme),a.dy`
+  `;changeRowsPerPage=e=>{const{detail:{option:t}}=e;this.selectedRowsPerPage=t,this.rowsPerPage=t.value,this.dispatchEvent(new CustomEvent("changeRowsPerPage",{detail:{option:t,value:this.rowsPerPage},bubbles:!0,composed:!0}))};gotoPage=e=>{this.dispatchEvent(new CustomEvent("change-page",{detail:{event:e},bubbles:!0,composed:!0}))};render(){return a.dy`
       ${this.displayed?a.dy`
-        <div class="container">
+        <div class="container${this.theme}">
         <div class="custom-actions">
           ${this.isButtonVisible?this.actions.label:null}
         </div>
