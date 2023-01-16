@@ -2700,9 +2700,14 @@
       }
 
       .container div {
-        display: flex;
+        //display: flex;
         flex-basis: 33%;
+        align-self: center;
         height:100%;
+      }
+
+      .right_align {
+        float: right;
       }
 
       .container div.custom-actions {
@@ -2734,6 +2739,7 @@
       .displayed-rows {
         justify-content: right;
         flex-grow: 2;
+        float: right;
       }
 
 
