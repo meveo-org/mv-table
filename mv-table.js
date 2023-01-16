@@ -613,7 +613,7 @@ export class MvTable extends LitElement {
     this.isAllSelected = this.hasAllSelected();
     return html`
       <div id="mv-table-container" class="mv-table-container${sortableClass} ${this.theme}">
-      ${this.selection.selectAll == true ? html`<div style="text-align: center"><span style="color: red">ATTENTION TOUTES</span> les lignes sont sélectionnées</div>` : this.selection.selectedRows.length ? html`<div style="text-align: center">${this.selection.selectedRows.length} lignes sélectionnées</div>` : null}
+      ${this.selection.selectAll == true ? html`<div style="text-align: center; background-color: var(--body-background)" class="${this.theme}"><span style="color: red">ATTENTION TOUTES</span> les lignes sont sélectionnées</div>` : this.selection.selectedRows.length ? html`<div style="text-align: center">${this.selection.selectedRows.length} lignes sélectionnées</div>` : null}
         <table>
           <thead>
             <tr id="table_header">

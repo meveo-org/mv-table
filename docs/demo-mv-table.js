@@ -2685,6 +2685,7 @@
           --color: var(--dark-color, #ffffff);
           --hover-color: #b3b3b3;
           --mv-checkbox-border-color: var(--color);
+          color: #ffffff;
         }
 
       ul {
@@ -2704,6 +2705,7 @@
         flex-basis: 33%;
         align-self: center;
         height:100%;
+        float: right;
       }
 
       .right_align {
@@ -2739,7 +2741,6 @@
       .displayed-rows {
         justify-content: right;
         flex-grow: 2;
-        float: right;
       }
 
 
@@ -3234,7 +3235,7 @@
         ></mv-url-cell>
       `};return h&&(b[o.code]=h),o.render&&(b[o.code]=h),b}render(){console.log("Render");const e=this.withCheckbox,t=this["row-actions"],o=t&&t.length>0,r=!!this["action-column"]||o,i=this.sortable?" sortable":"",{datePattern:s}=this,l=this.columns.filter((e=>!1!==e.displayed));return this.isPageSelected=this.hasPageSelected(),this.isAllSelected=this.hasAllSelected(),a.dy`
       <div id="mv-table-container" class="mv-table-container${i} ${this.theme}">
-      ${1==this.selection.selectAll?a.dy`<div style="text-align: center"><span style="color: red">ATTENTION TOUTES</span> les lignes sont sélectionnées</div>`:this.selection.selectedRows.length?a.dy`<div style="text-align: center">${this.selection.selectedRows.length} lignes sélectionnées</div>`:null}
+      ${1==this.selection.selectAll?a.dy`<div style="text-align: center; background-color: var(--body-background)" class="${this.theme}"><span style="color: red">ATTENTION TOUTES</span> les lignes sont sélectionnées</div>`:this.selection.selectedRows.length?a.dy`<div style="text-align: center">${this.selection.selectedRows.length} lignes sélectionnées</div>`:null}
         <table>
           <thead>
             <tr id="table_header">
