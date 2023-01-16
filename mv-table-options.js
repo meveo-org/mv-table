@@ -237,7 +237,7 @@ export class MvTableOptions extends LitElement {
   }
 
   render() {
-    console.log("theme: ", theme)
+    console.log("theme: ", this.theme)
     return html`
       ${this.displayed ? html`
         <div class="container">
