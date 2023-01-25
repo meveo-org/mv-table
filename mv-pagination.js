@@ -8,7 +8,7 @@ export class MvPagination extends LitElement {
       pages: { type: Number, attribute: true, reflect: true },
 
       // max-buttons must be an odd number >= 3, default 5
-      "max-buttons": { type: Number, attribute: true, reflect: true },
+      maxButtons: { type: Number, attribute: "max-button", reflect: true },
       // valid justify values are: "left", "right", or "center", default "center"
       justify: { type: String, attribute: true, reflect: true },
       // valid type values are: "button", "text", or "none", default "button"

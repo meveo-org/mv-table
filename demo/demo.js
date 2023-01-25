@@ -226,8 +226,9 @@ export class MvTableDemo extends LitElement {
             <mv-pagination
                 slot="pagination"
                 type="text"
-                .page="${this.page}"
-                .pages="${this.pages}"
+                max-button="1"
+                page="${this.page}"
+                pages="${this.pages}"
                 @change-page="${this.gotoPage}"
                 .theme="${theme}"
               ></mv-pagination>
@@ -252,8 +253,8 @@ export class MvTableDemo extends LitElement {
           ></mv-table>
 
           <mv-pagination
-            .page="${this.page}"
-            .pages="${this.pages}"
+            page="${this.page}"
+            pages="${this.pages}"
             @change-page="${this.gotoPage}"
             .theme="${theme}"
           ></mv-pagination>
