@@ -45,85 +45,104 @@ export class MvPagination extends LitElement {
           --mv-pagination-hover-dark-background,
           #007fad
         );
+        --pagination-width: var(--mv-pagination-width);
+        --pagination-min-width: var(--mv-pagination-min-width);
+        --pagination-height: var(--mv-pagination-height);
+        --pagination-display: var(--mv-pagination-display);
+        --pagination-align-items: var(--mv-pagination-align-items);
+        --pagination-span-justify-content: var(--mv---pagination-span-justify-content);
+        --pagination-current-page-margin: var(--mv-pagination-current-page-margin);
+        --pagination-current-page-padding: var(--mv-pagination-current-page-padding);
+        --pagination-current-page-background-color: var(--mv-pagination-current-page-background-color);
+        --pagination-current-page-border-radius: var(--mv-pagination-current-page-border-radius);
+        --pagination-current-page-font-weight: var(--mv-pagination-current-page-font-weight);
+        --mv-pagination-container-height: var(--mv-pagination-container-light-height);
+        --pagination-group-top-margin: var(--mv-pagination-group-top-margin);
       }
-
       .mv-pagination-container {
-        margin-top: var(--pagination-group-top-margin, 0.734vw);
+        margin-top: var(--pagination-group-top-margin, 10px);
         display: flex;
         flex-direction: row;
+        height: var(--mv-pagination-container-height);
       }
-
       .mv-pagination-container.left {
         justify-content: flex-start;
       }
-
       .mv-pagination-container.center {
         justify-content: center;
       }
-
       .mv-pagination-container.right {
         justify-content: flex-end;
       }
-
       .mv-pagination-group {
         display: flex;
         align-items: center;
-        justify-content: space-evenly;
+        width: var(--pagination-width);
+        justify-content: var(--mv-pagination-justify-content);
       }
-
       .button-group {
         display: flex;
         justify-content: space-evenly;
         align-items: center;
         background-color: var(--background-color);
-        border-radius: 4.035vw;
-        margin: 0px 1.101vw;
-        --mv-button-margin: 0 0.367vw;
+        border-radius: 55px;
+        margin: 0px 15px;
+        --mv-button-margin: 0 5px;
       }
-
       .button-group mv-button:first-child,
       .button-group mv-button:nth-child(2) {
-        --mv-button-margin: 0 0.367vw 0 0;
+        --mv-button-margin: 0 5px 0 0;
       }
-
       .button-group mv-button:last-child,
       .button-group mv-button:nth-last-child(2) {
-        --mv-button-margin: 0 0 0 0.367vw;
+        --mv-button-margin: 0 0 0 5px;
       }
-
       .page-buttons {
-        font-size: var(--font-size-m, 1.174vw);
+        font-size: var(--font-size-m, 0.88vw);
         font-weight: var(--pagination-button-font-weight, normal);
       }
-
       .page-buttons.large {
-        font-size: var(--font-size-xxl, 1.761vw);
+        font-size: var(--font-size-xxl, 24px);
         font-weight: var(--pagination-button-font-weight-large, bold);
-        height: 1.761vw;
-        width: 1.761vw;
+        height: 24px;
+        width: 24px;
         display: inline-block;
         position: relative;
-        top: -0.44vw;
+        top: -6px;
       }
-
       .current-page {
         color: var(--mv-pagination-current-page-color);
+        width: var(--pagination-width);
+        min-width: var(--pagination-min-width);
+        height: var(--pagination-height);
+        display: var(--pagination-display);
+        align-items: var(--pagination-align-items);
+        justify-content: var(--pagination-span-justify-content);
+        margin: var(--pagination-current-page-margin);
+        padding: var(--pagination-current-page-padding);
+        background-color: var(--pagination-current-page-background-color);
+        border-radius: var(--pagination-current-page-border-radius);
+        font-weight: var(--pagination-current-page-font-weight);
       }
-
       .light {
         --mv-button-circle-background: var(--light-background);
         --mv-button-light-background: var(--selected-light-background);
         --background-color: var(--light-background);
         --mv-button-circle-hover-background: var(--hover-light-background);
         --mv-button-circle-color: var(--light-color);
+        --width: var(--pagination-width, auto);
+        --mv-pagination-justify-content: var(--mv-pagination-light-justify-content, space-evenly);
+        --mv-pagination-current-page-color: var(--mv-pagination-current-page-text-color, black);
       }
-
       .dark {
         --mv-button-circle-background: var(--dark-background);
         --mv-button-light-background: var(--selected-dark-background);
         --background-color: var(--dark-background);
         --mv-button-circle-hover-background: var(--hover-dark-background);
         --mv-button-circle-color: var(--dark-color);
+        --width: var(--pagination-width, auto);
+        --mv-pagination-justify-content: space-evenly;
+        --mv-pagination-current-page-color: white;
       }
     `;
   }
@@ -169,7 +188,6 @@ export class MvPagination extends LitElement {
                   <span class="page-buttons large">&laquo;</span>
                 </slot>
               </mv-button>
-
               <mv-button
                 @button-clicked="${this.gotoPage(this.page - 1)}"
                 ?disabled="${isFirstPage}"
@@ -179,7 +197,6 @@ export class MvPagination extends LitElement {
                   <span class="page-buttons large">&lsaquo;</span>
                 </slot>
               </mv-button>
-
               ${this.type === "text"
                 ? html`
                     <span class="current-page">
@@ -187,8 +204,7 @@ export class MvPagination extends LitElement {
                     </span>
                   `
                 : html``}
-
-              ${this.type === "button"
+              ${this.isButtonType
                 ? html`
                     <div class="button-group">
                       <mv-button
@@ -199,7 +215,6 @@ export class MvPagination extends LitElement {
                       >
                         <span class="page-buttons">1</span>
                       </mv-button>
-
                       ${this.showLeftSeparator
                         ? html` <span class="page-buttons">...</span> `
                         : html``}
@@ -218,7 +233,6 @@ export class MvPagination extends LitElement {
                       ${this.showRightSeparator
                         ? html` <span class="page-buttons">...</span> `
                         : html``}
-
                       <mv-button
                         @button-clicked="${this.gotoPage(this.pages)}"
                         ?disabled="${isLastPage}"
@@ -239,7 +253,6 @@ export class MvPagination extends LitElement {
                   <span class="page-buttons large">&rsaquo;</span>
                 </slot>
               </mv-button>
-
               <mv-button
                 @button-clicked="${this.gotoPage(this.pages)}"
                 ?disabled="${isLastPage}"
