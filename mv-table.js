@@ -26,43 +26,39 @@ const SELECT_ALL = { id: 'all', value: 'all' }
 export class MvTable extends LitElement {
   selectFilter = [{
     label: msg('Est égale à ...', {id: 'table.equalsFilter'}),
-    value: "="
+    value: ""
   }, {
     label: msg('Est different de ...', {id: 'table.differentFilter'}),
-    value: "!="
+    value: "ne"
   }]
 
   selectFilterString = [{
     label: msg('Contient', {id: 'table.containsFilter'}),
-    value: "contain"
-  },
-  {
-    label: msg('Ne contient pas', {id: 'table.notContainsFilter'}),
-    value: "notContain"
+    value: "likeCriterias"
   }]
   selectFilterNum = [{
     label: msg('Supérieur à ...', {id: 'table.moreThanFilter'}),
-    value: ">"
+    value: "fromRange"
   },
   {
     label: msg('Inférieur à ...', {id: 'table.lessThanFilter'}),
-    value: "<"
+    value: "toRange"
   }, 
   {
     label: msg('Entre', {id: 'table.betweenFilter'}),
-    value: "between"
+    value: "inList"
   }]
   selectFilterDate = [{
     label: msg('Avant ...', {id: 'table.beforeFilter'}),
-    value: "before"
+    value: "toRange"
   },
   {
     label: msg('Après ...', {id: 'table.afterFilter'}),
-    value: "after"
+    value: "fromRange"
   },
   {
     label: msg('Entre', {id: 'table.betweenFilter'}),
-    value: "between"
+    value: "minmaxRange"
   }]
 
   static get properties() {
@@ -85,11 +81,10 @@ export class MvTable extends LitElement {
       "sort-order": { type: Object, attribute: false },
       sortable: { type: Boolean, attribute: true },
       dataIsLoading: { type: Boolean },
-      filterValues: { type: Array, reflect: true },
+      filterValues: { type: Object, reflect: true },
       customTypes: { type: Object },
       position: { type: String},
       isButtonVisible: { type: Boolean },
-      "columnPicker": { type: Object },
     };
   }
 
@@ -414,9 +409,7 @@ export class MvTable extends LitElement {
           border: var(--mv-table-body-td-border);
           border-style: var(--mv-table-body-td-border-style);
         }
-        /**
-        * ? Si filtre appliqué sur la colonne (class filtered)
-        */
+
         .filtered {
           border-radius: 14px;
           background-color: #317297 !important;
@@ -505,8 +498,8 @@ export class MvTable extends LitElement {
     this.pagination = {};
     this.formFields = [];
     this.pages = 1;
-    this.filterValues = [];
-    this.filterType = "=";
+    this.filterValues = {};
+    this.filterType = "";
     this.filterValue = "";
     this.columns = [];
     this.rows = [];
@@ -613,7 +606,7 @@ export class MvTable extends LitElement {
     this.isAllSelected = this.hasAllSelected();
     return html`
       <div id="mv-table-container" class="mv-table-container${sortableClass} ${this.theme}">
-      ${this.selection.selectAll == true ? html`<div style="text-align: center; background-color: var(--body-background)" class="${this.theme}"><span style="color: red">ATTENTION TOUTES</span> les lignes sont sélectionnées</div>` : this.selection.selectedRows.length ? html`<div style="text-align: center">${this.selection.selectedRows.length} lignes sélectionnées</div>` : null}
+      ${this.selection.selectAll == true ? html`<div style="text-align: center"><span style="color: red">ATTENTION TOUTES</span> les lignes sont sélectionnées</div>` : this.selection.selectedRows.length ? html`<div style="text-align: center">${this.selection.selectedRows.length} lignes sélectionnées</div>` : null}
         <table>
           <thead>
             <tr id="table_header">
@@ -671,10 +664,10 @@ export class MvTable extends LitElement {
                 this.sortable
                   ? html`
                     <td>
-                      <div class="title ${this.filterValues.find(elt => elt.hasOwnProperty(column.name)) && this.hasActiveFilter ? 'filtered' : '' }">
-                        <div class="${this.filterValues.find(elt => elt.hasOwnProperty(column.name)) && this.hasActiveFilter ? 'display-middle' : '' }" style="width: calc(100% - 1.467vw)">${column.title}</div> 
+                      <div class="title ${this.filterValues.hasOwnProperty(column.name) && this.hasActiveFilter ? 'filtered' : '' }">
+                        <div class="${this.filterValues.hasOwnProperty(column.name) && this.hasActiveFilter ? 'display-middle' : '' }" style="width: calc(100% - 1.467vw)">${column.title}</div>
                         ${column.filter ? html`
-                        <span class="dropdown-trigger ${this.filterValues.find(elt => elt.hasOwnProperty(column.name)) && this.hasActiveFilter ? 'display-middle' : '' }">
+                        <span class="dropdown-trigger ${this.filterValues.hasOwnProperty(column.name) && this.hasActiveFilter ? 'display-middle' : '' }">
                         <mv-dropdown
                           container
                             justify="right"
@@ -841,10 +834,10 @@ export class MvTable extends LitElement {
   };
 
   clearFilters = () => {  
-    this.filterValues = []
+    this.filterValues = {}
     this.dispatchEvent(
       new CustomEvent("clear-filters", {
-        detail: { filters: (this.filterValues = []) },
+        detail: { filters: (this.filterValues = {}) },
         bubbles: true,
         composed: true,
       })
@@ -937,9 +930,9 @@ export class MvTable extends LitElement {
     </div>`
   } 
   
-  renderFilterItem = (column, type) => {
-    const value = this.filterValues.find((elt) => elt.hasOwnProperty[column?.name]) != undefined ? 
-      this.filterValues.find((elt) => elt.hasOwnProperty[column?.name]) : 
+  renderFilterItem = (column, type="simple") => {
+    const value = this.filterValues.hasOwnProperty[column?.name] != undefined ? 
+      this.filterValues.hasOwnProperty[column?.name] : 
       "";
     if (column?.filter) {
       switch (column.type) {
@@ -1136,17 +1129,15 @@ export class MvTable extends LitElement {
     const {
       detail: { value },
     } = event;
-    const typeF = filterType != "simple" ? this.filterType : ""
-    const filter = { [code]: value, type: typeF }
-    if (this.filterValues.find(elt => elt.hasOwnProperty(code))) {
-      let change = this.filterValues.find(elt => elt.hasOwnProperty(code))
-      value != '' ? change[code] = value : this.filterValues = this.filterValues.filter(elt => !(Object.keys(elt)).includes(code))
+      let operatorAndField = this.filterType != "advanced" ? code : this.filterType+" "+code
+      if (this.filterValues.hasOwnProperty(operatorAndField)) {
+      value != '' ? this.filterValues[operatorAndField] = value : delete this.filterValues[operatorAndField]
     } else {
-    const filter = { [code]: value, type: typeF }
-    this.filterValues = [
+    const filter = { [operatorAndField]: value}
+    this.filterValues = {
       ...this.filterValues,
-      filter,
-    ];
+      ...filter,
+    };
   }
   this.click();
   };
