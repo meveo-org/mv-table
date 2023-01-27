@@ -1,7 +1,6 @@
 import { html, css } from "lit";
 import { msg } from '@lit/localize';
 import FilterTemplate from "./MvFilterTemplate";
-import "@meveo-org/mv-input";
 import "@meveo-org/mv-radio";
 
 
