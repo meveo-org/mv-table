@@ -126,6 +126,7 @@ export class MvTable extends LitElement {
         --mv-dropdown-min-width: 200px;
         --mv-dropdown-content-overflow: visible;
         --mv-dropdown-light-border: none;
+        --mv-dropdown-background: var(--mv-dropdown-light-background);
         --mv-input-box-padding: none;
         --font-size: 0.734vw;
         --mv-input-font-size: 0.734vw;
