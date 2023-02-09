@@ -213,6 +213,9 @@ export class MvTable extends LitElement {
           margin: auto;
           width: 100%;
         }
+        .cell_container {
+          overflow: visible;
+        }
         .checkbox {
           width: 5px;
         }
@@ -665,7 +668,7 @@ export class MvTable extends LitElement {
                   ? html`
                     <td>
                       <div class="title ${this.filterValues.hasOwnProperty(column.name) && this.hasActiveFilter ? 'filtered' : '' }">
-                        <div class="${this.filterValues.hasOwnProperty(column.name) && this.hasActiveFilter ? 'display-middle' : '' }" style="width: calc(100% - 1.467vw)">${column.title}</div>
+                        <div class="${this.filterValues.hasOwnProperty(column.name) && this.hasActiveFilter ? 'display-middle' : '' }" style="width: calc(100% - 1.467vw)">${column.label}</div>
                         ${column.filter ? html`
                         <span class="dropdown-trigger ${this.filterValues.hasOwnProperty(column.name) && this.hasActiveFilter ? 'display-middle' : '' }">
                         <mv-dropdown
@@ -727,13 +730,13 @@ export class MvTable extends LitElement {
                   `
                   : this.sortable ? html`
                       <td @click="${this.handleSort(column)}">
-                        <span class="title">${column.title}</span>
+                        <span class="title">${column.label}</span>
                         <span>${this.sortIcon(column)}</span>
                       </td>
                     `
                   : html`
                       <td>
-                        <span class="title">${column.title}</span>
+                        <span class="title">${column.label}</span>
                       </td>
                     `
 
