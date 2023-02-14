@@ -291,7 +291,6 @@ export class MvTable extends LitElement {
           max-height: 78%;
           overflow-x: auto;
           overflow-y: var(--table-overflow-y);
-          min-height: 300px;
         }
         
         .no-data {

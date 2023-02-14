@@ -37,6 +37,7 @@ export class MvTableOptions extends LitElement {
         --dark-background: var(--mv-pagination-dark-background, #3999c1);
         position: sticky;
         top: 0px;
+        --table-option-height: var(--mv-table-option-height, 10%);
         z-index: 20;
         --mv-button-font-size: 1.027vw;
         --body-dark-background: var(--mv-table-body-dark-background, #373e48);
@@ -68,7 +69,7 @@ export class MvTableOptions extends LitElement {
       .container {
         display: flex;
         justify-content: space-evenly;
-        height: 2.603vw;
+        height: var(--table-option-height);
         max-height: 10.734vw;
         background-color: var(--table-option-body-background, transparent);
       }
