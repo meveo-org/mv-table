@@ -1,6 +1,6 @@
 {
   "name": "@meveo-org/mv-table",
-  "version": "1.0.19",
+  "version": "1.0.20",
   "description": "MvTable is a Meveo table component (based on lit-element) that renders a table component given data in JSON format.",
   "main": "mv-table.js",
   "scripts": {
