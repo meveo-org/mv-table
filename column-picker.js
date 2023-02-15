@@ -21,6 +21,7 @@ export class ColumnPicker extends LitElement {
             --mv-button-circle-background: #328CC0;
             --mv-button-circle-color: white;
             --mv-circle-button-border: 2px solid #02657E;
+            --row-height: var(--table-row-height);
           }
           .small-button:hover {
             --hover-color: #328cc0;
@@ -46,7 +47,7 @@ export class ColumnPicker extends LitElement {
             display: flex;
             align-items: center;
             background: #328CC0; 
-            height: 100%; 
+            height: var(--row-height); 
             width: 50%; 
             border-top-right-radius: 20px; 
             border-bottom-right-radius: 20px;

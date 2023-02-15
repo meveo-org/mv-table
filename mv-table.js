@@ -442,12 +442,12 @@ export class MvTable extends LitElement {
           margin: auto;
           height: var(--table-row-height);
           max-height: var(--table-row-height);
-          background-color: var(--head-background);
+          background-color: transparent;
         }
         thead>tr:not(#filter){
         margin: auto;
         max-height: var(--table-head-height);
-        background-color: var(--head-background);
+        background-color: transparent;
         border-spacing: var(--no-border-spacing);
         // 9 because filters contains mv-select with z-index: 10.
         z-index: 9;
@@ -455,6 +455,7 @@ export class MvTable extends LitElement {
         thead td {
           cursor: default;
           color: var(--color);
+          background-color: var(--head-background);
         }
         thead td .title {
           font-family: var(--table-header-font-family);
