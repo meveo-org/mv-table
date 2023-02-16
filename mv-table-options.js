@@ -78,6 +78,8 @@ export class MvTableOptions extends LitElement {
         display: flex;
         flex-basis: 33%;
         height:100%;
+        flex-grow: 1;
+        justify-content: flex-end;
       }
 
       .container div.custom-actions {
@@ -132,7 +134,7 @@ export class MvTableOptions extends LitElement {
       }
 
       .pagination {
-        justify-content: center;
+        justify-content: center !important;
         align-items: center;
       }
       `;
@@ -206,7 +208,7 @@ export class MvTableOptions extends LitElement {
         @select-option="${this.changeRowsPerPage}"
         no-clear-button
       ></mv-select>
-      <span> rows</span>
+      <span> ${ msg("rows", {id: 'table.rows'}) }</span>
     </div>
   `
         
