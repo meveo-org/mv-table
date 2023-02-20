@@ -70,6 +70,7 @@ export class MvTableOptions extends LitElement {
         display: flex;
         justify-content: space-evenly;
         height: var(--table-option-height);
+        min-height: 42px;
         max-height: 10.734vw;
         background-color: var(--table-option-body-background, transparent);
       }

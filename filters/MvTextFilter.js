@@ -34,7 +34,7 @@ export default class MvTextFilter extends FilterTemplate {
   renderInput = () => html`
     <mv-input
       name="${this.field.code}"
-      placeholder="${this.field.description}"
+      placeholder="${this.field.label}"
       value="${this.value}"
       @input-change="${this.inputChange}"
     ></mv-input>
