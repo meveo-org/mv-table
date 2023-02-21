@@ -50,7 +50,7 @@ export class MvPagination extends LitElement {
         --pagination-height: var(--mv-pagination-height);
         --pagination-display: var(--mv-pagination-display);
         --pagination-align-items: var(--mv-pagination-align-items);
-        --pagination-span-justify-content: var(--mv---pagination-span-justify-content);
+        --pagination-span-justify-content: var(--mv---pagination-span-justify-content, center);
         --pagination-current-page-margin: var(--mv-pagination-current-page-margin);
         --pagination-current-page-padding: var(--mv-pagination-current-page-padding);
         --pagination-current-page-background-color: var(--mv-pagination-current-page-background-color);
@@ -58,6 +58,7 @@ export class MvPagination extends LitElement {
         --pagination-current-page-font-weight: var(--mv-pagination-current-page-font-weight);
         --mv-pagination-container-height: var(--mv-pagination-container-light-height);
         --pagination-group-top-margin: var(--mv-pagination-group-top-margin);
+        --pagination-current-page-font-size: var(--mv-pagination-current-page-font-size, 0.843vw);
       }
       .mv-pagination-container {
         margin-top: var(--pagination-group-top-margin, 10px);
@@ -123,6 +124,7 @@ export class MvPagination extends LitElement {
         background-color: var(--pagination-current-page-background-color);
         border-radius: var(--pagination-current-page-border-radius);
         font-weight: var(--pagination-current-page-font-weight);
+        font-size: var(--pagination-current-page-font-size);
       }
       .light {
         --mv-button-circle-background: var(--light-background);
