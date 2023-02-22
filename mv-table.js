@@ -389,16 +389,31 @@ export class MvTable extends LitElement {
         tbody tr {
           border-bottom: 0.073vw solid #e9e9e9;
           cursor: var(--table-row-cursor);
-          background-color: var(--body-background);
+          //background-color: var(--body-background);
           z-index: 8;
         }
-        tbody tr:hover,
+
         tbody tr.selected {
           background-color: var(--hover-background);
         }
         tbody tr.selectable {
           cursor: pointer;
         }
+
+        tbody > tr:hover > td {
+          z-index: 10;
+          background-color: var(--hover-background);
+        }
+
+        tbody tr:hover > td:first-child {
+          background-color: var(--hover-background);
+          border-radius: var(--body-td-first-child-radius);
+        }
+        tbody tr:hover > td:last-child {
+          background-color: var(--hover-background);
+          border-radius: var(--body-td-last-child-radius);
+        }
+
         td {
           border-bottom: none;
           padding: 0 15px 0 15px;
@@ -413,6 +428,7 @@ export class MvTable extends LitElement {
           word-wrap: var(--word-wrap);
           border: var(--mv-table-body-td-border);
           border-style: var(--mv-table-body-td-border-style);
+          background-color: var(--body-background);
         }
 
         .filtered {
