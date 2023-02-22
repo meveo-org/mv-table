@@ -91,6 +91,8 @@ export class MvTable extends LitElement {
   static get styles() {
     return css`
       :host {
+        scrollbar-color: #B8C0C2 #676767;
+        scrollbar-width: thin !important;
         font-family: var(--font-family, Arial);
         --font-size: var(--font-size-s, 1rem);
         --font-size-s: 0.587vw;
@@ -386,6 +388,7 @@ export class MvTable extends LitElement {
           position: relative;
           top: -14px;
         }
+
         tbody tr {
           border-bottom: 0.073vw solid #e9e9e9;
           cursor: var(--table-row-cursor);
