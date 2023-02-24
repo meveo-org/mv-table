@@ -85,6 +85,7 @@ export class MvTable extends LitElement {
       customTypes: { type: Object },
       position: { type: String},
       isButtonVisible: { type: Boolean },
+      openDateFilter: { type: Boolean },
     };
   }
 
@@ -134,6 +135,8 @@ export class MvTable extends LitElement {
         --mv-input-font-size: 0.734vw;
         --mv-table-input-box-padding: 0.073vw;
         --tr-max-height: var(--mv-table-tr-max-height, 30px);
+        --mv-modal-width: auto;
+        --mv-modal-content-width: auto;
       }
 
       .advancedFilter > mv-select {
@@ -553,6 +556,7 @@ export class MvTable extends LitElement {
     // Values : top or bottom. Other ignored. Default top
     this.position = "top";
     this.isButtonVisible = true;
+    this.openDateFilter = false;
   }
 
   getCellComponent (props) {
@@ -618,6 +622,10 @@ export class MvTable extends LitElement {
       defaultCellTypes;
     }
     return defaultCellTypes;
+  }
+
+  openCloseModal = () => {
+    this.openDateFilter = !this.openDateFilter;
   }
 
   render() {
@@ -975,13 +983,24 @@ export class MvTable extends LitElement {
         case "DATE":
           const { start, end } = value || {};
           return html`
-            <date-filter
-              no-label
-              .field="${column}"
-              start="${start || ""}"
-              end="${end || ""}"
-              @update-value="${this.updateValue(column, type)}"
-            ></date-filter>
+          <span @click="${this.openCloseModal}">
+          <mv-fa icon="calendar-check"></mv-fa> ${msg("Date selection", {id: 'table.chooseDate'})}
+          </span>
+            <mv-modal
+              ?open="${this.openDateFilter}"
+              @close-modal="${this.openCloseModal}"
+            >
+              <div slot="header">
+                <div style="text-align: center">Selectionnez la période</div>
+              </div>
+                <date-filter slot="body"
+                  no-label
+                  .field="${column}"
+                  start="${start || ""}"
+                  end="${end || ""}"
+                  @update-value="${this.updateValue(column, type)}"
+                ></date-filter>
+            </mv-modal>
           `;
         case "LIST":
           return html`
