@@ -92,6 +92,7 @@ export class MvTable extends LitElement {
   static get styles() {
     return css`
       :host {
+        --calendar-font-size: 0.600vw;
         scrollbar-color: #B8C0C2 #676767;
         scrollbar-width: thin !important;
         font-family: var(--font-family, Arial);
