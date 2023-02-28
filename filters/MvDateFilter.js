@@ -9,6 +9,7 @@ export default class MvDateFilter extends FilterTemplate {
       ...super.properties,
       start: { type: Object, reactive: true },
       end: { type: Object, reactive: true },
+      calendar: { type: Object, reactive: true },
     };
   }
 
@@ -35,6 +36,22 @@ export default class MvDateFilter extends FilterTemplate {
     super();
     this.start = {};
     this.end = {};
+    this.calendar = {
+      start: {
+        selected: { ...EMPTY_DATE },
+        placeholder: "",
+        hasError: null,
+        minYear: null,
+        maxYear: null,
+      },
+      end: {
+        selected: { ...EMPTY_DATE },
+        placeholder: "",
+        hasError: null,
+        minYear: null,
+        maxYear: null,
+      },
+    };
   }
 
   parseDate = (value) => {
@@ -56,26 +73,21 @@ export default class MvDateFilter extends FilterTemplate {
     this.start= new Date()
     this.end = new Date()
     return html`
+    
       <div class="date-range">
         <mv-calendar
-          name="start"
+          name="range-calendar"
           range-calendar
+          inline-input
           monday-first
-          pattern="MM/DD/YYYY"
+          pattern="DD/MM/YYYY"
           pattern-matcher="MDY"
           pattern-regex="\\d"
-          .start=${this.start}
-          .end=${this.end}
+          .start=${this.calendar.start}
+          .end=${this.calendar.end}
           @select-date="${this.changeDate}"
         ></mv-calendar>
-        <!-- <span> - </span>
-        <mv-calendar
-          name="end"
-          dropdown
-          .selected=${this.end}
-          @select-date="${this.changeDate}"
-        ></mv-calendar> -->
-      </div>
+      </div> 
     `;
   };
 
@@ -96,9 +108,6 @@ export default class MvDateFilter extends FilterTemplate {
       detail: { name, selected },
     } = event;
 
-
-    console.log(event)
-    console.log(this.start, this.end)
     this.updateValue({
       end: this.end,
       [name]: selected,
