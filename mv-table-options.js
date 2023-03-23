@@ -73,6 +73,8 @@ export class MvTableOptions extends LitElement {
         min-height: 42px;
         max-height: 10.734vw;
         background-color: var(--table-option-body-background, transparent);
+        align-self: center;
+        margin-bottom: 8px;
       }
 
       .container div {
@@ -88,7 +90,7 @@ export class MvTableOptions extends LitElement {
         flex-direction: row;
         justify-content: flex-start;
         gap: 20px;
-        align-items: center;
+        align-self: center;
         font-size: 20px;
       }
 

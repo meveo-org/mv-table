@@ -294,7 +294,7 @@ export class MvTable extends LitElement {
         }
         .mv-table-container {
           width: 100%;
-          max-height: 77%;
+          max-height: 87%;
           overflow-x: auto;
           overflow-y: var(--table-overflow-y);
         }
@@ -642,7 +642,7 @@ export class MvTable extends LitElement {
     this.isAllSelected = this.hasAllSelected();
     return html`
       <div id="mv-table-container" class="mv-table-container${sortableClass} ${this.theme}">
-      ${this.selection.selectAll == true ? html`<div style="text-align: center"><span style="color: red">${msg("ATTENTION TOUTES", {id: 'table.careful'})}</span>${msg(" les lignes sont sélectionnées", {id: 'table.allLine'})}</div>` : this.selection.selectedRows.length ? html`<div style="text-align: center">${this.selection.selectedRows.length}${msg("  lignes sélectionnées", {id: 'table.areSelected'})}</div>` : null}
+      <!-- ${this.selection.selectAll == true ? html`<div style="text-align: center"><span style="color: red">${msg("ATTENTION TOUTES", {id: 'table.careful'})}</span>${msg(" les lignes sont sélectionnées", {id: 'table.allLine'})}</div>` : this.selection.selectedRows.length ? html`<div style="text-align: center">${this.selection.selectedRows.length}${msg("  lignes sélectionnées", {id: 'table.areSelected'})}</div>` : null} -->
         <table>
           <thead>
             <tr id="table_header">
