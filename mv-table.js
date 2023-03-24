@@ -493,6 +493,7 @@ export class MvTable extends LitElement {
           display: flex;
           align-items: center;
           vertical-align: middle;
+          height: 30px;
         }
         thead td:first-child {
           border-radius: var(--head-first-child-radius);

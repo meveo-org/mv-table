@@ -90,6 +90,7 @@ export class MvTableOptions extends LitElement {
         flex-direction: row;
         justify-content: flex-start;
         gap: 20px;
+        align-items: center;
         align-self: center;
         font-size: 20px;
       }
