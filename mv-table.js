@@ -1172,14 +1172,14 @@ export class MvTable extends LitElement {
       html`<mv-fa icon="sort-down"></mv-fa>`;
   };
 
-  updateValue = (field, filterType="simple") => (event) => {
+  updateValue = (field, simpleOrAdvanced="simple") => (event) => {
     const code = field.name;
     const {
       detail: { value },
     } = event;
-      let operatorAndField = this.filterType != "advanced" ? code : this.filterType+" "+code
+      let operatorAndField = simpleOrAdvanced != "advanced" ? code : this.filterType+" "+code
       if (this.filterValues.hasOwnProperty(operatorAndField)) {
-      value != '' ? this.filterValues[operatorAndField] = value : delete this.filterValues[operatorAndField]
+        value != '' ? this.filterValues[operatorAndField] = value : delete this.filterValues[operatorAndField]
     } else {
     const filter = { [operatorAndField]: value}
     this.filterValues = {
