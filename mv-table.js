@@ -80,7 +80,7 @@ export class MvTable extends LitElement {
       datePattern: { type: String, attribute: "date-pattern" },
       "sort-order": { type: Object, attribute: false },
       sortable: { type: Boolean, attribute: true },
-      dataIsLoading: { type: Boolean },
+      dataIsLoading: { type: Boolean, reflect: true },
       filterValues: { type: Object, reflect: true },
       customTypes: { type: Object },
       position: { type: String},

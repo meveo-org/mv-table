@@ -21,6 +21,7 @@ export class MvTableDemo extends LitElement {
       isDialogDataOpen: {type: Boolean, state: true },
       columns : { type: Array, state: true, reflect: true },
       list: { type: Array, state: true },
+      dataIsLoading: { type: Boolean, state: true },
     };
   }
 
@@ -85,6 +86,7 @@ export class MvTableDemo extends LitElement {
     super();
     this.data = people;
     this.columnsClass = schemaAsTxt;
+    this.dataIsLoading = true;
     this.sortType = '';
     this.limit = 10;
     this.page = 1;
@@ -99,7 +101,7 @@ export class MvTableDemo extends LitElement {
       "films",
       "created"
     ];
-    this.list = [];
+    this.list = undefined;
     this.message = "";
     this.sortedColumn = "";
     const actionColumnStyles = {
@@ -165,7 +167,7 @@ export class MvTableDemo extends LitElement {
   }
 
   render() {
-    const hasList = this.list && this.list.length > 0;
+    const hasList = !!this.list;
     const { theme } = this;
     return hasList
       ? html`
@@ -238,6 +240,7 @@ export class MvTableDemo extends LitElement {
             .columns="${this.columns}"
             .rows="${this.list}"
             .action-column="${this.actionColumn}"
+            .dataIsLoading="${this.dataIsLoading}"
             @row-click="${this.handleRowClick}"
             @cell-click="${this.handleCellClick}"
             @select-row="${this.handleRowSelect}"
@@ -288,6 +291,7 @@ export class MvTableDemo extends LitElement {
     }
     this.pages = this.limit > 0 ? Math.ceil(count / this.limit) : 0;
     this.list = this.buildList(people.results);
+    this.dataIsLoading = false;
   }
 
   buildList(results) {
