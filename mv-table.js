@@ -294,6 +294,7 @@ export class MvTable extends LitElement {
         }
         .mv-table-container {
           width: 100%;
+          height: var(--mv-table-height, 100%);
           max-height: 87%;
           overflow-x: auto;
           overflow-y: var(--table-overflow-y);
