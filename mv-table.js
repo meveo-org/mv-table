@@ -1188,7 +1188,7 @@ export class MvTable extends LitElement {
       ...filter,
     };
   }
-  this.click();
+  //this.click();
   };
 }
 customElements.define("mv-table", MvTable);
