@@ -74,8 +74,6 @@ export class MvTable extends LitElement {
       "row-actions": { type: Array, attribute: false },
       "selected-rows": { type: Array, attribute: false },
       pagination: { type: Array },
-      //  valid theme values are: "light", "dark"
-      //    default: "light"
       theme: { type: String, attribute: false },
       datePattern: { type: String, attribute: "date-pattern" },
       "sort-order": { type: Object, attribute: false },
@@ -268,7 +266,7 @@ export class MvTable extends LitElement {
           --mv-input-box-padding: var(--mv-table-input-box-padding);
           --border-spacing: var(--mv-table-border-spacing);
           --color: var(--light-color, #80828c);
-          --td-color: var(--td-light-color) // Couleur proposée par contrast-finder.tanaguru.com avec constrat de 3.9 #9e9e9e; */
+          --td-color: var(--td-light-color)
           --hover-color: #5c5e65;
           --mv-checkbox-border-color: var(--color);
           --mv-table-url-color: var(--td-color);
@@ -397,7 +395,6 @@ export class MvTable extends LitElement {
         tbody tr {
           border-bottom: 0.073vw solid #e9e9e9;
           cursor: var(--table-row-cursor);
-          //background-color: var(--body-background);
           z-index: 8;
         }
 
@@ -560,6 +557,7 @@ export class MvTable extends LitElement {
     this.position = "top";
     this.isButtonVisible = true;
     this.openDateFilter = false;
+    this.filterTarget = "";
   }
 
   getCellComponent (props) {
@@ -632,7 +630,6 @@ export class MvTable extends LitElement {
   }
 
   render() {
-    console.log("Render");
     const withCheckbox = this.withCheckbox;
     const rowActions = this["row-actions"];
     const hasRowActions = rowActions && rowActions.length > 0;
@@ -644,7 +641,6 @@ export class MvTable extends LitElement {
     this.isAllSelected = this.hasAllSelected();
     return html`
       <div id="mv-table-container" class="mv-table-container${sortableClass} ${this.theme}">
-      <!-- ${this.selection.selectAll == true ? html`<div style="text-align: center"><span style="color: red">${msg("ATTENTION TOUTES", {id: 'table.careful'})}</span>${msg(" les lignes sont sélectionnées", {id: 'table.allLine'})}</div>` : this.selection.selectedRows.length ? html`<div style="text-align: center">${this.selection.selectedRows.length}${msg("  lignes sélectionnées", {id: 'table.areSelected'})}</div>` : null} -->
         <table>
           <thead>
             <tr id="table_header">
@@ -713,7 +709,7 @@ export class MvTable extends LitElement {
                             theme="${this.theme}"
                           >
                           <mv-dropdown trigger>
-                            <span style="font-size: 1.321vw;">&#9662;</span>
+                            <span @click="${(e) => this.filterTarget = column.name}" style="font-size: 1.321vw;">&#9662;</span>
                           </mv-dropdown>
                           <mv-dropdown content theme="${this.theme}" style="overflow: visible !important">
                             <ul class="header_menu" style="padding-left: 0.734vw; padding-right: 0.734vw">
@@ -926,6 +922,15 @@ export class MvTable extends LitElement {
   handleSelectOption = (event) => {
     const { detail: { option }, } = event;
     this.filterType = option.value;
+    let objKey = ''
+    Object.entries(this.filterValues).forEach(([key]) => key.includes(this.filterTarget) ? objKey = key : objKey = null);
+    if(objKey != null){
+      let temp = this.filterValues[objKey];
+      delete this.filterValues[objKey]
+      let column = objKey.split(" ")[1]
+      let concatOperatorAndField = option.value + " "+ column
+      this.filterValues[concatOperatorAndField] = temp
+    }
   }
 
   handleSort = (column, direction) => (originalEvent) => {
@@ -1178,17 +1183,18 @@ export class MvTable extends LitElement {
     const {
       detail: { value },
     } = event;
-      let operatorAndField = simpleOrAdvanced != "advanced" ? code : this.filterType+" "+code
+    Object.entries(this.filterValues).forEach(([key, value]) => value=="" || key.includes(code) ? delete this.filterValues[key] : null )
+      let operatorAndField = simpleOrAdvanced != "advanced" ? "eq "+code : (this.filterType || "eq")+" "+code
       if (this.filterValues.hasOwnProperty(operatorAndField)) {
         value != '' ? this.filterValues[operatorAndField] = value : delete this.filterValues[operatorAndField]
-    } else {
-    const filter = { [operatorAndField]: value}
-    this.filterValues = {
-      ...this.filterValues,
-      ...filter,
-    };
-  }
-  //this.click();
+      } else {
+        const filter = { [operatorAndField]: value}
+        this.filterValues = {
+          ...this.filterValues,
+          ...filter,
+      };
+    }
+    Object.entries(this.filterValues).forEach(([key, value]) => value=="" ? delete this.filterValues[key] : null )
   };
 }
 customElements.define("mv-table", MvTable);

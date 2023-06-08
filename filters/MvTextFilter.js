@@ -54,8 +54,6 @@ export default class MvTextFilter extends FilterTemplate {
     const {
       detail: { value },
     } = event
-    console.log(event)
-    console.log( this.field.code + " et value : " + value)
   }
 
 }
